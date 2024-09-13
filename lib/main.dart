@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:volunteerexpress/pages/auth-pages/login_page.dart';
+import 'package:volunteerexpress/pages/auth-pages/register_page.dart';
 import 'package:volunteerexpress/themes/colors.dart';
 
 void main() {
@@ -61,7 +62,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: primaryAccentColor),
         useMaterial3: true,
       ),
-      home: const LoginPage(),
+      home: const RegisterPage(),
     );
   }
 }

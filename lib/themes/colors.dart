@@ -13,4 +13,6 @@ const majorColorLightMode = Colors.white;
 const textColorLight = Colors.white;
 const textColorDark = Colors.black;
 
+const fadedColor = Color.fromARGB(119, 245, 20, 4);
+
 const confirmColor = Color.fromARGB(255, 43, 137, 46);

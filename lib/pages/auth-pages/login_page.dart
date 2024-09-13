@@ -21,20 +21,24 @@ class _LoginPageState extends State<LoginPage> {
         ),
         child: Column(
           children: [
+            // Email field
             TextFormField(
+              keyboardType: TextInputType.emailAddress,
               decoration: const InputDecoration(
                 hintText: 'Email',
               ),
             ),
+            // Password field
             TextFormField(
+              obscureText: true,
               decoration: const InputDecoration(
                 hintText: 'Password',
               ),
             ),
+            // Login button
             Padding(
               padding: const EdgeInsets.only(
                 top: 50,
-                bottom: 15,
               ),
               child: SizedBox(
                 width: 250,
@@ -44,9 +48,15 @@ class _LoginPageState extends State<LoginPage> {
                 ),
               ),
             ),
+            // Forgot password button
             TextOnlyButton(
               onPressed: () {},
-              label: 'Already have an account? Register here.',
+              label: 'Forgot password?',
+            ),
+            // Register page button
+            TextOnlyButton(
+              onPressed: () {},
+              label: 'Don\'t have an account? Register here.',
             )
           ],
         ),
