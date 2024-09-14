@@ -35,7 +35,6 @@ class MyApp extends StatelessWidget {
           // Textfield hint text
           titleMedium: TextStyle(
             fontSize: 20,
-            color: textColorDark,
           ),
           displaySmall: TextStyle(
             fontSize: 20,
@@ -52,18 +51,38 @@ class MyApp extends StatelessWidget {
         ),
         inputDecorationTheme: const InputDecorationTheme(
           hintStyle: TextStyle(
-            color: textColorDark,
+            color: subtleTextColorDark,
+            fontWeight: FontWeight.normal,
           ),
+          labelStyle: TextStyle(
+            fontWeight: FontWeight.bold,
+          ),
+          border: OutlineInputBorder(
+              borderRadius: BorderRadius.all(
+                Radius.circular(12),
+              ),
+              borderSide: BorderSide(
+                color: textColorDark,
+              )),
           focusedBorder: OutlineInputBorder(
             borderSide: BorderSide(
               color: primaryAccentColor,
+              width: 3,
+            ),
+            borderRadius: BorderRadius.all(
+              Radius.circular(12),
+            ),
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.all(
+              Radius.circular(12),
             ),
           ),
         ),
         colorScheme: ColorScheme.fromSeed(seedColor: primaryAccentColor),
         useMaterial3: true,
       ),
-      home: const RegisterPage(),
+      home: const LoginPage(),
       routes: {
         loginRoute: (context) => const LoginPage(),
         registerRoute: (context) => const RegisterPage(),

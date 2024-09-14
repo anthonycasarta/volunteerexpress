@@ -5,6 +5,8 @@ class PasswordTextFormField extends StatelessWidget {
   final TextEditingController controller;
   final TextEditingController? compareController;
   final bool isConfirmPass;
+  final bool obscureText;
+  final Widget? suffixIcon;
 
   const PasswordTextFormField({
     super.key,
@@ -12,23 +14,27 @@ class PasswordTextFormField extends StatelessWidget {
     required this.controller,
     required this.isConfirmPass,
     this.compareController,
+    required this.obscureText,
+    this.suffixIcon,
   });
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
       controller: controller,
-      obscureText: true,
+      obscureText: obscureText,
       autocorrect: false,
       decoration: InputDecoration(
         hintText: hintText,
+        labelText: hintText,
+        suffixIcon: suffixIcon,
       ),
       validator: (value) {
         if (value == null || value.isEmpty) {
-          return 'Enter a Password';
+          return '**Enter a Password**';
         } else if (isConfirmPass) {
           if (controller != compareController) {
-            return 'Passwords do not match';
+            return '**Passwords do not match**';
           }
         }
         return null;

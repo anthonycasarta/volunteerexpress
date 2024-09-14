@@ -4,27 +4,25 @@ import 'package:volunteerexpress/custom-widgets/textfields/email_text_form_field
 import 'package:volunteerexpress/custom-widgets/textfields/password_text_form_field.dart';
 import 'package:volunteerexpress/decorations/form_decoration.dart';
 
-class RegisterForm extends StatefulWidget {
+class LoginForm extends StatefulWidget {
   final TextEditingController emailController;
   final TextEditingController passwordController;
-  final TextEditingController confirmPasswordController;
 
   final GlobalKey<FormState> formKey;
 
-  const RegisterForm({
+  const LoginForm({
     super.key,
     required this.emailController,
     required this.passwordController,
-    required this.confirmPasswordController,
     required this.formKey,
   });
 
   @override
-  State<RegisterForm> createState() => _RegisterFormState();
+  State<LoginForm> createState() => _LoginFormState();
 }
 
-class _RegisterFormState extends State<RegisterForm> {
-  late bool _isObscured; // Holds obscure state
+class _LoginFormState extends State<LoginForm> {
+  late bool _isObscured;
 
   @override
   void initState() {
@@ -56,17 +54,18 @@ class _RegisterFormState extends State<RegisterForm> {
               isConfirmPass: false,
               controller: widget.passwordController,
               hintText: 'Password',
-            ),
-
-            // Spacing
-            const SizedBox(height: 20),
-
-            // Confirm Password field
-            PasswordTextFormField(
-              obscureText: _isObscured,
-              isConfirmPass: true,
-              hintText: 'Confirm Password',
-              controller: widget.confirmPasswordController,
+              suffixIcon: IconButton(
+                // Set whether text is hidden or not
+                // on button press
+                onPressed: () {
+                  setState(() {
+                    _isObscured = !_isObscured;
+                  });
+                },
+                icon: _isObscured
+                    ? const Icon(Icons.visibility_off) // Eye with slash icon
+                    : const Icon(Icons.visibility), // Eye icon
+              ),
             ),
 
             // Spacing
@@ -79,7 +78,7 @@ class _RegisterFormState extends State<RegisterForm> {
                 onPressed: () {
                   widget.formKey.currentState!.validate(); // validtion
                 },
-                label: 'Register',
+                label: 'Log in',
               ),
             ),
 

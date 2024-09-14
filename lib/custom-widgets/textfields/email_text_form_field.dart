@@ -11,10 +11,11 @@ class EmailTextFormField extends StatelessWidget {
       keyboardType: TextInputType.emailAddress,
       decoration: const InputDecoration(
         hintText: 'Email',
+        labelText: 'Email',
       ),
       validator: (value) {
         if (value == null || value.isEmpty) {
-          return 'Enter an Email';
+          return '**Enter an Email**';
         }
         return null;
       },

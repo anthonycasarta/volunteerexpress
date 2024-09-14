@@ -12,9 +12,10 @@ const majorColorLightMode = Colors.white;
 // text colors
 const textColorLight = Colors.white;
 const textColorDark = Colors.black;
+const subtleTextColorDark = Color.fromARGB(87, 0, 0, 0);
 
 const fadedPrimaryColor = Color.fromARGB(84, 245, 20, 4);
-const fadedPrimaryColorSaturated = Color.fromARGB(170, 245, 20, 4);
+const fadedPrimaryColorSaturated = Color.fromARGB(220, 245, 20, 4);
 const unfocusedSecondaryAccentColor = Color.fromARGB(83, 255, 196, 59);
 
 const confirmColor = Color.fromARGB(255, 43, 137, 46);
