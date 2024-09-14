@@ -49,6 +49,7 @@ class MyApp extends StatelessWidget {
             color: textColorDark,
           ),
         ),
+        // Textfield theme
         inputDecorationTheme: const InputDecorationTheme(
           hintStyle: TextStyle(
             color: subtleTextColorDark,
@@ -57,13 +58,31 @@ class MyApp extends StatelessWidget {
           labelStyle: TextStyle(
             fontWeight: FontWeight.bold,
           ),
+          // Textfield error theme
+          errorStyle: TextStyle(
+            fontSize: 15,
+            fontWeight: FontWeight.bold,
+            color: errorColor,
+          ),
+          // Textfield error border theme
+          errorBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.all(
+              Radius.circular(12),
+            ),
+            borderSide: BorderSide(
+              color: errorColor,
+              width: 2,
+            ),
+          ),
+          // Textfield border theme
           border: OutlineInputBorder(
-              borderRadius: BorderRadius.all(
-                Radius.circular(12),
-              ),
-              borderSide: BorderSide(
-                color: textColorDark,
-              )),
+            borderRadius: BorderRadius.all(
+              Radius.circular(12),
+            ),
+            borderSide: BorderSide(
+              color: textColorDark,
+            ),
+          ),
           focusedBorder: OutlineInputBorder(
             borderSide: BorderSide(
               color: primaryAccentColor,

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:volunteerexpress/themes/colors.dart';
 
 class EmailTextFormField extends StatelessWidget {
   final TextEditingController controller;
@@ -12,6 +13,8 @@ class EmailTextFormField extends StatelessWidget {
       decoration: const InputDecoration(
         hintText: 'Email',
         labelText: 'Email',
+        fillColor: fadedPrimaryColor,
+        filled: true,
       ),
       validator: (value) {
         if (value == null || value.isEmpty) {

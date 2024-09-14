@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:volunteerexpress/themes/colors.dart';
 
 class PasswordTextFormField extends StatelessWidget {
   final String hintText;
@@ -28,6 +29,8 @@ class PasswordTextFormField extends StatelessWidget {
         hintText: hintText,
         labelText: hintText,
         suffixIcon: suffixIcon,
+        fillColor: fadedPrimaryColor,
+        filled: true,
       ),
       validator: (value) {
         if (value == null || value.isEmpty) {
