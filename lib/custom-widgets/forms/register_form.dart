@@ -4,56 +4,99 @@ import 'package:volunteerexpress/custom-widgets/textfields/email_text_form_field
 import 'package:volunteerexpress/custom-widgets/textfields/password_text_form_field.dart';
 import 'package:volunteerexpress/themes/colors.dart';
 
-class RegisterForm extends StatelessWidget {
+class RegisterForm extends StatefulWidget {
   final TextEditingController emailController;
   final TextEditingController passwordController;
   final TextEditingController confirmPasswordController;
+
+  final GlobalKey<FormState> formKey;
 
   const RegisterForm({
     super.key,
     required this.emailController,
     required this.passwordController,
     required this.confirmPasswordController,
+    required this.formKey,
   });
 
   @override
+  State<RegisterForm> createState() => _RegisterFormState();
+}
+
+class _RegisterFormState extends State<RegisterForm> {
+  @override
   Widget build(BuildContext context) {
     return Container(
+      decoration: const BoxDecoration(
+        border: Border(
+          left: BorderSide(
+            color: primaryAccentColor,
+            width: 2.5,
+          ),
+          right: BorderSide(
+            color: primaryAccentColor,
+            width: 2.5,
+          ),
+          top: BorderSide(
+            color: primaryAccentColor,
+            width: 1,
+          ),
+          bottom: BorderSide(
+            color: primaryAccentColor,
+            width: 2.5,
+          ),
+        ),
+        borderRadius: BorderRadius.all(
+          Radius.circular(12),
+        ),
+        color: fadedPrimaryColor,
+      ),
       padding: const EdgeInsets.only(
         right: 15,
         left: 15,
       ),
-      color: fadedColor,
       child: Form(
+        key: widget.formKey, // Key for validation
         child: Column(
           children: [
-            EmailTextFormField(
-              controller: emailController,
-            ),
-
             // spacing
             const SizedBox(height: 20),
 
+            // Email field
+            EmailTextFormField(
+              controller: widget.emailController,
+            ),
+
+            // Spacing
+            const SizedBox(height: 20),
+
+            // Password field
             PasswordTextFormField(
-              controller: passwordController,
+              isConfirmPass: false,
+              controller: widget.passwordController,
               hintText: 'Password',
             ),
 
-            // spacing
+            // Spacing
             const SizedBox(height: 20),
 
+            // Confirm Password field
             PasswordTextFormField(
+              isConfirmPass: true,
               hintText: 'Confirm Password',
-              controller: confirmPasswordController,
+              controller: widget.confirmPasswordController,
             ),
 
-            // spacing
+            // Spacing
             const SizedBox(height: 50),
 
+            // Register button
             SizedBox(
               width: 250,
               child: DefaultTextButton(
-                onPressed: () {},
+                onPressed: () {
+                  widget.formKey.currentState!.validate(); // validtion
+                },
                 label: 'Register',
               ),
             ),

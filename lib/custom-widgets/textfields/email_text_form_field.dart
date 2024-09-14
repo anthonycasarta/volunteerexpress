@@ -12,6 +12,12 @@ class EmailTextFormField extends StatelessWidget {
       decoration: const InputDecoration(
         hintText: 'Email',
       ),
+      validator: (value) {
+        if (value == null || value.isEmpty) {
+          return 'Enter an Email';
+        }
+        return null;
+      },
     );
   }
 }

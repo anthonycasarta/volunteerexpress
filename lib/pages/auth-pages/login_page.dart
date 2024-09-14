@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:volunteerexpress/constants/routes.dart';
 import 'package:volunteerexpress/custom-widgets/textbuttons/default_textbutton.dart';
 import 'package:volunteerexpress/custom-widgets/textbuttons/text_only_button.dart';
 
@@ -55,7 +56,12 @@ class _LoginPageState extends State<LoginPage> {
             ),
             // Register page button
             TextOnlyButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.of(context).pushNamedAndRemoveUntil(
+                  registerRoute,
+                  (route) => false,
+                );
+              },
               label: 'Don\'t have an account? Register here.',
             )
           ],

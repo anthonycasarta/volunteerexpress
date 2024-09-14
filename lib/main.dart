@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:volunteerexpress/constants/routes.dart';
 import 'package:volunteerexpress/pages/auth-pages/login_page.dart';
 import 'package:volunteerexpress/pages/auth-pages/register_page.dart';
 import 'package:volunteerexpress/themes/colors.dart';
@@ -63,6 +64,10 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       home: const RegisterPage(),
+      routes: {
+        loginRoute: (context) => const LoginPage(),
+        registerRoute: (context) => const RegisterPage(),
+      },
     );
   }
 }
