@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:volunteerexpress/custom-widgets/textbuttons/default_textbutton.dart';
-import 'package:volunteerexpress/custom-widgets/textfields/email_text_form_field.dart';
-import 'package:volunteerexpress/custom-widgets/textfields/password_text_form_field.dart';
+import 'package:volunteerexpress/custom-widgets/textfields/email_textformfield.dart';
+import 'package:volunteerexpress/custom-widgets/textfields/password_textformfield.dart';
 import 'package:volunteerexpress/decorations/form_decoration.dart';
 
 class RegisterForm extends StatefulWidget {
@@ -24,11 +24,13 @@ class RegisterForm extends StatefulWidget {
 }
 
 class _RegisterFormState extends State<RegisterForm> {
-  late bool _isObscured; // Holds obscure state
+  late bool _isPassObscured;
+  late bool _isConfirmObscured; // Holds obscure state
 
   @override
   void initState() {
-    _isObscured = true;
+    _isPassObscured = true;
+    _isConfirmObscured = true;
     super.initState();
   }
 
@@ -52,10 +54,22 @@ class _RegisterFormState extends State<RegisterForm> {
 
             // Password field
             PasswordTextFormField(
-              obscureText: _isObscured,
+              obscureText: _isPassObscured,
               isConfirmPass: false,
               controller: widget.passwordController,
               hintText: 'Password',
+              suffixIcon: IconButton(
+                // Set whether text is hidden or not
+                // on button press
+                onPressed: () {
+                  setState(() {
+                    _isPassObscured = !_isPassObscured;
+                  });
+                },
+                icon: _isPassObscured
+                    ? const Icon(Icons.visibility_off) // Eye with slash icon
+                    : const Icon(Icons.visibility), // Eye icon
+              ),
             ),
 
             // Spacing
@@ -63,10 +77,22 @@ class _RegisterFormState extends State<RegisterForm> {
 
             // Confirm Password field
             PasswordTextFormField(
-              obscureText: _isObscured,
+              obscureText: _isConfirmObscured,
               isConfirmPass: true,
               hintText: 'Confirm Password',
               controller: widget.confirmPasswordController,
+              suffixIcon: IconButton(
+                // Set whether text is hidden or not
+                // on button press
+                onPressed: () {
+                  setState(() {
+                    _isConfirmObscured = !_isConfirmObscured;
+                  });
+                },
+                icon: _isConfirmObscured
+                    ? const Icon(Icons.visibility_off) // Eye with slash icon
+                    : const Icon(Icons.visibility), // Eye icon
+              ),
             ),
 
             // Spacing

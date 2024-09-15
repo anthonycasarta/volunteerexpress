@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:volunteerexpress/custom-widgets/textbuttons/default_textbutton.dart';
-import 'package:volunteerexpress/custom-widgets/textfields/email_text_form_field.dart';
-import 'package:volunteerexpress/custom-widgets/textfields/password_text_form_field.dart';
+import 'package:volunteerexpress/custom-widgets/textfields/email_textformfield.dart';
+import 'package:volunteerexpress/custom-widgets/textfields/password_textformfield.dart';
 import 'package:volunteerexpress/decorations/form_decoration.dart';
 
 class LoginForm extends StatefulWidget {
