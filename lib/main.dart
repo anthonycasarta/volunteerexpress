@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:volunteerexpress/constants/routes.dart';
+import 'package:volunteerexpress/pages/auth-pages/login_page.dart';
+import 'package:volunteerexpress/pages/auth-pages/register_page.dart';
 import 'package:volunteerexpress/themes/colors.dart';
-import 'profile.dart';
+
 void main() {
   runApp(const MyApp());
 }
@@ -32,7 +35,6 @@ class MyApp extends StatelessWidget {
           // Textfield hint text
           titleMedium: TextStyle(
             fontSize: 20,
-            color: textColorDark,
           ),
           displaySmall: TextStyle(
             fontSize: 20,
@@ -47,20 +49,63 @@ class MyApp extends StatelessWidget {
             color: textColorDark,
           ),
         ),
+        // Textfield theme
         inputDecorationTheme: const InputDecorationTheme(
           hintStyle: TextStyle(
-            color: textColorDark,
+            color: subtleTextColorDark,
+            fontWeight: FontWeight.normal,
+          ),
+          labelStyle: TextStyle(
+            fontWeight: FontWeight.bold,
+          ),
+          // Textfield error theme
+          errorStyle: TextStyle(
+            fontSize: 15,
+            fontWeight: FontWeight.bold,
+            color: errorColor,
+          ),
+          // Textfield error border theme
+          errorBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.all(
+              Radius.circular(12),
+            ),
+            borderSide: BorderSide(
+              color: errorColor,
+              width: 2,
+            ),
+          ),
+          // Textfield border theme
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.all(
+              Radius.circular(12),
+            ),
+            borderSide: BorderSide(
+              color: textColorDark,
+            ),
           ),
           focusedBorder: OutlineInputBorder(
             borderSide: BorderSide(
               color: primaryAccentColor,
+              width: 3,
+            ),
+            borderRadius: BorderRadius.all(
+              Radius.circular(12),
+            ),
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.all(
+              Radius.circular(12),
             ),
           ),
         ),
         colorScheme: ColorScheme.fromSeed(seedColor: primaryAccentColor),
         useMaterial3: true,
       ),
-      home: ProfilePage(),
+      home: const LoginPage(),
+      routes: {
+        loginRoute: (context) => const LoginPage(),
+        registerRoute: (context) => const RegisterPage(),
+      },
     );
   }
 }

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:volunteerexpress/themes/colors.dart';
 
 class DefaultTextButton extends StatelessWidget {
-  final VoidCallback? onPressed;
+  final VoidCallback onPressed;
   final String label;
   final double? fontSize;
   final Color buttonColor;
