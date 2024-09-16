@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:volunteerexpress/themes/colors.dart';
 import 'profile.dart';
+import 'event_form.dart';
 void main() {
   runApp(const MyApp());
 }
@@ -60,7 +61,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: primaryAccentColor),
         useMaterial3: true,
       ),
-      home: ProfilePage(),
+      home: EventManagementForm(),
     );
   }
 }
