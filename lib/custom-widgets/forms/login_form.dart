@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:volunteerexpress/constants/routes.dart';
 import 'package:volunteerexpress/custom-widgets/textbuttons/default_textbutton.dart';
 import 'package:volunteerexpress/custom-widgets/textfields/email_textformfield.dart';
 import 'package:volunteerexpress/custom-widgets/textfields/password_textformfield.dart';
@@ -7,7 +8,6 @@ import 'package:volunteerexpress/decorations/form_decoration.dart';
 class LoginForm extends StatefulWidget {
   final TextEditingController emailController;
   final TextEditingController passwordController;
-  final VoidCallback? onPressed;
 
   final GlobalKey<FormState> formKey;
 
@@ -16,7 +16,6 @@ class LoginForm extends StatefulWidget {
     required this.emailController,
     required this.passwordController,
     required this.formKey,
-    required this.onPressed,
   });
 
   @override
@@ -51,7 +50,6 @@ class _LoginFormState extends State<LoginForm> {
             const SizedBox(height: 20),
 
             // Password field
-
             PasswordTextFormField(
               obscureText: _isObscured,
               isConfirmPass: false,
@@ -74,11 +72,18 @@ class _LoginFormState extends State<LoginForm> {
             // Spacing
             const SizedBox(height: 50),
 
-            // Register button
+            // Log in button
             SizedBox(
               width: 250,
               child: DefaultTextButton(
-                onPressed: widget.onPressed,
+                onPressed: () {
+                  widget.formKey.currentState!.validate();
+                  // Go to profile page on button press
+                  Navigator.of(context).pushNamedAndRemoveUntil(
+                    profileRoute,
+                    (route) => false,
+                  );
+                },
                 label: 'Log in',
               ),
             ),
