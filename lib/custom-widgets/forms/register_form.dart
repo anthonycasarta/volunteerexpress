@@ -67,8 +67,8 @@ class _RegisterFormState extends State<RegisterForm> {
                   });
                 },
                 icon: _isPassObscured
-                    ? const Icon(Icons.visibility_off) // Eye with slash icon
-                    : const Icon(Icons.visibility), // Eye icon
+                    ? const Icon(Icons.visibility) // Eye icon
+                    : const Icon(Icons.visibility_off), // Eye with slash icon
               ),
             ),
 
@@ -90,8 +90,8 @@ class _RegisterFormState extends State<RegisterForm> {
                   });
                 },
                 icon: _isConfirmObscured
-                    ? const Icon(Icons.visibility_off) // Eye with slash icon
-                    : const Icon(Icons.visibility), // Eye icon
+                    ? const Icon(Icons.visibility) // Eye icon
+                    : const Icon(Icons.visibility_off), // Eye with slash icon
               ),
             ),
 

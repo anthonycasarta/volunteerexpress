@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:volunteerexpress/constants/routes.dart';
 import 'package:volunteerexpress/custom-widgets/textbuttons/default_textbutton.dart';
 import 'package:volunteerexpress/custom-widgets/textfields/email_textformfield.dart';
 import 'package:volunteerexpress/custom-widgets/textfields/password_textformfield.dart';
@@ -49,7 +50,6 @@ class _LoginFormState extends State<LoginForm> {
             const SizedBox(height: 20),
 
             // Password field
-
             PasswordTextFormField(
               obscureText: _isObscured,
               isConfirmPass: false,
@@ -64,20 +64,25 @@ class _LoginFormState extends State<LoginForm> {
                   });
                 },
                 icon: _isObscured
-                    ? const Icon(Icons.visibility_off) // Eye with slash icon
-                    : const Icon(Icons.visibility), // Eye icon
+                    ? const Icon(Icons.visibility) // Eye icon
+                    : const Icon(Icons.visibility_off), // Eye with slash icon
               ),
             ),
 
             // Spacing
             const SizedBox(height: 50),
 
-            // Register button
+            // Log in button
             SizedBox(
               width: 250,
               child: DefaultTextButton(
                 onPressed: () {
-                  widget.formKey.currentState!.validate(); // validtion
+                  widget.formKey.currentState!.validate();
+                  // Go to profile page on button press
+                  Navigator.of(context).pushNamedAndRemoveUntil(
+                    profileRoute,
+                    (route) => false,
+                  );
                 },
                 label: 'Log in',
               ),
