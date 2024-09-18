@@ -66,8 +66,8 @@ class _LoginFormState extends State<LoginForm> {
                   });
                 },
                 icon: _isObscured
-                    ? const Icon(Icons.visibility_off) // Eye with slash icon
-                    : const Icon(Icons.visibility), // Eye icon
+                    ? const Icon(Icons.visibility) // Eye icon
+                    : const Icon(Icons.visibility_off), // Eye with slash icon
               ),
             ),
 

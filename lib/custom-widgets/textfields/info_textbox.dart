@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:volunteerexpress/themes/colors.dart';
 
-
 class InfoTextBox extends StatelessWidget {
   final TextEditingController controller;
   final String labelText;
