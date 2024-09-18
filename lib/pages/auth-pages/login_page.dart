@@ -76,6 +76,13 @@ class _LoginPageState extends State<LoginPage> {
                   emailController: _emailController,
                   passwordController: _passwordController,
                   formKey: _loginFormKey,
+                  onPressed: () {
+                    _loginFormKey.currentState!.validate();
+                    Navigator.of(context).pushNamedAndRemoveUntil(
+                      profileRoute,
+                      (route) => false,
+                    );
+                  },
                 ),
 
                 // Spacing

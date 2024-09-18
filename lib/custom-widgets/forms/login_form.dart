@@ -7,6 +7,7 @@ import 'package:volunteerexpress/decorations/form_decoration.dart';
 class LoginForm extends StatefulWidget {
   final TextEditingController emailController;
   final TextEditingController passwordController;
+  final VoidCallback? onPressed;
 
   final GlobalKey<FormState> formKey;
 
@@ -15,6 +16,7 @@ class LoginForm extends StatefulWidget {
     required this.emailController,
     required this.passwordController,
     required this.formKey,
+    required this.onPressed,
   });
 
   @override
@@ -76,9 +78,7 @@ class _LoginFormState extends State<LoginForm> {
             SizedBox(
               width: 250,
               child: DefaultTextButton(
-                onPressed: () {
-                  widget.formKey.currentState!.validate(); // validtion
-                },
+                onPressed: widget.onPressed,
                 label: 'Log in',
               ),
             ),
