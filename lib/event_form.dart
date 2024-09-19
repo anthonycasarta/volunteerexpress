@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:volunteerexpress/custom-widgets/textbuttons/default_textbutton.dart';
 import 'package:volunteerexpress/custom-widgets/textbuttons/text_only_button.dart';
 import 'package:volunteerexpress/themes/colors.dart';
-import 'package:multi_select_flutter/multi_select_flutter.dart';
+import 'package:multi_dropdown/multi_dropdown.dart';
 
 
 class EventManagementForm extends StatefulWidget {
@@ -13,48 +12,75 @@ class EventManagementForm extends StatefulWidget {
 
 }
 
+
+
 class _EventManagementFormState extends State<EventManagementForm> {
+    final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+    
     final TextEditingController eventNameController = TextEditingController();
     final TextEditingController eventDescriptionController = TextEditingController(); 
     final TextEditingController eventLocationController = TextEditingController();
-    final TextEditingController eventDateController = TextEditingController();
-    
-    List<DateTime> dates = [];
+    final skillController = MultiSelectController<String>();
 
-    Future<void> selectDate() async {
-    DateTime? picked = await showDatePicker(
-      context: context,
-      initialDate: DateTime.now(),
-      firstDate: DateTime(2000),
-      lastDate: DateTime(2100),
-    );
-    if (picked != null) {
-      setState(() {
-        dates.add(picked);
-        eventDateController.text = picked.toString().split(" ")[0];
-      });
-    }
+    List<DateTime> selectedDates  = [];
+
+    Future<void> selectDate(BuildContext context) async {
+      DateTime? pickedDate = await showDatePicker(
+    context: context,
+    initialDate: DateTime.now(),
+    firstDate: DateTime(2000),
+    lastDate: DateTime(2101),
+  );
+
+ 
+
+
+  if (pickedDate != null) {
+    setState(() {
+      if (selectedDates.contains(pickedDate)) {
+        selectedDates.remove(pickedDate);
+      } else {
+        selectedDates.add(pickedDate);
+      }
+    });
   }
+}
 
-    final List<String> requiredSkills = [
-      "Teamwork",
-      "Communication",
-      "Leadership",
-      "Problem Solving",
-      "Time Management",
-      "Technical Skills",
-      "Adaptability",
-    ];
+  
+  
 
-    final List<String> urgencyOptions = [
+  final List<String> urgencyOptions = [
       'High',
       'Medium',
       'Low',
-    ];
+  ];
+
+  var requiredSkills = [
+    DropdownItem(label: 'Leadership', value: "Leadership"),
+    DropdownItem(label: ' Problem Solving', value: " Problem Solving"),
+    DropdownItem(label: 'Creativity', value: "Creativity"),
+    DropdownItem(label: 'Adaptability', value: "Adaptability"),
+    DropdownItem(label: 'Teamwork', value: "Teamwork"),
+    DropdownItem(label: 'Communication', value: "Communication"),
+  ];
 
     String? selectedUrgency;
+    List<String> selectedSkills = [];
 
-  List<String> selectedSkills = [];
+  @override
+  void initState() {
+    super.initState();
+    // Initialize any controllers or other resources if needed
+  }
+
+  @override
+  void dispose() {
+    eventNameController.dispose();
+    eventDescriptionController.dispose();
+    eventLocationController.dispose();
+    super.dispose(); // Call the superclass dispose method
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -65,6 +91,8 @@ class _EventManagementFormState extends State<EventManagementForm> {
       ),
     body: SingleChildScrollView(
       padding: const EdgeInsets.all(16.0),
+      child: Form( 
+        key: _formKey,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -79,6 +107,12 @@ class _EventManagementFormState extends State<EventManagementForm> {
             hintText: 'Enter the event name',
             isRequired: true,
             maxLength: 100,
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return 'Event name is required';
+              }
+              return null;
+            },
           ),
           const SizedBox(height: 20),
           InfoTextBox(
@@ -89,6 +123,12 @@ class _EventManagementFormState extends State<EventManagementForm> {
             isMultiline: true,
             minLines: 2,
             maxLength: 500,
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return 'Event name is required';
+              }
+              return null;
+            },
           ),
           const SizedBox(height: 20),
           InfoTextBox(
@@ -99,90 +139,141 @@ class _EventManagementFormState extends State<EventManagementForm> {
             isMultiline: true,
             minLines: 2,
             maxLength: 500,
-          ),
-          const SizedBox(height: 20),
-          MultiSelectDialogField(
-            
-            items: requiredSkills
-              .map((skill) => MultiSelectItem<String>(skill, skill))
-              .toList(),
-            title: const Text("Required Skills"),
-            selectedColor: primaryAccentColor,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.all(Radius.circular(5)),
-              border: Border.all(
-                color: Colors.grey,
-                width: 1,
-              ),
-            ),
-          buttonText: const Text(
-            "Select skills",
-            style: TextStyle(
-              fontSize: 18,
-              color: textColorDark,
-            ),
-          ),
-          onConfirm: (List<String> selected) {
-            setState(() {
-              selectedSkills = selected;
-            });
-          },
-          ),
-          const SizedBox(height: 20),
-          const Text(
-              'Urgency',
-              style: TextStyle(fontSize: 16, color: textColorDark),
-          ),
-          DropdownButtonFormField<String>(
-            value: selectedUrgency,
-            hint: const Text('Select Urgency'),
-            items: urgencyOptions.map((String urgency) {
-              return DropdownMenuItem<String>(
-                value: urgency, child: Text(urgency),
-                );}).toList(),
-            onChanged: (String? newValue) {
-              setState(() {
-                selectedUrgency = newValue;
-              });
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return 'Event name is required';
+              }
+              return null;
             },
-            validator: (value) => value == null ? 'Please select an urgency level' : null,
-            decoration: const InputDecoration(
-              border: OutlineInputBorder(),
-              //filled: true,
-              contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 16),
-            )
           ),
-          const SizedBox(height:20),
-          TextField(
-                  controller: eventDateController,
-                  decoration: const InputDecoration(
-                    labelText: 'DATE',
-                    prefixIcon: Icon(Icons.calendar_today),
-                    enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.grey),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: primaryAccentColor),
+
+          const SizedBox(height: 20),
+          // Multi-select dropdown for required skills
+          MultiDropdown<String>(
+                items: requiredSkills,
+                controller: skillController,
+                enabled: true,
+                fieldDecoration: FieldDecoration(
+                  hintText: 'Select Required Skill',
+                  hintStyle: const TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.normal,
+                    color: textColorDark,
+                  ),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(5),
+                    borderSide: const BorderSide(
+                      color: Colors.grey,
+                    )
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(5),
+                    borderSide: const BorderSide(
+                        color: Colors.red
                     ),
                   ),
-                  readOnly: true,
-                  onTap: selectDate,
-                ),
+              ),
+              validator: (value) {
+                if (value == null  || value.isEmpty) {
+                  return 'Select Requiered Skills';
+                }
+                  return null;
+              }
+
+            ),
+        
+
+      
+
           const SizedBox(height: 20),
-          TextOnlyButton(
-            onPressed: () {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Event Saved')),
+          DropdownButtonFormField<String>(
+            value: selectedUrgency,
+            decoration: InputDecoration(
+              
+              labelText: selectedUrgency == null ? null : 'Urgency',
+              border: const OutlineInputBorder(),
+              focusedBorder:const  OutlineInputBorder(
+                borderSide: BorderSide(color: primaryAccentColor),
+              ),
+              contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 16),
+            ),
+            hint: const DefaultTextStyle(
+              style: TextStyle(
+                fontSize: 18,
+                color: textColorDark,
+              ),
+              child: Text('Select Urgency'),
+            ),
+
+            isExpanded: true,
+            items: urgencyOptions.map((String urgency) {
+              return DropdownMenuItem<String>(
+                value: urgency,
+                child: Text(
+                  urgency,
+                  style: const TextStyle(
+                    fontSize: 18, 
+                    height: 1.2, 
+                  ), 
+                ),
               );
+            }).toList(),
+            onChanged: (String? newValue) {
+              setState(() {selectedUrgency = newValue;});
             },
-            label: 'Save Event',
-            fontSize: 18,
+            validator: (value) => value == null ? 'Please select an urgency level' : null,
+          ),
+        
+          const SizedBox(height:20),
+          TextFormField(
+                  decoration: const InputDecoration(
+                    labelText: 'Event Dates',
+                    hintText: 'Select event dates',
+                    prefixIcon: Icon(Icons.calendar_today),
+                    border: OutlineInputBorder(),
+                  ),
+                  controller: TextEditingController(
+                    text: selectedDates.isNotEmpty
+                    ? selectedDates.map((date) => date.toLocal().toString().split(' ')[0]).join(', ')
+                    : null,
+                    ),
+                    readOnly: true,
+                    onTap: () {
+                      selectDate(context);
+                    },
+                  validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Dates Selection is required';
+                  }
+                    return null;
+                  },
+                ),
+          const SizedBox(height:20),
+          TextOnlyButton(
+            onPressed: (){ 
+              setState(() {
+              
+              });
+              if (_formKey.currentState!.validate() &&
+                      selectedDates.isNotEmpty) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('Event saved')),
+                    );
+            } else {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text('Please fill all required fields')),
+              );
+            }
+          },
+          fontSize: 20, 
+          label: 'Save Changes'
           ),
         ],
       ),
+      ),
     ),
   );
-  } 
+  }
 }
 
 class InfoTextBox extends StatelessWidget {
@@ -193,6 +284,7 @@ class InfoTextBox extends StatelessWidget {
   final int? maxLength;
   final bool isMultiline;
   final int? minLines;
+   final String? Function(String?)? validator; 
 
   const InfoTextBox({
     super.key,
@@ -203,11 +295,12 @@ class InfoTextBox extends StatelessWidget {
     this.maxLength,
     this.isMultiline = false,
     this.minLines = 1,
+    this.validator,
   });
 
   @override
   Widget build(BuildContext context) {
-    return TextField(
+    return TextFormField(
       controller: controller,
       minLines: minLines,
       maxLength: maxLength,
@@ -218,6 +311,7 @@ class InfoTextBox extends StatelessWidget {
         border: const OutlineInputBorder(),
         suffixText: isRequired ? '*' : null,  // Adds a * if required
       ),
+       validator: validator,
     );
   }
 }
