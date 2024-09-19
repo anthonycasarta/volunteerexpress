@@ -109,6 +109,8 @@ class MyApp extends StatelessWidget {
         loginRoute: (context) => const LoginPage(),
         registerRoute: (context) => const RegisterPage(),
         profileRoute: (context) => const ProfilePage(),
+        notificationsRoute: (context) => const NotificationViewPage(),
+        volunteerHistoryRoute: (conttext) => const VolunteerHistoryPage(),
       },
     );
   }
