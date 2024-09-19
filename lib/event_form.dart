@@ -17,10 +17,10 @@ class EventManagementForm extends StatefulWidget {
 class _EventManagementFormState extends State<EventManagementForm> {
     final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
     
-    final TextEditingController eventNameController = TextEditingController();
-    final TextEditingController eventDescriptionController = TextEditingController(); 
-    final TextEditingController eventLocationController = TextEditingController();
-    final skillController = MultiSelectController<String>();
+    late final TextEditingController eventNameController;
+    late final TextEditingController eventDescriptionController; 
+    late final TextEditingController eventLocationController;
+    late final MultiSelectController<String> skillController;
 
     List<DateTime> selectedDates  = [];
 
@@ -30,11 +30,7 @@ class _EventManagementFormState extends State<EventManagementForm> {
     initialDate: DateTime.now(),
     firstDate: DateTime(2000),
     lastDate: DateTime(2101),
-  );
-
- 
-
-
+    );
   if (pickedDate != null) {
     setState(() {
       if (selectedDates.contains(pickedDate)) {
@@ -47,8 +43,6 @@ class _EventManagementFormState extends State<EventManagementForm> {
 }
 
   
-  
-
   final List<String> urgencyOptions = [
       'High',
       'Medium',
@@ -69,6 +63,10 @@ class _EventManagementFormState extends State<EventManagementForm> {
 
   @override
   void initState() {
+    eventNameController = TextEditingController();
+    eventDescriptionController = TextEditingController();
+    eventLocationController = TextEditingController();
+    skillController = MultiSelectController<String>();
     super.initState();
     // Initialize any controllers or other resources if needed
   }
@@ -78,6 +76,7 @@ class _EventManagementFormState extends State<EventManagementForm> {
     eventNameController.dispose();
     eventDescriptionController.dispose();
     eventLocationController.dispose();
+    skillController.dispose();
     super.dispose(); // Call the superclass dispose method
   }
 
