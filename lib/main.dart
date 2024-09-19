@@ -104,11 +104,12 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
 
-      home: const LoginPage(),
+      home: const EventManagementForm(),
       routes: {
         loginRoute: (context) => const LoginPage(),
         registerRoute: (context) => const RegisterPage(),
         profileRoute: (context) => const ProfilePage(),
+        eventFormRoute: (context) => const EventManagementForm(),
       },
     );
   }
