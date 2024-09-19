@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:volunteerexpress/themes/colors.dart';
 
 class VolunteerHistoryPage extends StatelessWidget {
     const VolunteerHistoryPage({Key? key}) : super(key: key);
@@ -14,7 +15,7 @@ class VolunteerHistoryPage extends StatelessWidget {
     PreferredSizeWidget appBar(){
       return AppBar(
         title: const Text('Volunteer History'),
-        backgroundColor: const Color.fromARGB(255, 174, 23, 12),
+        backgroundColor: const primaryAccentColor,
         titleTextStyle: const TextStyle(
           color: Colors.white,
           fontWeight: FontWeight.bold,
@@ -65,7 +66,7 @@ class VolunteerHistoryPage extends StatelessWidget {
         padding: const EdgeInsets.all(10),
         decoration: const BoxDecoration(
           shape: BoxShape.circle,
-          color: Color.fromARGB(255, 174, 23, 12),
+          color: primaryAccentColor,
         ),
         child: const Icon(
           Icons.assignment_outlined,
