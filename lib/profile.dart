@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:volunteerexpress/custom-widgets/textbuttons/default_textbutton.dart';
 import 'package:volunteerexpress/custom-widgets/textbuttons/text_only_button.dart';
 import 'package:volunteerexpress/themes/colors.dart';
 
@@ -39,9 +38,10 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomInset : false,
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        title: const Text('Profile Management', style: TextStyle(color: textColorLight)),
+        title: const Text('Profile Management',
+            style: TextStyle(color: textColorLight)),
         backgroundColor: primaryAccentColor,
       ),
       body: Container(
@@ -168,9 +168,12 @@ class _ProfilePageState extends State<ProfilePage> {
                     }
                   },
                   dropdownMenuEntries: const <DropdownMenuEntry<String>>[
-                    DropdownMenuEntry(value: 'Hands-on', label: 'Hands-on Work'),
-                    DropdownMenuEntry(value: 'Delivery', label: 'Delivery-Driving'),
-                    DropdownMenuEntry(value: 'Sales', label: 'Sales Assistance'),
+                    DropdownMenuEntry(
+                        value: 'Hands-on', label: 'Hands-on Work'),
+                    DropdownMenuEntry(
+                        value: 'Delivery', label: 'Delivery-Driving'),
+                    DropdownMenuEntry(
+                        value: 'Sales', label: 'Sales Assistance'),
                     DropdownMenuEntry(value: 'Food', label: 'Food Packing'),
                   ],
                 ),
@@ -203,14 +206,16 @@ class _ProfilePageState extends State<ProfilePage> {
                   dates.map((date) => date.toString().split(" ")[0]).join(", "),
                   style: const TextStyle(color: textColorDark, fontSize: 15),
                 ),
-                TextOnlyButton(onPressed: (){
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Changes have been saved'),
-                    ),
-                    );
-                },
-                fontSize: 20, 
-                label: 'Save Changes'),
+                TextOnlyButton(
+                    onPressed: () {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('Changes have been saved'),
+                        ),
+                      );
+                    },
+                    fontSize: 20,
+                    label: 'Save Changes'),
               ],
             ),
           ),
