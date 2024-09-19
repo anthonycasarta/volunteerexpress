@@ -15,7 +15,7 @@ class NotificationViewPage extends StatelessWidget {
     PreferredSizeWidget appBar(){
       return AppBar(
         title: const Text('Notifications'),
-        backgroundColor: const primaryAccentColor,
+        backgroundColor: primaryAccentColor,
         titleTextStyle: const TextStyle(
           color: Colors.white,
           fontWeight: FontWeight.bold,
