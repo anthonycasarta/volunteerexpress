@@ -4,6 +4,7 @@ import 'package:volunteerexpress/pages/auth-pages/login_page.dart';
 import 'package:volunteerexpress/pages/auth-pages/register_page.dart';
 import 'package:volunteerexpress/profile.dart';
 import 'package:volunteerexpress/themes/colors.dart';
+import 'event_form.dart';
 
 void main() {
   runApp(const MyApp());
@@ -102,11 +103,13 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: primaryAccentColor),
         useMaterial3: true,
       ),
+
       home: const LoginPage(),
       routes: {
         loginRoute: (context) => const LoginPage(),
         registerRoute: (context) => const RegisterPage(),
         profileRoute: (context) => const ProfilePage(),
+        eventFormRoute: (context) => const EventManagementForm(),
       },
     );
   }
