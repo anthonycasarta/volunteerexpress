@@ -6,6 +6,7 @@ import 'package:volunteerexpress/profile.dart';
 import 'package:volunteerexpress/themes/colors.dart';
 import 'package:volunteerexpress/notifications.dart';
 import 'package:volunteerexpress/volunteer_history.dart';
+import 'package:volunteerexpress/matching_form.dart';
 import 'event_form.dart';
 
 
@@ -115,6 +116,7 @@ class MyApp extends StatelessWidget {
         notificationRoute: (context) => const NotificationViewPage(),
         volunteerHistoryRoute: (conttext) => const VolunteerHistoryPage(),
         eventFormRoute: (context) => const EventManagementForm(),
+        matchingFormRoute: (context) => const MatchingFormPage(),
       },
     );
   }
