@@ -15,7 +15,7 @@ class VolunteerHistoryPage extends StatelessWidget {
     PreferredSizeWidget appBar(){
       return AppBar(
         title: const Text('Volunteer History'),
-        backgroundColor: const primaryAccentColor,
+        backgroundColor: (primaryAccentColor),
         titleTextStyle: const TextStyle(
           color: Colors.white,
           fontWeight: FontWeight.bold,
