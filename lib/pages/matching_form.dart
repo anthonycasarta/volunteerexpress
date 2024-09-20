@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:volunteerexpress/constants/routes.dart';
+import 'package:volunteerexpress/custom-widgets/textbuttons/text_only_button.dart';
 import 'package:volunteerexpress/themes/colors.dart';
 
 class MatchingFormPage extends StatefulWidget {
@@ -56,20 +58,16 @@ class _CheckBoxState extends State<MatchingFormPage> {
                   },
                 ),
               ),
-              
               const SizedBox(height: 20),
-
               const Text(
                 'Please choose the people you would like to add:',
                 style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
+                  color: Colors.black,
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
-
               const SizedBox(height: 20),
-
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -92,7 +90,6 @@ class _CheckBoxState extends State<MatchingFormPage> {
                 ],
               ),
               const SizedBox(height: 20),
-
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -115,7 +112,6 @@ class _CheckBoxState extends State<MatchingFormPage> {
                 ],
               ),
               const SizedBox(height: 20),
-
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -138,7 +134,6 @@ class _CheckBoxState extends State<MatchingFormPage> {
                 ],
               ),
               const SizedBox(height: 20),
-
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -160,9 +155,7 @@ class _CheckBoxState extends State<MatchingFormPage> {
                   ),
                 ],
               ),
-
               const SizedBox(height: 20),
-
               Container(
                 width: 300,
                 height: 50,
@@ -182,6 +175,40 @@ class _CheckBoxState extends State<MatchingFormPage> {
                   child: const Text(
                     "Match Volunteer",
                     style: TextStyle(fontSize: 18),
+                  ),
+                ),
+              ),
+
+              const SizedBox(height: 60),
+
+              // Nav bar
+              Center(
+                child: SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      TextOnlyButton(
+                          onPressed: () =>
+                              Navigator.pushNamed(context, eventFormRoute),
+                          label: "Event Form"),
+                      TextOnlyButton(
+                          onPressed: () =>
+                              Navigator.pushNamed(context, profileRoute),
+                          label: "Profile Page"),
+                      TextOnlyButton(
+                          onPressed: () => Navigator.pushNamed(
+                              context, volunteerHistoryRoute),
+                          label: "Volunteer History"),
+                      TextOnlyButton(
+                          onPressed: () =>
+                              Navigator.pushNamed(context, notificationRoute),
+                          label: "Notifications"),
+                      TextOnlyButton(
+                          onPressed: () =>
+                              Navigator.pushNamed(context, loginRoute),
+                          label: "Logout"),
+                    ],
                   ),
                 ),
               ),

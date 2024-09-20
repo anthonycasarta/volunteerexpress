@@ -259,6 +259,10 @@ class _ProfilePageState extends State<ProfilePage> {
                                   context, notificationRoute),
                               label: "Notifications"),
                           TextOnlyButton(
+                              onPressed: () => Navigator.pushNamed(
+                                  context, matchingFormRoute),
+                              label: "Matching Form"),
+                          TextOnlyButton(
                               onPressed: () =>
                                   Navigator.pushNamed(context, loginRoute),
                               label: "Logout"),
