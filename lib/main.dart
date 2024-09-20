@@ -4,7 +4,10 @@ import 'package:volunteerexpress/pages/auth-pages/login_page.dart';
 import 'package:volunteerexpress/pages/auth-pages/register_page.dart';
 import 'package:volunteerexpress/profile.dart';
 import 'package:volunteerexpress/themes/colors.dart';
+import 'package:volunteerexpress/notifications.dart';
+import 'package:volunteerexpress/volunteer_history.dart';
 import 'event_form.dart';
+
 
 void main() {
   runApp(const MyApp());
@@ -109,6 +112,8 @@ class MyApp extends StatelessWidget {
         loginRoute: (context) => const LoginPage(),
         registerRoute: (context) => const RegisterPage(),
         profileRoute: (context) => const ProfilePage(),
+        notificationRoute: (context) => const NotificationViewPage(),
+        volunteerHistoryRoute: (conttext) => const VolunteerHistoryPage(),
         eventFormRoute: (context) => const EventManagementForm(),
       },
     );
