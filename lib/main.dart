@@ -30,6 +30,14 @@ class MyApp extends StatelessWidget {
             fontWeight: FontWeight.bold,
           ),
         ),
+        // icon button color
+        iconButtonTheme: const IconButtonThemeData(
+          style: ButtonStyle(
+            iconColor: WidgetStatePropertyAll<Color>(
+              textColorLight,
+            ),
+          ),
+        ),
         textTheme: const TextTheme(
           // Textfield input text
           bodyLarge: TextStyle(
