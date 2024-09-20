@@ -278,6 +278,10 @@ class _EventManagementFormState extends State<EventManagementForm> {
                           label: "Notifications"),
                       TextOnlyButton(
                           onPressed: () =>
+                              Navigator.pushNamed(context, matchingFormRoute),
+                          label: "Matching Form"),
+                      TextOnlyButton(
+                          onPressed: () =>
                               Navigator.pushNamed(context, loginRoute),
                           label: "Logout"),
                     ],

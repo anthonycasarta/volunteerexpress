@@ -166,6 +166,10 @@ class _VolunteerHistoryPageState extends State<VolunteerHistoryPage> {
                 label: "Profile Page"),
             TextOnlyButton(
                 onPressed: () =>
+                    Navigator.pushNamed(context, matchingFormRoute),
+                label: "Matching Form"),
+            TextOnlyButton(
+                onPressed: () =>
                     Navigator.pushNamed(context, notificationRoute),
                 label: "Notifications"),
             TextOnlyButton(
