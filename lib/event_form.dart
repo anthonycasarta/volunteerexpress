@@ -267,8 +267,31 @@ class _EventManagementFormState extends State<EventManagementForm> {
           fontSize: 20, 
           label: 'Save Changes'
           ),
+          Center(
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      TextOnlyButton(
+                        onPressed:() =>  Navigator.pushNamed(context,'/profile/'),
+                        label: "Profile Page"),
+                        TextOnlyButton(
+                        onPressed:() =>  Navigator.pushNamed(context,'/volunteer-history/'),
+                        label: "Volunteer History"),
+                        TextOnlyButton(
+                        onPressed:() =>  Navigator.pushNamed(context,'/notifications/'),
+                        label: "Notifications"),
+                        TextOnlyButton(
+                        onPressed:() =>  Navigator.pushNamed(context,'/login/'),
+                        label: "Logout"),
+                        
+                  
+                    ],
+                  
+                  ),
+                )
         ],
       ),
+      
       ),
     ),
   );

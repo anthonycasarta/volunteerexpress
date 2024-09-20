@@ -1,16 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:volunteerexpress/themes/colors.dart';
+import 'package:volunteerexpress/custom-widgets/textbuttons/text_only_button.dart';
 
 class VolunteerHistoryPage extends StatelessWidget {
-    const VolunteerHistoryPage({Key? key}) : super(key: key);
+  const VolunteerHistoryPage({Key? key}) : super(key: key);
 
-    @override
-    Widget build(BuildContext context) {
-      return Scaffold(
-        appBar: appBar(),
-        body: listView(),
-      );
-    }
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: appBar(),
+      body: Column(
+        children: [
+          Expanded(child: listView()), // The list view
+          navBar(context), // Add the navBar here
+        ],
+      ),
+    );
+  }
 
     PreferredSizeWidget appBar(){
       return AppBar(
@@ -138,10 +144,36 @@ class VolunteerHistoryPage extends StatelessWidget {
                 fontSize: 10,
                 color: Color.fromARGB(255, 18, 168, 33),
               ),
-            )
+            ),
+            
           ],
         ),
       );
     }
+    Widget navBar(BuildContext context){
+      return Center(
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      TextOnlyButton(
+                        onPressed:() =>  Navigator.pushNamed(context,'/event-form/'),
+                        label: "Event Form"),
+                        TextOnlyButton(
+                        onPressed:() =>  Navigator.pushNamed(context,'/profile/'),
+                        label: "Profile Page"),
+                        TextOnlyButton(
+                        onPressed:() =>  Navigator.pushNamed(context,'/notifications/'),
+                        label: "Notifications"),
+                        TextOnlyButton(
+                        onPressed:() =>  Navigator.pushNamed(context,'/login/'),
+                        label: "Logout"),
+                        
+                  
+                    ],
+                  
+                  ),
+                );
+    }
+    
 
 }

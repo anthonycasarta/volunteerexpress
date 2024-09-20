@@ -215,7 +215,33 @@ class _ProfilePageState extends State<ProfilePage> {
                       );
                     },
                     fontSize: 20,
-                    label: 'Save Changes'),
+                    label: 'Save Changes'
+                ),
+                Center(
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      TextOnlyButton(
+                        onPressed:() =>  Navigator.pushNamed(context,'/event-form/'),
+                        label: "Event Form"),
+                        TextOnlyButton(
+                        onPressed:() =>  Navigator.pushNamed(context,'/volunteer-history/'),
+                        label: "Volunteer History"),
+                        TextOnlyButton(
+                        onPressed:() =>  Navigator.pushNamed(context,'/notifications/'),
+                        label: "Notifications"),
+                        TextOnlyButton(
+                        onPressed:() =>  Navigator.pushNamed(context,'/login/'),
+                        label: "Logout"),
+                        
+                  
+                    ],
+                  
+                  ),
+                )
+
+                
+              
               ],
             ),
           ),
