@@ -2,12 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:volunteerexpress/constants/routes.dart';
 import 'package:volunteerexpress/pages/auth-pages/login_page.dart';
 import 'package:volunteerexpress/pages/auth-pages/register_page.dart';
-import 'package:volunteerexpress/profile.dart';
+import 'package:volunteerexpress/pages/profile.dart';
 import 'package:volunteerexpress/themes/colors.dart';
-import 'package:volunteerexpress/notifications.dart';
-import 'package:volunteerexpress/volunteer_history.dart';
-import 'event_form.dart';
-
+import 'package:volunteerexpress/pages/notifications.dart';
+import 'package:volunteerexpress/pages/volunteer_history.dart';
+import 'pages/event_form.dart';
 
 void main() {
   runApp(const MyApp());
@@ -29,6 +28,14 @@ class MyApp extends StatelessWidget {
             color: textColorLight,
             fontSize: 20,
             fontWeight: FontWeight.bold,
+          ),
+        ),
+        // icon button color
+        iconButtonTheme: const IconButtonThemeData(
+          style: ButtonStyle(
+            iconColor: WidgetStatePropertyAll<Color>(
+              textColorLight,
+            ),
           ),
         ),
         textTheme: const TextTheme(
