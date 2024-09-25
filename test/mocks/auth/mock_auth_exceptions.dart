@@ -1,0 +1,1 @@
+class NotInitializedMockAuthException implements Exception {}

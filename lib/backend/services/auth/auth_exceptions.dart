@@ -3,6 +3,8 @@ class InvalidCredentialAuthException implements Exception {}
 
 class UserNotLoggedInAuthException implements Exception {}
 
+class UserNotFoundAuthException implements Exception {}
+
 // register exceptions
 class WeakPasswordAuthException implements Exception {}
 
