@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:volunteerexpress/backend/services/auth/auth_exceptions.dart';
+import 'package:volunteerexpress/backend/services/auth/auth_service.dart';
 import 'package:volunteerexpress/frontend/custom-widgets/textbuttons/default_textbutton.dart';
 import 'package:volunteerexpress/frontend/custom-widgets/textfields/email_textformfield.dart';
 import 'package:volunteerexpress/frontend/custom-widgets/textfields/password_textformfield.dart';
 import 'package:volunteerexpress/frontend/decorations/form_decoration.dart';
+
+import 'dart:developer' as dev show log;
 
 class RegisterForm extends StatefulWidget {
   final TextEditingController emailController;
@@ -102,8 +106,31 @@ class _RegisterFormState extends State<RegisterForm> {
             SizedBox(
               width: 250,
               child: DefaultTextButton(
-                onPressed: () {
-                  widget.formKey.currentState!.validate(); // validtion
+                onPressed: () async {
+                  // validtion
+                  if (widget.formKey.currentState!.validate()) {
+                    final email = widget.emailController.text;
+                    final password = widget.passwordController.text;
+                    try {
+                      await AuthService.firebase().createUser(
+                        email: email,
+                        password: password,
+                      );
+                      //
+                      // *****CHECK FOR EMAIL VERIFICATION IN THE FUTURE*****
+                      //
+
+                      // Unimplemented exceptions
+                    } on EmailAlreadyInUseAuthException {
+                      dev.log('email already in use'); //placeholder
+                    } on WeakPasswordAuthException {
+                      dev.log('weak password'); //placeholder
+                    } on InvalidEmailAuthException {
+                      dev.log('invalid email'); //placeholder
+                    } on GenericAuthException catch (e) {
+                      dev.log(e.toString()); //placeholder
+                    }
+                  }
                 },
                 label: 'Register',
               ),

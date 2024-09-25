@@ -1,9 +1,13 @@
 import 'package:volunteerexpress/backend/services/auth/auth_provider.dart';
 import 'package:volunteerexpress/backend/services/auth/auth_user.dart';
+import 'package:volunteerexpress/backend/services/auth/firebase/firebase_auth_provider.dart';
 
 class AuthService implements AuthProvider {
   final AuthProvider authProvider;
   const AuthService(this.authProvider);
+
+  // Return instance of AuthService that uses Firebase as the AuthProvider
+  factory AuthService.firebase() => AuthService(FirebaseAuthProvider());
 
   @override
   Future<AuthUser> createUser({
@@ -33,4 +37,7 @@ class AuthService implements AuthProvider {
 
   @override
   Future<void> sendEmailVerification() => authProvider.sendEmailVerification();
+
+  @override
+  Future<void> initialize() => authProvider.initialize();
 }

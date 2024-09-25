@@ -36,7 +36,7 @@ class PasswordTextFormField extends StatelessWidget {
         if (value == null || value.isEmpty) {
           return '**Enter a Password**';
         } else if (isConfirmPass) {
-          if (controller != compareController) {
+          if (controller.text != compareController!.text) {
             return '**Passwords do not match**';
           }
         }
