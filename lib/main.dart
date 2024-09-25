@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:volunteerexpress/constants/routes.dart';
-import 'package:volunteerexpress/pages/matching_form.dart';
-import 'package:volunteerexpress/pages/auth-pages/login_page.dart';
-import 'package:volunteerexpress/pages/auth-pages/register_page.dart';
-import 'package:volunteerexpress/pages/event_form.dart';
-import 'package:volunteerexpress/pages/notifications.dart';
-import 'package:volunteerexpress/pages/profile.dart';
-import 'package:volunteerexpress/pages/volunteer_history.dart';
-import 'package:volunteerexpress/themes/colors.dart';
+import 'package:volunteerexpress/frontend/constants/routes.dart';
+import 'package:volunteerexpress/frontend/pages/matching_form.dart';
+import 'package:volunteerexpress/frontend/pages/auth-pages/login_page.dart';
+import 'package:volunteerexpress/frontend/pages/auth-pages/register_page.dart';
+import 'package:volunteerexpress/frontend/pages/event_form.dart';
+import 'package:volunteerexpress/frontend/pages/notifications.dart';
+import 'package:volunteerexpress/frontend/pages/profile.dart';
+import 'package:volunteerexpress/frontend/pages/volunteer_history.dart';
+import 'package:volunteerexpress/frontend/themes/colors.dart';
 
 void main() {
   runApp(const MyApp());

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:volunteerexpress/enums/auth_enums.dart';
-import 'package:volunteerexpress/themes/colors.dart';
+import 'package:volunteerexpress/frontend/enums/auth_enums.dart';
+import 'package:volunteerexpress/frontend/themes/colors.dart';
 
 class FormListTile extends StatelessWidget {
   final Auth auth;
