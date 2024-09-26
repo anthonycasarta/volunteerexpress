@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "840655620129",
+    "project_id": "volunteerexpress",
+    "storage_bucket": "volunteerexpress.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:840655620129:android:b31b72212a9258e6fffb60",
+        "android_client_info": {
+          "package_name": "com.coogsfalltwentyfour.volunteerexpress"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCI5GRxOFsEsnTZAPcLscscgbcUeabF_0k"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
