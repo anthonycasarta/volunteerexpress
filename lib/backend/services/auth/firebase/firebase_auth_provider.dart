@@ -5,6 +5,7 @@ import 'package:volunteerexpress/backend/services/auth/auth_provider.dart';
 
 import 'package:firebase_auth/firebase_auth.dart' as firebase_auth
     show FirebaseAuth, FirebaseAuthException;
+import 'package:volunteerexpress/firebase_options.dart';
 
 class FirebaseAuthProvider implements AuthProvider {
   @override
@@ -114,7 +115,7 @@ class FirebaseAuthProvider implements AuthProvider {
   @override
   Future<void> initialize() async {
     await Firebase.initializeApp(
-        //options: DefaultFirebaseOptions.currentPlatform,
-        );
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
   }
 }
