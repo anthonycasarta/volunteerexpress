@@ -4,10 +4,11 @@ import 'package:volunteerexpress/backend/services/auth/firebase/firebase_auth_pr
 
 class AuthService implements AuthProvider {
   final AuthProvider authProvider;
-  const AuthService(this.authProvider);
+  const AuthService({required this.authProvider});
 
   // Return instance of AuthService that uses Firebase as the AuthProvider
-  factory AuthService.firebase() => AuthService(FirebaseAuthProvider());
+  factory AuthService.firebase() =>
+      AuthService(authProvider: FirebaseAuthProvider());
 
   @override
   Future<AuthUser> createUser({

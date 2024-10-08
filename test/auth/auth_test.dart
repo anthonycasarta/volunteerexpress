@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 import 'package:volunteerexpress/backend/services/auth/auth_exceptions.dart';
+import 'package:volunteerexpress/backend/services/auth/auth_service.dart';
 import 'package:volunteerexpress/backend/services/auth/firebase/firebase_auth_provider.dart';
 
 import 'package:mockito/annotations.dart';
@@ -10,11 +11,26 @@ import 'package:mockito/annotations.dart';
 import 'auth_test.mocks.dart';
 
 void main() {
-  final provider = MockFirebaseAuthProvider();
+  final mockFirebaseProvider = MockFirebaseAuthProvider();
+  final mockAuthService = AuthService(authProvider: mockFirebaseProvider);
   const invalidEmail = 'emailgmail.com';
 
   group('Firebase mock authentication', () {
-    test('weak pass exception', () async {});
+    test('weak pass exception', () async {
+      when(mockFirebaseProvider.createUser(
+        email: invalidEmail,
+        password: 'LemonLimeRime2387046!',
+      )).thenAnswer(
+        (_) => throw InvalidEmailAuthException(),
+      );
+
+      await expectLater(
+          mockAuthService.createUser(
+            email: invalidEmail,
+            password: 'LemonLimeRime2387046!',
+          ),
+          InvalidEmailAuthException);
+    });
   });
 
   // group('Mock Authentication', () {
