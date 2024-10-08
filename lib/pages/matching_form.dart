@@ -2,20 +2,40 @@ import 'package:flutter/material.dart';
 import 'package:volunteerexpress/constants/routes.dart';
 import 'package:volunteerexpress/custom-widgets/textbuttons/text_only_button.dart';
 import 'package:volunteerexpress/themes/colors.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:volunteerexpress/services/matching_services.dart';
+//Import for Firebase initialization
 
 class MatchingFormPage extends StatefulWidget {
   const MatchingFormPage({super.key});
 
   @override
-  State<MatchingFormPage> createState() => _CheckBoxState();
+  State<MatchingFormPage> createState() => _MatchingFormPageState();
 }
 
-class _CheckBoxState extends State<MatchingFormPage> {
+class _MatchingFormPageState extends State<MatchingFormPage> {
   bool firstValue = false;
   bool secondValue = false;
   bool thirdValue = false;
   bool fourthValue = false;
-  final matchedEvents = ["Event one", "Event two", "Event three"];
+  final matchedEvents = [
+    "Hands-on work", "Delivery-Driving", "Sales Assistance","Food Packing"
+    ];
+  String? selectedEvent;
+  List<Map<String, dynamic>> matchedVolunteers = [];
+  
+  // Add Firebase initialization in initState
+  @override
+  void initState() {
+    super.initState();
+   // _initializeFirebase();
+  }
+
+  //Future<void> _initializeFirebase() async {
+    //await Firebase.initializeApp(); // Initialize Firebase here
+  //}
+
+  //final matchingServices = MatchingServices(firestore: FirebaseFirestore.instance);
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +68,9 @@ class _CheckBoxState extends State<MatchingFormPage> {
                     );
                   }).toList(),
                   onChanged: (value) {
-                    //handle events
+                    setState(() {
+                      selectedEvent = value;
+                    });
                   },
                   validator: (value) {
                     if (value == null) {
@@ -68,105 +90,30 @@ class _CheckBoxState extends State<MatchingFormPage> {
                 ),
               ),
               const SizedBox(height: 20),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Checkbox(
-                    value: firstValue,
-                    onChanged: (value) {
-                      setState(() {
-                        firstValue = value!;
-                      });
-                    },
-                  ),
-                  const Text(
-                    "Person one",
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 20),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Checkbox(
-                    value: secondValue,
-                    onChanged: (value) {
-                      setState(() {
-                        secondValue = value!;
-                      });
-                    },
-                  ),
-                  const Text(
-                    "Person two",
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 20),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Checkbox(
-                    value: thirdValue,
-                    onChanged: (value) {
-                      setState(() {
-                        thirdValue = value!;
-                      });
-                    },
-                  ),
-                  const Text(
-                    "Person three",
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 20),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Checkbox(
-                    value: fourthValue,
-                    onChanged: (value) {
-                      setState(() {
-                        fourthValue = value!;
-                      });
-                    },
-                  ),
-                  const Text(
-                    "Person four",
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 20),
               Container(
                 width: 300,
                 height: 50,
                 margin: const EdgeInsets.symmetric(vertical: 20),
                 child: ElevatedButton(
-                  onPressed: () {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text('Form has been updated'),
-                      ),
-                    );
+                  onPressed: () async {
+                    //if (selectedEvent == null) {
+                    //  ScaffoldMessenger.of(context).showSnackBar(
+                      //  const SnackBar(
+                         // content: Text('Please select an event'),
+                        //),
+                      //);
+                     // return;
+                    //}
+                    //matchedVolunteers = await matchingServices.displayMatchedVolunteers(selectedEvent!);
+                    //if (matchedVolunteers.isEmpty) {
+                     // ScaffoldMessenger.of(context).showSnackBar(
+                       // const SnackBar(
+                        //  content: Text('No Volunteers matched the event'),
+                       // ),
+                      //);
+                   // } else {
+                     // showMatchedVolunteersDialog(context);
+                    //}
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: primaryAccentColor,
@@ -178,9 +125,7 @@ class _CheckBoxState extends State<MatchingFormPage> {
                   ),
                 ),
               ),
-
               const SizedBox(height: 60),
-
               // Nav bar
               Center(
                 child: SingleChildScrollView(
@@ -197,8 +142,8 @@ class _CheckBoxState extends State<MatchingFormPage> {
                               Navigator.pushNamed(context, profileRoute),
                           label: "Profile Page"),
                       TextOnlyButton(
-                          onPressed: () => Navigator.pushNamed(
-                              context, volunteerHistoryRoute),
+                          onPressed: () =>
+                              Navigator.pushNamed(context, volunteerHistoryRoute),
                           label: "Volunteer History"),
                       TextOnlyButton(
                           onPressed: () =>
@@ -218,4 +163,29 @@ class _CheckBoxState extends State<MatchingFormPage> {
       ),
     );
   }
-}
+
+  /*void showMatchedVolunteersDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Matched Volunteers'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: matchedVolunteers.map((volunteer) {
+              return Text(volunteer['fullName']);
+            }).toList(),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text('OK'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+*/}
