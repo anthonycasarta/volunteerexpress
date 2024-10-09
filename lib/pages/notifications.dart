@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:volunteerexpress/themes/colors.dart';
+import 'package:volunteerexpress/services/notification_services.dart';
 
 class NotificationViewPage extends StatefulWidget {
   const NotificationViewPage({super.key});
@@ -9,11 +10,42 @@ class NotificationViewPage extends StatefulWidget {
 }
 
 class _NotificationViewPageState extends State<NotificationViewPage> {
+  NotificationServices _notificationServices = NotificationServices();
+  late Future<List<Map<String, dynamic>>> _notificationsFuture;
+
+  @override
+  void initState(){
+    super.initState();
+    _notificationsFuture = _notificationServices.fetchNotifications();
+  }
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: appBar(),
-      body: listView(),
+      body: FutureBuilder<List<Map<String, dynamic>>>(
+        future: _notificationsFuture,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          }
+          if (!snapshot.hasData || snapshot.data!.isEmpty) {
+            return const Center(child: Text('No notifications yet'));
+          }
+
+          final notifications = snapshot.data!;
+          return ListView.separated(
+            itemBuilder: (context, index) {
+              final notification = notifications[index];
+              return listViewItem(notification);
+            },
+            separatorBuilder: (context, index) {
+              return const Divider(height: 0);
+            },
+            itemCount: notifications.length,
+          );
+        },
+      ),
     );
   }
 
@@ -29,18 +61,7 @@ class _NotificationViewPageState extends State<NotificationViewPage> {
     );
   }
 
-  Widget listView() {
-    return ListView.separated(
-        itemBuilder: (context, index) {
-          return listViewItem(index);
-        },
-        separatorBuilder: (context, index) {
-          return const Divider(height: 0);
-        },
-        itemCount: 15);
-  }
-
-  Widget listViewItem(int index) {
+  Widget listViewItem(Map<String, dynamic> notification) {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 13, vertical: 10),
       child: Row(
@@ -53,8 +74,8 @@ class _NotificationViewPageState extends State<NotificationViewPage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  message(index),
-                  timeAndDate(index),
+                  message(notification['title'], notification['description']),
+                  timeAndDate(notification['time']),
                 ],
               ),
             ),
@@ -81,21 +102,21 @@ class _NotificationViewPageState extends State<NotificationViewPage> {
     );
   }
 
-  Widget message(int index) {
+  Widget message(String title, String description) {
     double textSize = 14;
     return RichText(
       maxLines: 3,
       overflow: TextOverflow.ellipsis,
       text: TextSpan(
-        text: 'Message ',
+        text: '$title ',
         style: TextStyle(
             fontSize: textSize,
             color: Colors.black,
             fontWeight: FontWeight.bold),
-        children: const [
+        children: [
           TextSpan(
-            text: ' Notification Description',
-            style: TextStyle(
+            text: description,
+            style: const TextStyle(
               fontWeight: FontWeight.w400,
             ),
           )
@@ -104,21 +125,24 @@ class _NotificationViewPageState extends State<NotificationViewPage> {
     );
   }
 
-  Widget timeAndDate(int index) {
+  Widget timeAndDate(DateTime time) {
+    String formattedDate = '${time.month}-${time.day}-${time.year}';
+    String formattedTime = '${time.hour}:${time.minute.toString().padLeft(2, '0')} ${time.hour >= 12 ? "PM" : "AM"}';
+    
     return Container(
       margin: const EdgeInsets.only(top: 5),
-      child: const Row(
+      child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(
-            '09-20-24',
-            style: TextStyle(
+            formattedDate,
+            style: const TextStyle(
               fontSize: 10,
             ),
           ),
           Text(
-            '12:00 pm',
-            style: TextStyle(
+            formattedTime,
+            style: const TextStyle(
               fontSize: 10,
             ),
           )
