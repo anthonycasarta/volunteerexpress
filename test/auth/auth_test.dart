@@ -1,8 +1,8 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 import 'package:volunteerexpress/backend/services/auth/auth_exceptions.dart';
 import 'package:volunteerexpress/backend/services/auth/auth_service.dart';
+import 'package:volunteerexpress/backend/services/auth/auth_user.dart';
 import 'package:volunteerexpress/backend/services/auth/firebase/firebase_auth_provider.dart';
 
 import 'package:mockito/annotations.dart';
@@ -14,22 +14,106 @@ void main() {
   final mockFirebaseProvider = MockFirebaseAuthProvider();
   final mockAuthService = AuthService(authProvider: mockFirebaseProvider);
   const invalidEmail = 'emailgmail.com';
+  const weakPass = 'pass';
+  const validEmail = 'email@gmail.com';
+  const strongPass = 'LemonLimeRime2387046!';
 
-  group('Firebase mock authentication', () {
-    test('weak pass exception', () async {
+  const mockUser = {
+    'email': 'mockemail@gmail.com',
+    'pass': 'mockPass284639366!',
+  };
+
+  group('Firebase Mock createUser', () {
+    test('InvalidEmailAuthException thrown on invalid email', () async {
       when(mockFirebaseProvider.createUser(
         email: invalidEmail,
-        password: 'LemonLimeRime2387046!',
-      )).thenAnswer(
-        (_) => throw InvalidEmailAuthException(),
+        password: strongPass,
+      )).thenThrow(
+        InvalidEmailAuthException(),
       );
 
       await expectLater(
+          () => mockAuthService.createUser(
+                email: invalidEmail,
+                password: strongPass,
+              ),
+          throwsA(isA<InvalidEmailAuthException>()));
+    });
+
+    test('WeakPasswordAuthException thrown on weak password', () async {
+      when(mockFirebaseProvider.createUser(
+        email: validEmail,
+        password: weakPass,
+      )).thenThrow(
+        WeakPasswordAuthException(),
+      );
+
+      await expectLater(
+          () => mockAuthService.createUser(
+                email: validEmail,
+                password: weakPass,
+              ),
+          throwsA(isA<WeakPasswordAuthException>()));
+    });
+
+    test(
+        'EmailAlreadyInUseAuthException thrown when creating a user that already exists',
+        () async {
+      when(mockFirebaseProvider.createUser(
+        email: mockUser['email'],
+        password: strongPass,
+      )).thenThrow(
+        EmailAlreadyInUseAuthException(),
+      );
+
+      await expectLater(
+          () => mockAuthService.createUser(
+                email: mockUser['email']!,
+                password: strongPass,
+              ),
+          throwsA(isA<EmailAlreadyInUseAuthException>()));
+    });
+
+    test('A user is returned when createUser is successful', () async {
+      await expectLater(
           mockAuthService.createUser(
-            email: invalidEmail,
-            password: 'LemonLimeRime2387046!',
+            email: validEmail,
+            password: strongPass,
           ),
-          InvalidEmailAuthException);
+          isA<Future<AuthUser>>());
+    });
+  });
+
+  group('Firebase Mock logIn', () {
+    test('InvalidCredentialAuthException thrown on wrong email', () async {
+      when(mockFirebaseProvider.logIn(
+        email: validEmail,
+        password: mockUser['pass'],
+      )).thenThrow(
+        InvalidCredentialAuthException(),
+      );
+
+      await expectLater(
+          () => mockAuthService.logIn(
+                email: validEmail,
+                password: mockUser['pass']!,
+              ),
+          throwsA(isA<InvalidCredentialAuthException>()));
+    });
+    test('InvalidCredentialAuthException thrown on wrong password', () async {
+      when(mockFirebaseProvider.logIn(
+        email: mockUser['email'],
+        password: strongPass,
+      )).thenThrow(
+        InvalidCredentialAuthException(),
+      );
+
+      await expectLater(
+          () => mockAuthService.logIn(
+                email: mockUser['email']!,
+                password: strongPass,
+              ),
+          throwsA(isA<InvalidCredentialAuthException>()));
     });
   });
 
