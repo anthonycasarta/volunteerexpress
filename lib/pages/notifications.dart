@@ -10,42 +10,27 @@ class NotificationViewPage extends StatefulWidget {
 }
 
 class _NotificationViewPageState extends State<NotificationViewPage> {
-  NotificationServices _notificationServices = NotificationServices();
-  late Future<List<Map<String, dynamic>>> _notificationsFuture;
+  //final NotificationServices notificationServices = NotificationServices();
+  List<Map<String, dynamic>> notifications = [];
 
   @override
   void initState(){
     super.initState();
-    _notificationsFuture = _notificationServices.fetchNotifications();
+    loadNotifications();
+  }
+
+  Future<void> loadNotifications() async {
+    //List<Map<String, dynamic>> fetchedNotifications = await notificationServices.fetchNotifications();
+    setState(() {
+      //notifications = fetchedNotifications;
+    });
   }
   
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: appBar(),
-      body: FutureBuilder<List<Map<String, dynamic>>>(
-        future: _notificationsFuture,
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
-          }
-          if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return const Center(child: Text('No notifications yet'));
-          }
-
-          final notifications = snapshot.data!;
-          return ListView.separated(
-            itemBuilder: (context, index) {
-              final notification = notifications[index];
-              return listViewItem(notification);
-            },
-            separatorBuilder: (context, index) {
-              return const Divider(height: 0);
-            },
-            itemCount: notifications.length,
-          );
-        },
-      ),
+      body: listView(),
     );
   }
 
@@ -61,7 +46,24 @@ class _NotificationViewPageState extends State<NotificationViewPage> {
     );
   }
 
-  Widget listViewItem(Map<String, dynamic> notification) {
+  Widget listView() {
+    if (notifications.isEmpty) {
+      return const Center(
+        child: Text('No notifications available'),
+      );
+    }
+
+    return ListView.separated(
+        itemBuilder: (context, index) {
+          return listViewItem(index);
+        },
+        separatorBuilder: (context, index) {
+          return const Divider(height: 0);
+        },
+        itemCount: notifications.length);
+  }
+  
+  Widget listViewItem(int index) {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 13, vertical: 10),
       child: Row(
@@ -74,8 +76,8 @@ class _NotificationViewPageState extends State<NotificationViewPage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  message(notification['title'], notification['description']),
-                  timeAndDate(notification['time']),
+                  message(index),
+                  timeAndDate(index),
                 ],
               ),
             ),
@@ -102,20 +104,20 @@ class _NotificationViewPageState extends State<NotificationViewPage> {
     );
   }
 
-  Widget message(String title, String description) {
+  Widget message(index) {
     double textSize = 14;
     return RichText(
       maxLines: 3,
       overflow: TextOverflow.ellipsis,
       text: TextSpan(
-        text: '$title ',
+        text: notifications[index]['title'] ?? 'No title',
         style: TextStyle(
             fontSize: textSize,
             color: Colors.black,
             fontWeight: FontWeight.bold),
         children: [
           TextSpan(
-            text: description,
+            text: ' ${notifications[index]['description'] ?? 'No description'}',
             style: const TextStyle(
               fontWeight: FontWeight.w400,
             ),
@@ -125,23 +127,21 @@ class _NotificationViewPageState extends State<NotificationViewPage> {
     );
   }
 
-  Widget timeAndDate(DateTime time) {
-    String formattedDate = '${time.month}-${time.day}-${time.year}';
-    String formattedTime = '${time.hour}:${time.minute.toString().padLeft(2, '0')} ${time.hour >= 12 ? "PM" : "AM"}';
-    
+  Widget timeAndDate(int index) {
+    DateTime dateTime = notifications[index]['time'] as DateTime;
     return Container(
       margin: const EdgeInsets.only(top: 5),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(
-            formattedDate,
+            '${dateTime.month}-${dateTime.day}-${dateTime.year}',
             style: const TextStyle(
               fontSize: 10,
             ),
           ),
           Text(
-            formattedTime,
+            '${dateTime.hour}:${dateTime.minute} ${dateTime.hour > 12 ? 'pm' : 'am'}',
             style: const TextStyle(
               fontSize: 10,
             ),
