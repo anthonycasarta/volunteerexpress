@@ -48,5 +48,24 @@ void main() {
 
       expect(result, isEmpty);
     });
+
+    test('should return notifications with correct data types', () async {
+      final mockNotifications = [
+        {
+          'title': 'A String containing Title',
+          'description': 'A String containing Description',
+          'time': DateTime.now(),
+        }
+      ];
+
+      when(mockNotificationService.fetchNotifications())
+          .thenAnswer((_) async => mockNotifications);
+
+      final result = await mockNotificationService.fetchNotifications();
+
+      expect(result[0]['title'], isA<String>());
+      expect(result[0]['description'], isA<String>());
+      expect(result[0]['time'], isA<DateTime>());
+    });
   });
 }
