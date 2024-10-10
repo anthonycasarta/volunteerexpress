@@ -164,7 +164,7 @@ void main() {
         'UserNotLoggedInAuthException thrown when logging out a user that is not logged in',
         () {
       // Call function with mock service
-      expect(() async => await mockAuthServiceDefault.logOut(),
+      expect(() async => await mockAuthServiceNotLoggedIn.logOut(),
           throwsA(isA<UserNotLoggedInAuthException>()));
     });
   });

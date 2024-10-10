@@ -3,6 +3,8 @@ import 'package:volunteerexpress/frontend/constants/routes.dart';
 import 'package:volunteerexpress/frontend/custom-widgets/textbuttons/text_only_button.dart';
 import 'package:volunteerexpress/frontend/themes/colors.dart';
 
+import 'package:volunteerexpress/services/profile_services.dart';
+
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
 
@@ -231,15 +233,17 @@ class _ProfilePageState extends State<ProfilePage> {
                     style: const TextStyle(color: textColorDark, fontSize: 15),
                   ),
                   TextOnlyButton(
-                      onPressed: () {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text('Changes have been saved'),
-                          ),
-                        );
-                      },
-                      fontSize: 20,
-                      label: 'Save Changes'),
+                    onPressed: () {
+                      // String fullName = nameController.text;
+                      // String address = address1Controller.text;
+                      // String city = cityController.text;
+                      // String zip = zipController.text; // Make sure you have a controller for preference // Make sure this variable holds your selected dates
+
+                      // ProfileServices().saveProfileToFile(fullName, address, city, zip, preference.toString(), dates, context);
+                    },
+                    fontSize: 20,
+                    label: 'Save Changes',
+                  ),
                   Center(
                     child: SingleChildScrollView(
                       scrollDirection: Axis.horizontal,
