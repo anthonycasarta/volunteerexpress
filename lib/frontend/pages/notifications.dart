@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:volunteerexpress/themes/colors.dart';
+import 'package:volunteerexpress/frontend/themes/colors.dart';
 
 class NotificationViewPage extends StatefulWidget {
   const NotificationViewPage({super.key});

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:volunteerexpress/constants/routes.dart';
-import 'package:volunteerexpress/custom-widgets/forms/login_form.dart';
-import 'package:volunteerexpress/custom-widgets/textbuttons/text_only_button.dart';
-import 'package:volunteerexpress/themes/colors.dart';
+import 'package:volunteerexpress/frontend/constants/routes.dart';
+import 'package:volunteerexpress/frontend/custom-widgets/forms/login_form.dart';
+import 'package:volunteerexpress/frontend/custom-widgets/textbuttons/text_only_button.dart';
+import 'package:volunteerexpress/frontend/themes/colors.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
