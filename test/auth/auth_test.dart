@@ -1,4 +1,6 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_auth_mocks/firebase_auth_mocks.dart';
+import 'package:mock_exceptions/mock_exceptions.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 import 'package:volunteerexpress/backend/services/auth/auth_exceptions.dart';
@@ -16,11 +18,28 @@ void main() {
   final mockFirebaseProvider = MockFirebaseAuthProvider();
   final mockAuthService = AuthService(authProvider: mockFirebaseProvider);
 
+  // Users for testing
+  final userEmailVerified = MockUser(
+    email: 'user@gmail.com',
+    isEmailVerified: true,
+  );
+  final userEmailNotVerified = MockUser(
+    email: 'user2@gmail.com',
+    isEmailVerified: false,
+  );
+  const mockUser = {
+    'email': 'mockemail@gmail.com',
+    'pass': 'mockPass284639366!',
+  };
+
   // Firebase Auth Mocks
+  final mockFirebaseAuth = MockFirebaseAuth(mockUser: userEmailVerified);
   final mockAuthServiceNotLoggedIn = AuthService(
       authProvider: FirebaseAuthProvider(MockFirebaseAuth(signedIn: false)));
   final mockAuthServiceLoggedIn = AuthService(
       authProvider: FirebaseAuthProvider(MockFirebaseAuth(signedIn: true)));
+  final mockAuthService2 =
+      AuthService(authProvider: FirebaseAuthProvider(mockFirebaseAuth));
 
   // Testing variables
   const invalidEmail = 'email.com';
@@ -28,42 +47,38 @@ void main() {
   const validEmail = 'email@gmail.com';
   const strongPass = 'LemonLimeRime2387046!';
 
-  // User for testing
-  const mockUser = {
-    'email': 'mockemail@gmail.com',
-    'pass': 'mockPass284639366!',
-  };
-
   // Tests
 
   // Create User
   group('Firebase Mock createUser', () {
-    test('InvalidEmailAuthException thrown on invalid email', () async {
-      when(mockFirebaseProvider.createUser(
-        email: invalidEmail,
-        password: strongPass,
-      )).thenThrow(
-        InvalidEmailAuthException(),
-      );
+    test('InvalidEmailAuthException thrown on invalid email', () {
+      // Setting invocation behavior for mockFirebaseAuth
+      whenCalling(Invocation.method(#createUserWithEmailAndPassword, null, {
+        #email: invalidEmail,
+        #password: strongPass,
+      }))
+          .on(mockFirebaseAuth)
+          .thenThrow(FirebaseAuthException(code: 'invalid-email'));
 
-      await expectLater(
-          () => mockAuthService.createUser(
+      // Call function with mock service
+      expect(
+          () async => await mockAuthService2.createUser(
                 email: invalidEmail,
                 password: strongPass,
               ),
           throwsA(isA<InvalidEmailAuthException>()));
     });
 
-    test('WeakPasswordAuthException thrown on weak password', () async {
-      when(mockFirebaseProvider.createUser(
-        email: validEmail,
-        password: weakPass,
-      )).thenThrow(
-        WeakPasswordAuthException(),
-      );
+    test('WeakPasswordAuthException thrown on weak password', () {
+      whenCalling(Invocation.method(#createUserWithEmailAndPassword, null, {
+        #email: validEmail,
+        #password: weakPass,
+      }))
+          .on(mockFirebaseAuth)
+          .thenThrow(FirebaseAuthException(code: 'weak-password'));
 
-      await expectLater(
-          () => mockAuthService.createUser(
+      expect(
+          () async => await mockAuthService2.createUser(
                 email: validEmail,
                 password: weakPass,
               ),
@@ -72,17 +87,17 @@ void main() {
 
     test(
         'EmailAlreadyInUseAuthException thrown when creating a user that already exists',
-        () async {
-      when(mockFirebaseProvider.createUser(
-        email: mockUser['email'],
-        password: strongPass,
-      )).thenThrow(
-        EmailAlreadyInUseAuthException(),
-      );
+        () {
+      whenCalling(Invocation.method(#createUserWithEmailAndPassword, null, {
+        #email: userEmailVerified.email,
+        #password: strongPass,
+      }))
+          .on(mockFirebaseAuth)
+          .thenThrow(FirebaseAuthException(code: 'email-already-in-use'));
 
-      await expectLater(
-          () => mockAuthService.createUser(
-                email: mockUser['email']!,
+      expect(
+          () async => await mockAuthService2.createUser(
+                email: userEmailVerified.email!,
                 password: strongPass,
               ),
           throwsA(isA<EmailAlreadyInUseAuthException>()));
