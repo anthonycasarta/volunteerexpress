@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:volunteerexpress/themes/colors.dart';
+import 'package:volunteerexpress/services/notification_services.dart';
 
 class NotificationViewPage extends StatefulWidget {
   const NotificationViewPage({super.key});
@@ -9,6 +10,22 @@ class NotificationViewPage extends StatefulWidget {
 }
 
 class _NotificationViewPageState extends State<NotificationViewPage> {
+  //final NotificationServices notificationServices = NotificationServices();
+  List<Map<String, dynamic>> notifications = [];
+
+  @override
+  void initState(){
+    super.initState();
+    loadNotifications();
+  }
+
+  Future<void> loadNotifications() async {
+    //List<Map<String, dynamic>> fetchedNotifications = await notificationServices.fetchNotifications();
+    setState(() {
+      //notifications = fetchedNotifications;
+    });
+  }
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -30,6 +47,12 @@ class _NotificationViewPageState extends State<NotificationViewPage> {
   }
 
   Widget listView() {
+    if (notifications.isEmpty) {
+      return const Center(
+        child: Text('No notifications available'),
+      );
+    }
+
     return ListView.separated(
         itemBuilder: (context, index) {
           return listViewItem(index);
@@ -37,9 +60,9 @@ class _NotificationViewPageState extends State<NotificationViewPage> {
         separatorBuilder: (context, index) {
           return const Divider(height: 0);
         },
-        itemCount: 15);
+        itemCount: notifications.length);
   }
-
+  
   Widget listViewItem(int index) {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 13, vertical: 10),
@@ -81,21 +104,21 @@ class _NotificationViewPageState extends State<NotificationViewPage> {
     );
   }
 
-  Widget message(int index) {
+  Widget message(index) {
     double textSize = 14;
     return RichText(
       maxLines: 3,
       overflow: TextOverflow.ellipsis,
       text: TextSpan(
-        text: 'Message ',
+        text: notifications[index]['title'] ?? 'No title',
         style: TextStyle(
             fontSize: textSize,
             color: Colors.black,
             fontWeight: FontWeight.bold),
-        children: const [
+        children: [
           TextSpan(
-            text: ' Notification Description',
-            style: TextStyle(
+            text: ' ${notifications[index]['description'] ?? 'No description'}',
+            style: const TextStyle(
               fontWeight: FontWeight.w400,
             ),
           )
@@ -105,20 +128,21 @@ class _NotificationViewPageState extends State<NotificationViewPage> {
   }
 
   Widget timeAndDate(int index) {
+    DateTime dateTime = notifications[index]['time'] as DateTime;
     return Container(
       margin: const EdgeInsets.only(top: 5),
-      child: const Row(
+      child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(
-            '09-20-24',
-            style: TextStyle(
+            '${dateTime.month}-${dateTime.day}-${dateTime.year}',
+            style: const TextStyle(
               fontSize: 10,
             ),
           ),
           Text(
-            '12:00 pm',
-            style: TextStyle(
+            '${dateTime.hour}:${dateTime.minute} ${dateTime.hour > 12 ? 'pm' : 'am'}',
+            style: const TextStyle(
               fontSize: 10,
             ),
           )
