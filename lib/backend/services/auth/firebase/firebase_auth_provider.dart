@@ -8,6 +8,10 @@ import 'package:firebase_auth/firebase_auth.dart' as firebase_auth
 import 'package:volunteerexpress/firebase_options.dart';
 
 class FirebaseAuthProvider implements AuthProvider {
+  final firebase_auth.FirebaseAuth firebaseAuth;
+
+  FirebaseAuthProvider(this.firebaseAuth);
+
   @override
   Future<AuthUser> createUser({
     required String email,
@@ -15,7 +19,7 @@ class FirebaseAuthProvider implements AuthProvider {
   }) async {
     try {
       // create a user
-      await firebase_auth.FirebaseAuth.instance.createUserWithEmailAndPassword(
+      await firebaseAuth.createUserWithEmailAndPassword(
         email: email,
         password: password,
       );
@@ -48,7 +52,7 @@ class FirebaseAuthProvider implements AuthProvider {
 
   @override
   AuthUser? get currentUser {
-    final user = firebase_auth.FirebaseAuth.instance.currentUser; // get user
+    final user = firebaseAuth.currentUser; // get user
     // check if there is a user
     if (user != null) {
       return AuthUser.fromFirebase(user); // return user
@@ -63,7 +67,7 @@ class FirebaseAuthProvider implements AuthProvider {
     required String password,
   }) async {
     try {
-      await firebase_auth.FirebaseAuth.instance.signInWithEmailAndPassword(
+      await firebaseAuth.signInWithEmailAndPassword(
         email: email,
         password: password,
       );
@@ -92,7 +96,7 @@ class FirebaseAuthProvider implements AuthProvider {
 
   @override
   Future<void> logOut() async {
-    final user = firebase_auth.FirebaseAuth.instance.currentUser;
+    final user = firebaseAuth.currentUser;
     if (user != null) {
       await firebase_auth.FirebaseAuth.instance
           .signOut(); // sign out if current user exists
@@ -103,7 +107,7 @@ class FirebaseAuthProvider implements AuthProvider {
 
   @override
   Future<void> sendEmailVerification() async {
-    final user = firebase_auth.FirebaseAuth.instance.currentUser; // get user
+    final user = firebaseAuth.currentUser; // get user
     if (user != null) {
       await user
           .sendEmailVerification(); // send email verification if a user exists

@@ -1,3 +1,4 @@
+import 'package:firebase_auth_mocks/firebase_auth_mocks.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 import 'package:volunteerexpress/backend/services/auth/auth_exceptions.dart';
@@ -11,18 +12,31 @@ import 'package:mockito/annotations.dart';
 import 'auth_test.mocks.dart';
 
 void main() {
+  // Mockito
   final mockFirebaseProvider = MockFirebaseAuthProvider();
   final mockAuthService = AuthService(authProvider: mockFirebaseProvider);
-  const invalidEmail = 'emailgmail.com';
+
+  // Firebase Auth Mocks
+  final mockAuthServiceNotLoggedIn = AuthService(
+      authProvider: FirebaseAuthProvider(MockFirebaseAuth(signedIn: false)));
+  final mockAuthServiceLoggedIn = AuthService(
+      authProvider: FirebaseAuthProvider(MockFirebaseAuth(signedIn: true)));
+
+  // Testing variables
+  const invalidEmail = 'email.com';
   const weakPass = 'pass';
   const validEmail = 'email@gmail.com';
   const strongPass = 'LemonLimeRime2387046!';
 
+  // User for testing
   const mockUser = {
     'email': 'mockemail@gmail.com',
     'pass': 'mockPass284639366!',
   };
 
+  // Tests
+
+  // Create User
   group('Firebase Mock createUser', () {
     test('InvalidEmailAuthException thrown on invalid email', () async {
       when(mockFirebaseProvider.createUser(
@@ -84,6 +98,7 @@ void main() {
     });
   });
 
+  // Log in
   group('Firebase Mock logIn', () {
     test('InvalidCredentialAuthException thrown on wrong email', () async {
       when(mockFirebaseProvider.logIn(
@@ -117,66 +132,35 @@ void main() {
     });
   });
 
-  // group('Mock Authentication', () {
-  //   final provider = MockAuthProvider();
+  // Log out
+  group('Firebase Mock logOut', () {
+    test(
+        'UserNotLoggedInAuthException thrown when logging out a user that is not logged in',
+        () async {
+      await expectLater(mockAuthServiceNotLoggedIn.logOut(),
+          throwsA(isA<UserNotLoggedInAuthException>()));
+    });
+  });
 
-  //   test('Provider should not be initialized by default', () {
-  //     expect(provider.isInitialized, false);
-  //   });
+  // Email Verification
+  group('Firebase Mock sendEmailVerfication', () {
+    test(
+        'UserNotLoggedInAuthException thrown when trying to send email verification on user that is not logged in',
+        () async {
+      await expectLater(mockAuthServiceNotLoggedIn.sendEmailVerification(),
+          throwsA(isA<UserNotLoggedInAuthException>()));
+    });
+  });
 
-  //   test('Cannot log out when provider is not initialized', () {
-  //     expect(
-  //       provider.logOut(),
-  //       throwsA(
-  //         const TypeMatcher<NotInitializedMockAuthException>(),
-  //       ),
-  //     );
-  //   });
+  group('Firebase Mock currentUser', () {
+    test('currentUser should be null when a user is not logged in', () {
+      expect(mockAuthServiceNotLoggedIn.currentUser, null);
+    });
 
-  //   test('Provider should initialize on initialize call', () async {
-  //     await provider.initialize();
-
-  //     expect(provider.isInitialized, true);
-  //   });
-
-  //   test('User should be null after initialization', () {
-  //     expect(provider.currentUser, null);
-  //   });
-
-  //   test(
-  //     'Initialization should take less than 2 seconds',
-  //     () async {
-  //       await provider.initialize();
-  //       expect(provider.isInitialized, true);
-  //     },
-  //     timeout: const Timeout(Duration(seconds: 2)),
-  //   );
-
-  //   test(
-  //       'logIn function should throw exceptions on wrong email and/or password',
-  //       () {
-  //     const wrongEmail = 'wrongEmail@gmail.com';
-  //     const password = 'password';
-  //     const email = 'email@gmail.com';
-  //     const wrongPassword = 'wrongPassword';
-
-  //     expect(provider.logIn(email: wrongEmail, password: password),
-  //         throwsA(const TypeMatcher<InvalidCredentialAuthException>()));
-
-  //     expect(provider.logIn(email: email, password: wrongPassword),
-  //         throwsA(const TypeMatcher<InvalidCredentialAuthException>()));
-
-  //     expect(provider.logIn(email: wrongEmail, password: wrongPassword),
-  //         throwsA(const TypeMatcher<InvalidCredentialAuthException>()));
-  //   });
-
-  //   test(
-  //       'When logging in with correct credentials, logIn should return that user',
-  //       () {
-  //     final user =
-  //         provider.logIn(email: 'email@gmail.com', password: 'password');
-
-  //     expect(provider.currentUser, user);
-  //   });
-  // });
+    test(
+        'If there is a currentUser and instance of the AuthUser should be returned',
+        () {
+      expect(mockAuthServiceLoggedIn.currentUser, isA<AuthUser>());
+    });
+  });
 }
