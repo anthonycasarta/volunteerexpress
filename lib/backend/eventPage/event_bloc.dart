@@ -11,8 +11,8 @@ class EventBloc extends Bloc<EventEvent, EventState> {
   EventBloc(this.eventRepository) : super(const EventInitial()) {
     on<LoadEvents>(_onLoadEvents);
     on<SelectEvent>(_onSelectEvent);
-    on<SaveEvent>(_onSaveEvent);
-    on<AddNewEvent>(_onAddNewEvent);
+    on<UpdateEvent>(_onSaveEvent);
+    on<AddEvent>(_onAddEvent);
     on<DeleteEvent>(_onDeleteEvent);
   }
 
@@ -30,7 +30,7 @@ class EventBloc extends Bloc<EventEvent, EventState> {
     emit(EventFormState(event: event.event));
   }
 
-  Future<void> _onSaveEvent(SaveEvent event, Emitter<EventState> emit) async {
+  Future<void> _onSaveEvent(UpdateEvent event, Emitter<EventState> emit) async {
     emit(const EventLoading());
     try {
       await eventRepository.updateEvent(event.event); // Save the event
@@ -42,17 +42,25 @@ class EventBloc extends Bloc<EventEvent, EventState> {
     }
   }
 
-  void _onAddNewEvent(AddNewEvent event, Emitter<EventState> emit) {
-    emit(const EventFormState()); // Emit form state for adding a new event
+  Future<void> _onAddEvent(AddEvent event, Emitter<EventState> emit) async {
+  emit(const EventLoading()); // Emit loading state
+  try {
+    await eventRepository.addEvent(event.event); // Save the new event
+    final events = await eventRepository.fetchEvents(); // Fetch updated events
+    emit(EventListState(events: events)); // Emit the updated list of events
+  } catch (e) {
+    emit(EventError(e.toString())); // Emit an error if adding fails
   }
+}
 
   Future<void> _onDeleteEvent(DeleteEvent event, Emitter<EventState> emit) async {
-    emit(const EventLoading());
-    try {
-      await eventRepository.deleteEvent(event.event); // Delete the event
-      emit(const EventInitial()); // Optionally, you can emit a success state or reload events
-    } catch (e) {
-      emit(EventError(e.toString())); // Emit an error if deleting fails
-    }
+  emit(const EventLoading());
+  try {
+    await eventRepository.deleteEvent(event.event); // Delete the event using the ID
+    final events = await eventRepository.fetchEvents(); // Fetch the updated events list
+    emit(EventListState(events: events)); // Emit the updated state
+  } catch (e) {
+    emit(EventError(e.toString())); // Emit an error if deletion fails
   }
+}
 }

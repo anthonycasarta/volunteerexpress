@@ -26,17 +26,22 @@ class SelectEvent extends EventEvent {
 }
 
 // Event to Save an Event 
-class SaveEvent extends EventEvent {
+class UpdateEvent extends EventEvent {
   final Event event;
 
-  const SaveEvent(this.event);
+  const UpdateEvent(this.event);
 
   @override
-  List<Object?> get props => [event];
+  List<Object> get props => [event];
 }
 
-class AddNewEvent extends EventEvent {
-  const AddNewEvent();
+class AddEvent extends EventEvent {
+  final Event event;
+
+  const AddEvent(this.event);
+
+  @override
+  List<Object> get props => [event];
 }
 
 class DeleteEvent extends EventEvent {

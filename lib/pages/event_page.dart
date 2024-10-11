@@ -24,33 +24,17 @@ class EventPage extends StatelessWidget {
           if (state is EventLoading) {
             return const Center(child: CircularProgressIndicator());
           } else if (state is EventListState) {
-            /*
-            return ListView.builder(
-              itemCount: state.events.length,
-              itemBuilder: (context, index) {
-                final event = state.events[index];
-                return ListTile(
-                  title: Text(event.name),
-                  onTap: () {
-                    // Navigate to EventManagementForm and pass the selected event
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => EventManagementForm(event: event),
-                      ),
-                    );
-                  },
-                );
-              },
-            );
-            */
             return EventTable(
               events: state.events,
               onEventSelected: (event) {
+                EventBloc eventBloc = context.read<EventBloc>();
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => EventManagementForm(event: event),
+                    builder: (context) => EventManagementForm(
+                      event: event,
+                      bloc: eventBloc,
+                    ),
                   )
                 );
               },

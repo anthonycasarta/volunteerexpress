@@ -8,14 +8,15 @@ import 'package:volunteerexpress/backend/eventPage/event_bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:volunteerexpress/backend/eventPage/event_event.dart';
 //import 'package:volunteerexpress/backend/eventPage/event_state.dart';
-
+import 'package:volunteerexpress/backend/eventPage/event_repository.dart';
 
 
 
 class EventManagementForm extends StatefulWidget {
   final Event? event;
+  final EventBloc bloc;
   
-  const EventManagementForm({super.key, this.event});
+  const EventManagementForm({super.key, this.event, required this.bloc});
 
   @override
   State<EventManagementForm> createState() => _EventManagementFormState();
@@ -104,10 +105,10 @@ class _EventManagementFormState extends State<EventManagementForm> {
         item.selected = true; // Mark item as selected
       }
 
-      print(selectedDropdownItems);
+      //print(selectedDropdownItems);
 
       skillController.selectedItems.addAll(selectedDropdownItems);
-       print('Selected Items in Controller: ${skillController.selectedItems}');
+      // print('Selected Items in Controller: ${skillController.selectedItems}');
       setState(() {});
     }
   }
@@ -170,7 +171,6 @@ void resetForm() {
           child: Column(
             children: [
               InfoTextBox(
-
                     // The Event Name Portion 
                     controller: eventNameController,
                     labelText: 'Event Name',
@@ -326,10 +326,10 @@ void resetForm() {
 
                   // Save button 
                   const SizedBox(height: 20),
-                  TextOnlyButton(
+                  Row(
+                    children: [
+                      TextOnlyButton(
                       onPressed: () {
-
-
                         setState(() {});
                         if (_formKey.currentState!.validate() &&
                             selectedDates.isNotEmpty) {
@@ -337,18 +337,38 @@ void resetForm() {
                             const SnackBar(content: Text('Event saved')),
                           );
                           
-                          final newEvent = Event(
-                            name: eventNameController.text,
-                            location: eventLocationController.text,
-                            date: selectedDates.isNotEmpty ? selectedDates.first.toIso8601String() : '', // Ensure you have a date
-                            urgency: selectedUrgency ?? 'Low', // Provide a default if not set
-                            requiredSkills: selectedSkills.join(','), // Handle as needed
-                            description: eventDescriptionController.text,
-                          );
+                          if (widget.event != null) {
                           
-                          //context.read<EventBloc>().add(SaveEvent(newEvent));
+                            final newEvent = Event(
+                              id: widget.event!.id,
+                              name: eventNameController.text,
+                              location: eventLocationController.text,
+                              //date: selectedDates.isNotEmpty ? selectedDates.first.toIso8601String() : '', // Ensure you have a date
+                              date: '${selectedDates.first.year}-${selectedDates.first.month.toString().padLeft(2, '0')}-${selectedDates.first.day.toString().padLeft(2, '0')}',
+                              urgency: selectedUrgency ?? 'Low', // Provide a default if not set
+                              requiredSkills: selectedSkills.join(','), // Handle as needed
+                              description: eventDescriptionController.text,
+                            );
+                            // Update existing event
+                            // Call your update function here
+                            widget.bloc.add(UpdateEvent(newEvent)); // Example of calling an update event action
+                            
+                          } else {
+                              final newEvent = Event(
+                                id: "12413",
+                                name: eventNameController.text,
+                                location: eventLocationController.text,
+                                //date: selectedDates.isNotEmpty ? selectedDates.first.toIso8601String() : '', // Ensure you have a date
+                                date: '${selectedDates.first.year}-${selectedDates.first.month.toString().padLeft(2, '0')}-${selectedDates.first.day.toString().padLeft(2, '0')}',
+                                urgency: selectedUrgency ?? 'Low', // Provide a default if not set
+                                requiredSkills: selectedSkills.join(','), // Handle as needed
+                                description: eventDescriptionController.text,
+                              );
 
-                          // .read<EventBloc>().add(const LoadEvents());
+                            widget.bloc.add(AddEvent(newEvent)); // Example of calling an add event action
+                          }
+                          
+                        
                           Navigator.pop(context);
 
                         } else {
@@ -359,7 +379,56 @@ void resetForm() {
                         }
                       },
                       fontSize: 20,
-                      label: 'Save Changes'),
+                      label: 'Save Event'),
+
+                      const Spacer(),
+
+                      TextOnlyButton(
+                        onPressed: () {
+                          // Show a confirmation dialog when Delete Event is pressed
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                title: const Text("Confirm Deletion"),
+                                content: const Text("Are you sure you want to delete this event?"),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () {
+                                      // If user presses cancel, just close the dialog
+                                      Navigator.of(context).pop();
+                                    },
+                                    child: const Text("Cancel"),
+                                  ),
+                                  TextButton(
+                                    onPressed: () {
+
+                                      
+                                      if (widget.event != null) {
+                                        widget.bloc.add(DeleteEvent(widget.event!));
+                                      }
+                                    
+                                      // Handle the delete event logic here
+                                      // For example, pop the dialog and navigate back
+                                      Navigator.of(context).pop(); // Close the dialog
+                                      Navigator.pop(context); // Go back to previous page or handle delete
+                                      // You can add more logic here to remove the event from the database or state
+                                    },
+                                    child: const Text(
+                                      "Delete",
+                                      style: TextStyle(color: Colors.red), // Red color to indicate delete action
+                                    ),
+                                  ),
+                                ],
+                              );
+                            },
+                          );
+                        },
+                        fontSize: 20,
+                        label: "Delete Event",
+                      ),
+                    ],
+                  )
             ],
           ),
         ),

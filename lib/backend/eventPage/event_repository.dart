@@ -3,28 +3,31 @@ import 'package:volunteerexpress/models/event_model.dart';
 class EventRepository {
   // Dummy list to simulate a data source
   final List<Event> _events = [
-    const Event(
+    Event(
+      id: "1",
       name: 'Beach Cleanup',
-      location: 'Santa Monica',
+      location: 'Santa Monca',
       date: '2024-10-15',
       urgency: 'High',
-      requiredSkills: 'Leadership, Problem Solving',
+      requiredSkills: 'Leadership, Problem Solving, Adaptability, ',
       description: 'Join us for a day of cleaning the beach!',
     ),
-    const Event(
+    Event(
+      id: "2",
       name: 'Food Drive',
       location: 'Local Community Center',
       date: '2024-11-05',
       urgency: 'Medium',
-      requiredSkills: 'Organization, People Skills',
+      requiredSkills: 'Communication, Adaptability',
       description: 'Help us collect and distribute food to those in need.',
     ),
-    const Event(
+    Event(
+      id: "3",
       name: 'Charity Run',
       location: 'Central Park',
       date: '2024-12-01',
       urgency: 'Low',
-      requiredSkills: 'Endurance, Fundraising',
+      requiredSkills: 'Leadership, Creativity, Adaptability',
       description: 'Participate in a charity run for local nonprofits.',
     ),
   ];
@@ -32,7 +35,7 @@ class EventRepository {
   // Method to fetch events
   Future<List<Event>> fetchEvents() async {
     // Simulate a delay for fetching data
-    await Future.delayed(const Duration(seconds: 2));
+    //await Future.delayed(const Duration(seconds: 2));
     return _events;
   }
 
@@ -47,7 +50,12 @@ class EventRepository {
   }
 
   // Method to update an event
-  Future<void> updateEvent(Event event) async {
-    // Update logic here
+  Future<void> updateEvent(Event updateEvent) async {
+    for (int i = 0; i < _events.length; i++) {
+      if (_events[i].id == updateEvent.id) {
+        _events[i] = updateEvent;
+        break;
+      }
+    }
   }
 }
