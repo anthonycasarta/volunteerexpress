@@ -1,0 +1,23 @@
+
+name: volunteerexpress-ci
+on: 
+    push:
+    pull_request:
+
+jobs:
+    run-tests:
+        name: Test
+        runs-on: ubuntu-latest
+        
+        steps:
+            - name: Checkout Repo
+              uses: actions/checkout@v4
+
+            - name: Setup Flutter
+              uses: subosito/flutter-action@v2
+              with:
+                channel: stable
+                
+            - run: flutter pub get
+            - run: flutter test
+
