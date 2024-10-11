@@ -3,7 +3,7 @@ import 'package:volunteerexpress/frontend/constants/routes.dart';
 import 'package:volunteerexpress/frontend/custom-widgets/textbuttons/text_only_button.dart';
 import 'package:volunteerexpress/frontend/themes/colors.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:volunteerexpress/services/matching_services.dart';
+import 'package:volunteerexpress/backend/services/matching_services.dart';
 //Import for Firebase initialization
 
 class MatchingFormPage extends StatefulWidget {

@@ -7,7 +7,8 @@ import 'dart:async' as _i4;
 
 import 'package:cloud_firestore/cloud_firestore.dart' as _i2;
 import 'package:mockito/mockito.dart' as _i1;
-import 'package:volunteerexpress/services/notification_services.dart' as _i3;
+import 'package:volunteerexpress/backend/services/notification_services.dart'
+    as _i3;
 
 // ignore_for_file: type=lint
 // ignore_for_file: avoid_redundant_argument_values

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:volunteerexpress/frontend/constants/routes.dart';
-import 'package:volunteerexpress/frontend/custom-widgets/forms/register_form.dart';
+import 'package:volunteerexpress/frontend/pages/auth-pages/forms/register_form.dart';
 import 'package:volunteerexpress/frontend/custom-widgets/list-tile/form_list_tile.dart';
 import 'package:volunteerexpress/frontend/custom-widgets/textbuttons/text_only_button.dart';
 import 'package:volunteerexpress/frontend/enums/auth_enums.dart';

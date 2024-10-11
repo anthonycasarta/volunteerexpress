@@ -1,8 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
-import 'package:volunteerexpress/services/notification_services.dart';
-
+import 'package:volunteerexpress/backend/services/notification_services.dart';
 
 @GenerateMocks([NotificationServices])
 import 'notification_services_test.mocks.dart';
@@ -40,7 +39,8 @@ void main() {
       expect(result[1]['description'], 'Food Drive event is now available!');
     });
 
-    test('should return an empty list when no notifications are available', () async {
+    test('should return an empty list when no notifications are available',
+        () async {
       when(mockNotificationService.fetchNotifications())
           .thenAnswer((_) async => []);
 
