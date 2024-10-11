@@ -190,7 +190,7 @@ class _CheckBoxState extends State<MatchingFormPage> {
                     children: [
                       TextOnlyButton(
                           onPressed: () =>
-                              Navigator.pushNamed(context, eventFormRoute),
+                              Navigator.pushNamed(context, eventPageRoute),
                           label: "Event Form"),
                       TextOnlyButton(
                           onPressed: () =>

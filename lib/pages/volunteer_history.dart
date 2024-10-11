@@ -159,7 +159,7 @@ class _VolunteerHistoryPageState extends State<VolunteerHistoryPage> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             TextOnlyButton(
-                onPressed: () => Navigator.pushNamed(context, eventFormRoute),
+                onPressed: () => Navigator.pushNamed(context, eventPageRoute),
                 label: "Event Form"),
             TextOnlyButton(
                 onPressed: () => Navigator.pushNamed(context, profileRoute),

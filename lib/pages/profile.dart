@@ -248,7 +248,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         children: [
                           TextOnlyButton(
                               onPressed: () =>
-                                  Navigator.pushNamed(context, eventFormRoute),
+                                  Navigator.pushNamed(context, eventPageRoute),
                               label: "Event Form"),
                           TextOnlyButton(
                               onPressed: () => Navigator.pushNamed(

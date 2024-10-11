@@ -1,14 +1,21 @@
-/*
 import 'package:flutter/material.dart';
-import 'package:volunteerexpress/constants/routes.dart';
-import 'package:volunteerexpress/custom-widgets/textbuttons/text_only_button.dart';
-import 'package:volunteerexpress/themes/colors.dart';
 import 'package:multi_dropdown/multi_dropdown.dart';
+import 'package:volunteerexpress/custom-widgets/textbuttons/text_only_button.dart';
+//import 'package:volunteerexpress/constants/routes.dart';
+import 'package:volunteerexpress/themes/colors.dart';
+import 'package:volunteerexpress/models/event_model.dart';
+import 'package:volunteerexpress/backend/eventPage/event_bloc.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:volunteerexpress/backend/eventPage/event_event.dart';
+//import 'package:volunteerexpress/backend/eventPage/event_state.dart';
+
 
 
 
 class EventManagementForm extends StatefulWidget {
-  const EventManagementForm({super.key});
+  final Event? event;
+  
+  const EventManagementForm({super.key, this.event});
 
   @override
   State<EventManagementForm> createState() => _EventManagementFormState();
@@ -17,38 +24,16 @@ class EventManagementForm extends StatefulWidget {
 class _EventManagementFormState extends State<EventManagementForm> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  // sets controllers
   late final TextEditingController eventNameController;
   late final TextEditingController eventDescriptionController;
   late final TextEditingController eventLocationController;
   late final MultiSelectController<String> skillController;
 
-  // holds the informations 
   List<DateTime> selectedDates = [];
   String? selectedUrgency;
   List<String> selectedSkills = [];
 
-  // hard coded options 
-  List<Map<String, dynamic>> events = [
-    {
-      'name': 'Community Cleanup ',
-      'location': 'Park A',
-      'date': '2024-11-12',
-      'urgency': 'High',
-    },
-    {
-      'name': 'Charity Run',
-      'location': 'Downtown',
-      'date': '2024-12-05',
-      'urgency': 'Medium',
-    },
-    {
-      'name': 'Tree Planting',
-      'location': 'Forest Reserve',
-      'date': '2024-10-20',
-      'urgency': 'Low',
-    },
-  ];
+  
 
   // Removes and add dates to the picked date list
   Future<void> selectDate(BuildContext context) async {
@@ -79,25 +64,55 @@ class _EventManagementFormState extends State<EventManagementForm> {
   // The required skills options
   var requiredSkills = [
     DropdownItem(label: 'Leadership', value: "Leadership"),
-    DropdownItem(label: ' Problem Solving', value: "Problem Solving"),
+    DropdownItem(label: 'Problem Solving', value: "Problem Solving"),
     DropdownItem(label: 'Creativity', value: "Creativity"),
     DropdownItem(label: 'Adaptability', value: "Adaptability"),
     DropdownItem(label: 'Teamwork', value: "Teamwork"),
     DropdownItem(label: 'Communication', value: "Communication"),
   ];
 
-  
   // Initialize any controllers or other resources if needed
   @override
   void initState() {
-    eventNameController = TextEditingController();
-    eventDescriptionController = TextEditingController();
-    eventLocationController = TextEditingController();
-    skillController = MultiSelectController<String>();
     super.initState();
+
+    
+    eventNameController = TextEditingController(text: widget.event?.name ?? '');
+    eventDescriptionController = TextEditingController(text: widget.event?.description ?? '');
+    eventLocationController = TextEditingController(text: widget.event?.location ?? '');
+    skillController = MultiSelectController<String>();
+    
+
+    if (widget.event != null) {
+      eventNameController.text = widget.event!.name;
+      eventDescriptionController.text = widget.event!.description;
+      eventLocationController.text = widget.event!.location;
+      selectedUrgency = widget.event!.urgency;
+      selectedDates = [DateTime.parse(widget.event!.date)];
+      selectedSkills = widget.event!.requiredSkills.split(',').map((skill) => skill.trim()).toList();
+      //print(selectedSkills);
+      
+      // You might need to update the MultiSelectController as well
+
+      skillController.clearAll();
+      
+      List<DropdownItem<String>> selectedDropdownItems = requiredSkills
+        .where((dropdownItem) => selectedSkills.contains(dropdownItem.value))
+        .toList(); // Match the actual DropdownItem objects
+
+      for (var item in selectedDropdownItems) {
+        item.selected = true; // Mark item as selected
+      }
+
+      print(selectedDropdownItems);
+
+      skillController.selectedItems.addAll(selectedDropdownItems);
+       print('Selected Items in Controller: ${skillController.selectedItems}');
+      setState(() {});
+    }
   }
 
- // Calls the superclass dispose method
+  // Calls the superclass dispose method
   @override
   void dispose() {
     eventNameController.dispose();
@@ -107,19 +122,30 @@ class _EventManagementFormState extends State<EventManagementForm> {
     super.dispose();
   }
 
-
   // Fills out the form when selected
-  void populateForm(Map<String, dynamic> event) {
-    eventNameController.text = event['name'];
-    eventLocationController.text = event['location'];
-    selectedUrgency = event['urgency'];
+  /*
+  void populateForm(Event event) {
+    eventNameController.text = event.name;
+    eventLocationController.text = event.location;
+    eventDescriptionController.text = event.description; 
     
-    selectedDates = [DateTime.parse(event['date'])];
+    selectedUrgency = event.urgency;
+    
+    selectedDates = [DateTime.parse(event.date)];
+    
+    skillController.clearAll();
+    selectedSkills = event.requiredSkills.split(',').map((skill) => skill.trim()).toList();
+    List<DropdownItem<String>> selectedDropdownItems = selectedSkills
+      .map((skill) => DropdownItem(label: skill, value: skill))
+      .toList();
+    
+    skillController.selectedItems.addAll(selectedDropdownItems);
     setState(() {});
   }
+  */
 
-  // Clears the information when the form is done
-  void resetForm() {
+// resets the form
+void resetForm() {
     eventNameController.clear();
     eventLocationController.clear();
     eventDescriptionController.clear();
@@ -130,110 +156,20 @@ class _EventManagementFormState extends State<EventManagementForm> {
     setState(() {});
   }
 
-
-
-
-  // Creates the page
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // The Appbar 
       appBar: AppBar(
-        title: const Text('Event Management',
-            style: TextStyle(color: textColorLight)),
+        title: const Text('Event Management', style: TextStyle(color: textColorLight)),
         backgroundColor: primaryAccentColor,
       ),
-
-
-      // The Body of the Page (The form)
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
+        child: Form(
+          key: _formKey,
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Event Table
-              const Text('Event List', 
-              style: TextStyle(fontSize: 24, color: textColorDark)),
-              const SizedBox(height: 10),
-              SingleChildScrollView(
-                child: DataTable(
-                  headingRowHeight: 60,
-                  dataRowMinHeight: 60,
-                  dataRowMaxHeight: 100,
-                  columns: const [
-                    DataColumn(label: Text("Name", style: TextStyle(fontSize: 18))),
-                    DataColumn(label: Text('Location', style: TextStyle(fontSize: 18))),
-                    DataColumn(label: Text('Date', style: TextStyle(fontSize: 18))),
-                    DataColumn(label: Text("Urgency", style: TextStyle(fontSize: 18))),
-
-                  ],
-                  rows: events.map((event) {
-                  
-                    return DataRow(
-                      cells: [
-                        DataCell(Text(event['name'], style: const TextStyle(fontSize: 18))),
-                        DataCell(Text(event['location'], style: const TextStyle(fontSize: 18))),
-                        DataCell(Text(event['date'], style: const TextStyle(fontSize: 18))),
-                        DataCell(Text(event['urgency'], style: const TextStyle(fontSize: 18))),
-                      ],
-                      onSelectChanged: (selected) {
-                        if (selected != null && selected) {
-                          populateForm(event);
-                        }
-                      },
-                    );
-                  }).toList(),
-                ),
-              ),
-              const SizedBox(height: 20),
-              TextButton(
-                 onPressed: resetForm,
-                 child: const Text('Add New Event'), 
-              ),
-              // The bottom app section 
-              Center(
-                child: SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      TextOnlyButton(
-                          onPressed: () =>
-                              Navigator.pushNamed(context, profileRoute),
-                          label: "Profile Page"),
-                      TextOnlyButton(
-                          onPressed: () => Navigator.pushNamed(
-                              context, volunteerHistoryRoute),
-                          label: "Volunteer History"),
-                      TextOnlyButton(
-                          onPressed: () =>
-                              Navigator.pushNamed(context, notificationRoute),
-                          label: "Notifications"),
-                      TextOnlyButton(
-                          onPressed: () =>
-                              Navigator.pushNamed(context, matchingFormRoute),
-                          label: "Matching Form"),
-                      TextOnlyButton(
-                          onPressed: () =>
-                              Navigator.pushNamed(context, loginRoute),
-                          label: "Logout"),
-                    ],
-                  ),
-                ),
-              ),
-
-               // The form (Contains all the inputs)
-              const Text(
-                'Event Details',
-                style: TextStyle(fontSize: 24, color: textColorDark),
-              ),
-              const SizedBox(height: 20),
-              // Creates the Form
-              Form (
-                key: _formKey,
-                child: Column (
-                children: [
-                  InfoTextBox(
+              InfoTextBox(
 
                     // The Event Name Portion 
                     controller: eventNameController,
@@ -291,6 +227,7 @@ class _EventManagementFormState extends State<EventManagementForm> {
                       items: requiredSkills,
                       controller: skillController,
                       enabled: true,
+                      
                       fieldDecoration: FieldDecoration(
                         hintText: 'Select Required Skill',
                         hintStyle: const TextStyle(
@@ -391,12 +328,29 @@ class _EventManagementFormState extends State<EventManagementForm> {
                   const SizedBox(height: 20),
                   TextOnlyButton(
                       onPressed: () {
+
+
                         setState(() {});
                         if (_formKey.currentState!.validate() &&
                             selectedDates.isNotEmpty) {
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(content: Text('Event saved')),
                           );
+                          
+                          final newEvent = Event(
+                            name: eventNameController.text,
+                            location: eventLocationController.text,
+                            date: selectedDates.isNotEmpty ? selectedDates.first.toIso8601String() : '', // Ensure you have a date
+                            urgency: selectedUrgency ?? 'Low', // Provide a default if not set
+                            requiredSkills: selectedSkills.join(','), // Handle as needed
+                            description: eventDescriptionController.text,
+                          );
+                          
+                          //context.read<EventBloc>().add(SaveEvent(newEvent));
+
+                          // .read<EventBloc>().add(const LoadEvents());
+                          Navigator.pop(context);
+
                         } else {
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(
@@ -406,10 +360,9 @@ class _EventManagementFormState extends State<EventManagementForm> {
                       },
                       fontSize: 20,
                       label: 'Save Changes'),
-                ],)  
-              ),
             ],
           ),
+        ),
       ),
     );
   }
@@ -417,7 +370,7 @@ class _EventManagementFormState extends State<EventManagementForm> {
 
 
 
-// formats the text boxes 
+
 class InfoTextBox extends StatelessWidget {
   final TextEditingController controller;
   final String labelText;
@@ -457,4 +410,3 @@ class InfoTextBox extends StatelessWidget {
     );
   }
 }
-*/
