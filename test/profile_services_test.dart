@@ -1,26 +1,22 @@
 import 'package:fake_cloud_firestore/fake_cloud_firestore.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:volunteerexpress/services/profile_services.dart';
+import 'package:volunteerexpress/backend/services/profile_services.dart';
 
 void main() {
   test('ProfileServices saves profile correctly to Firestore', () async {
-  
     final fakeFirestore = FakeFirebaseFirestore();
     final profileService = ProfileServices(firestore: fakeFirestore);
     List<DateTime> dates = [DateTime(2024, 10, 7)];
 
-    
     await profileService.saveProfileToFirestore(
-      'Zachary Pierce', 
-      '9813 Hyacinth Way', 
-      'Conroe', 
-      'TX', 
-      '77385', 
-      'Delivery Driving', 
-      dates
-    );
+        'Zachary Pierce',
+        '9813 Hyacinth Way',
+        'Conroe',
+        'TX',
+        '77385',
+        'Delivery Driving',
+        dates);
 
-   
     final snapshot = await fakeFirestore.collection('profiles').get();
     expect(snapshot.docs.length, 1); // Ensure one document is added
 

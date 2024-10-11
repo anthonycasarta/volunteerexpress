@@ -3,7 +3,7 @@ import 'package:volunteerexpress/frontend/constants/routes.dart';
 import 'package:volunteerexpress/frontend/custom-widgets/textbuttons/text_only_button.dart';
 import 'package:volunteerexpress/frontend/themes/colors.dart';
 
-import 'package:volunteerexpress/services/profile_services.dart';
+import 'package:volunteerexpress/backend/services/profile_services.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
