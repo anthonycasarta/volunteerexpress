@@ -43,6 +43,7 @@ dependencies:
   firebase_analytics: ^11.3.1
   bloc: ^8.1.4
   flutter_bloc: ^8.1.6
+  mockito: ^5.4.4
   path_provider: ^2.1.4
   fake_cloud_firestore: ^3.0.3
 
@@ -59,6 +60,10 @@ dev_dependencies:
   # rules and activating additional ones.
   flutter_lints: ^4.0.0
   test: ^1.25.7
+  mockito: ^5.4.4
+  build_runner: ^2.4.13
+  firebase_auth_mocks: ^0.14.1
+  mock_exceptions: ^0.8.2
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
