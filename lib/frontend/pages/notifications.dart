@@ -11,7 +11,7 @@ class NotificationViewPage extends StatefulWidget {
 }
 
 class _NotificationViewPageState extends State<NotificationViewPage> {
-  //final NotificationServices notificationServices = NotificationServices();
+  //final NotificationServices notificationServices = NotificationServices(firestore: FirebaseFirestore.instance);
   List<Map<String, dynamic>> notifications = [];
 
   @override
