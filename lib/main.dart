@@ -13,6 +13,8 @@ import 'package:volunteerexpress/pages/event_page.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:volunteerexpress/backend/eventPage/event_bloc.dart'; // Import EventBloc
 import 'package:volunteerexpress/backend/eventPage/event_repository.dart'; // Import your EventRepository
+import 'package:fake_cloud_firestore/fake_cloud_firestore.dart';
+
 
 void main() {
   runApp(const MyApp());
@@ -128,8 +130,8 @@ class MyApp extends StatelessWidget {
         notificationRoute: (context) => const NotificationViewPage(),
         volunteerHistoryRoute: (conttext) => const VolunteerHistoryPage(),
         eventPageRoute: (context) => BlocProvider(
-          create: (context) => EventBloc(EventRepository()), // Initialize EventBloc
-          child: EventPage(),
+          create: (context) => EventBloc(EventRepository(firestore: FakeFirebaseFirestore())), // Initialize EventBloc
+          child: const EventPage(),
         ),
         matchingFormRoute: (context) => const MatchingFormPage(),
       },
