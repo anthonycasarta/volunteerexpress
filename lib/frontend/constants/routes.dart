@@ -3,5 +3,5 @@ const registerRoute = '/register/';
 const profileRoute = '/profile/';
 const notificationRoute = '/notifications/';
 const volunteerHistoryRoute = '/volunteer-history/';
-const eventFormRoute = '/event-form/';
+const eventPageRoute = '/event_page/';
 const matchingFormRoute = '/matching-form/';
