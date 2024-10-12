@@ -1,14 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:multi_dropdown/multi_dropdown.dart';
 import 'package:volunteerexpress/custom-widgets/textbuttons/text_only_button.dart';
-//import 'package:volunteerexpress/constants/routes.dart';
 import 'package:volunteerexpress/themes/colors.dart';
 import 'package:volunteerexpress/models/event_model.dart';
 import 'package:volunteerexpress/backend/eventPage/event_bloc.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:volunteerexpress/backend/eventPage/event_event.dart';
-//import 'package:volunteerexpress/backend/eventPage/event_state.dart';
-import 'package:volunteerexpress/backend/eventPage/event_repository.dart';
 
 
 
@@ -95,7 +91,7 @@ class _EventManagementFormState extends State<EventManagementForm> {
       
       // You might need to update the MultiSelectController as well
 
-      skillController.clearAll();
+      //skillController.clearAll();
       
       List<DropdownItem<String>> selectedDropdownItems = requiredSkills
         .where((dropdownItem) => selectedSkills.contains(dropdownItem.value))
@@ -122,28 +118,6 @@ class _EventManagementFormState extends State<EventManagementForm> {
     skillController.dispose();
     super.dispose();
   }
-
-  // Fills out the form when selected
-  /*
-  void populateForm(Event event) {
-    eventNameController.text = event.name;
-    eventLocationController.text = event.location;
-    eventDescriptionController.text = event.description; 
-    
-    selectedUrgency = event.urgency;
-    
-    selectedDates = [DateTime.parse(event.date)];
-    
-    skillController.clearAll();
-    selectedSkills = event.requiredSkills.split(',').map((skill) => skill.trim()).toList();
-    List<DropdownItem<String>> selectedDropdownItems = selectedSkills
-      .map((skill) => DropdownItem(label: skill, value: skill))
-      .toList();
-    
-    skillController.selectedItems.addAll(selectedDropdownItems);
-    setState(() {});
-  }
-  */
 
 // resets the form
 void resetForm() {
@@ -340,13 +314,14 @@ void resetForm() {
                           if (widget.event != null) {
                           
                             final newEvent = Event(
-                              id: widget.event!.id,
+                              id: widget.event?.id,
                               name: eventNameController.text,
                               location: eventLocationController.text,
                               //date: selectedDates.isNotEmpty ? selectedDates.first.toIso8601String() : '', // Ensure you have a date
                               date: '${selectedDates.first.year}-${selectedDates.first.month.toString().padLeft(2, '0')}-${selectedDates.first.day.toString().padLeft(2, '0')}',
                               urgency: selectedUrgency ?? 'Low', // Provide a default if not set
-                              requiredSkills: selectedSkills.join(','), // Handle as needed
+                              //requiredSkills: selectedSkills.join(','), // Handle as needed
+                              requiredSkills: skillController.selectedItems.map((item) => item.value).join(','),
                               description: eventDescriptionController.text,
                             );
                             // Update existing event
@@ -355,13 +330,13 @@ void resetForm() {
                             
                           } else {
                               final newEvent = Event(
-                                id: "12413",
                                 name: eventNameController.text,
                                 location: eventLocationController.text,
                                 //date: selectedDates.isNotEmpty ? selectedDates.first.toIso8601String() : '', // Ensure you have a date
                                 date: '${selectedDates.first.year}-${selectedDates.first.month.toString().padLeft(2, '0')}-${selectedDates.first.day.toString().padLeft(2, '0')}',
                                 urgency: selectedUrgency ?? 'Low', // Provide a default if not set
-                                requiredSkills: selectedSkills.join(','), // Handle as needed
+                                // requiredSkills: selectedSkills.join(','), // Handle as needed
+                                requiredSkills: skillController.selectedItems.map((item) => item.value).join(','),
                                 description: eventDescriptionController.text,
                               );
 

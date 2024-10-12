@@ -6,38 +6,6 @@ class EventRepository {
   final FirebaseFirestore firestore;
 
   EventRepository({required this.firestore});
-  /* Local Testing Events
-  final List<Event> _events = [
-    const Event(
-      id: "1",
-      name: 'Beach Cleanup',
-      location: 'Santa Monca',
-      date: '2024-10-15',
-      urgency: 'High',
-      requiredSkills: 'Leadership, Problem Solving, Adaptability, ',
-      description: 'Join us for a day of cleaning the beach!',
-    ),
-    const Event(
-      id: "2",
-      name: 'Food Drive',
-      location: 'Local Community Center',
-      date: '2024-11-05',
-      urgency: 'Medium',
-      requiredSkills: 'Communication, Adaptability',
-      description: 'Help us collect and distribute food to those in need.',
-    ),
-    const Event(
-      id: "3",
-      name: 'Charity Run',
-      location: 'Central Park',
-      date: '2024-12-01',
-      urgency: 'Low',
-      requiredSkills: 'Leadership, Creativity, Adaptability',
-      description: 'Participate in a charity run for local nonprofits.',
-    ),
-  ];
-  */
-
 
   // Method to fetch events
   Future<List<Event>> fetchEvents() async {
@@ -60,14 +28,18 @@ class EventRepository {
 
   // Method to add an event
   Future<void> addEvent(Event event) async {
-    await firestore.collection('events').add({
+
+    DocumentReference docRef = firestore.collection('events').doc(event.id);
+
+    await docRef.set({
       'name': event.name,
       'location': event.location,
       'date': event.date,
       'urgency': event.urgency,
       'requiredSkills': event.requiredSkills,
       'description': event.description,
-    });
+  });
+    
   }
 
   // Method to delete an event
@@ -87,6 +59,7 @@ class EventRepository {
   // Method to update an event
   Future<void> updateEvent(Event updateEvent) async {
     await firestore.collection('events').doc(updateEvent.id).update({
+      'id' : updateEvent.id,
       'name': updateEvent.name,
       'location': updateEvent.location,
       'date': updateEvent.date,

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:volunteerexpress/models/event_model.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:volunteerexpress/backend/eventPage/event_bloc.dart';
-import 'package:volunteerexpress/backend/eventPage/event_event.dart';
 import 'package:volunteerexpress/pages/event_pages/event_form.dart';
 
 
@@ -17,7 +16,9 @@ class EventTable extends StatelessWidget   {
       return SingleChildScrollView(
         child: Column(
           children: [
-            DataTable(
+            
+            SingleChildScrollView(
+              child: DataTable(
               headingRowHeight: 60,
               dataRowMinHeight: 60,
               dataRowMaxHeight: 100,
@@ -26,10 +27,8 @@ class EventTable extends StatelessWidget   {
                 DataColumn(label: Text('Location', style: TextStyle(fontSize: 18))),
                 DataColumn(label: Text('Date', style: TextStyle(fontSize: 18))),
                 DataColumn(label: Text("Urgency", style: TextStyle(fontSize: 18))),
-
               ],
               rows: events.map((event) {
-              
                 return DataRow(
                   cells: [
                     DataCell(Text(event.name, style: const TextStyle(fontSize: 18))),
@@ -45,6 +44,9 @@ class EventTable extends StatelessWidget   {
                 );
               }).toList(),
             ),
+            
+            ),
+            
 
             const SizedBox(height: 20),
             ElevatedButton(
@@ -60,7 +62,7 @@ class EventTable extends StatelessWidget   {
                   ),
                 );
               },
-              child: const Text('Add Eevnt', style: TextStyle(fontSize: 18),)
+              child: const Text('Add Event', style: TextStyle(fontSize: 18),)
 
 
             )

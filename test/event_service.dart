@@ -68,7 +68,7 @@ void main() {
       });
 
       final event = Event(
-        id: docRef.id, // Using the ID from the document reference
+        id: docRef.id,
         name: 'Event to Delete',
         location: 'Some Location',
         date: '2024-12-01',
@@ -98,7 +98,7 @@ void main() {
       });
 
       final updatedEvent = Event(
-        id: docRef.id, // Using the ID from the document reference
+        id: docRef.id, 
         name: 'Updated Event',
         location: 'Updated Location',
         date: '2024-10-10',

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:volunteerexpress/backend/eventPage/event_bloc.dart';
 import 'package:volunteerexpress/backend/eventPage/event_event.dart';
-import 'package:volunteerexpress/backend/eventPage/event_repository.dart';
 import 'package:volunteerexpress/backend/eventPage/event_state.dart'; 
 import 'package:volunteerexpress/pages/event_pages/event_table.dart';
 import 'package:volunteerexpress/pages/event_pages/event_form.dart';
