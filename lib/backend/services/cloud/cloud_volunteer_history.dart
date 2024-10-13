@@ -4,35 +4,23 @@ import 'package:volunteerexpress/backend/services/cloud/firebase/constants/cloud
 
 class CloudVolunteerHistory {
   final String docId;
-  final String ownerUid;
-  final String eventName;
-  final String eventDescription;
-  final String eventLocation;
-  final String eventSkills;
-  final String eventUrgency;
-  final String eventDate;
+  final String volunteerUid;
+  final String eventId;
+  final String volunteerStatus;
 
   @immutable
   CloudVolunteerHistory({
     required this.docId,
-    required this.ownerUid,
-    required this.eventName,
-    required this.eventDescription,
-    required this.eventLocation,
-    required this.eventSkills,
-    required this.eventUrgency,
-    required this.eventDate,
+    required this.volunteerUid,
+    required this.eventId,
+    required this.volunteerStatus,
   });
 
   // Firestore
   CloudVolunteerHistory.fromSnapshot(
       firestore.QueryDocumentSnapshot<Map<String, dynamic>> snapshot)
       : docId = snapshot.id,
-        ownerUid = snapshot.data()[ownerUidFieldName],
-        eventName = snapshot.data()[eventNameFieldName],
-        eventDescription = snapshot.data()[eventDescriptionFieldName],
-        eventLocation = snapshot.data()[eventLocationFieldName],
-        eventSkills = snapshot.data()[eventSkillsFieldName],
-        eventUrgency = snapshot.data()[eventUrgencyFieldName],
-        eventDate = snapshot.data()[eventDateFieldName];
+        volunteerUid = snapshot.data()[volunteerUidFieldName],
+        eventId = snapshot.data()[eventIdFieldName],
+        volunteerStatus = snapshot.data()[volunteerStatusFieldName];
 }
