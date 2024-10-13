@@ -8,15 +8,17 @@ void main() {
     await fakeFirestore.collection('profiles').add({
       'fullName': 'Zachary Pierce',
       'preference': 'Delivery Driving',
+      'dates': ['2024-10-13T00:00:00.000Z'],//ISO8601 date string in case anyone is wondering
     });
     await fakeFirestore.collection('profiles').add({
       'fullName': 'Tom Brady',
       'preference': 'Hands-on work',
+      'dates': ['2024-10-14T00:00:00.000Z'], //Different date
     });
 
     final matchingServices = MatchingServices(firestore: fakeFirestore);
     List<Map<String, dynamic>> matchedVolunteers =
-        await matchingServices.displayMatchedVolunteers('Delivery Driving');
+        await matchingServices.displayMatchedVolunteers('Delivery Driving','2024-10-13T00:00:00.000Z');
 
     expect(matchedVolunteers.length, 1);
     expect(matchedVolunteers.first['fullName'], 'Zachary Pierce');
