@@ -3,11 +3,15 @@ import 'package:volunteerexpress/frontend/constants/routes.dart';
 import 'package:volunteerexpress/frontend/pages/matching_form.dart';
 import 'package:volunteerexpress/frontend/pages/auth-pages/login_page.dart';
 import 'package:volunteerexpress/frontend/pages/auth-pages/register_page.dart';
-import 'package:volunteerexpress/frontend/pages/event_form.dart';
 import 'package:volunteerexpress/frontend/pages/notifications.dart';
 import 'package:volunteerexpress/frontend/pages/profile.dart';
 import 'package:volunteerexpress/frontend/pages/volunteer_history.dart';
 import 'package:volunteerexpress/frontend/themes/colors.dart';
+import 'package:volunteerexpress/frontend/pages/event_page.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:volunteerexpress/backend/eventPage/event_bloc.dart';
+import 'package:volunteerexpress/backend/eventPage/event_repository.dart';
+import 'package:fake_cloud_firestore/fake_cloud_firestore.dart';
 
 void main() {
  
@@ -123,7 +127,10 @@ class MyApp extends StatelessWidget {
         profileRoute: (context) => const ProfilePage(),
         notificationRoute: (context) => const NotificationViewPage(),
         volunteerHistoryRoute: (conttext) => const VolunteerHistoryPage(),
-        eventFormRoute: (context) => const EventManagementForm(),
+        eventPageRoute: (context) => BlocProvider(
+          create: (context) => EventBloc(EventRepository(firestore: FakeFirebaseFirestore())), // Initialize EventBloc
+          child: const EventPage(),
+        ),
         matchingFormRoute: (context) => const MatchingFormPage(),
       },
     );
