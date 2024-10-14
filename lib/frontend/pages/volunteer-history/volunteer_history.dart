@@ -1,5 +1,10 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:volunteerexpress/backend/services/auth/auth_service.dart';
+import 'package:volunteerexpress/backend/services/cloud/cloud_volunteer_history.dart';
+import 'package:volunteerexpress/backend/services/cloud/firebase/firebase_volunteer_history_provider.dart';
 import 'package:volunteerexpress/frontend/constants/routes.dart';
+import 'package:volunteerexpress/frontend/pages/volunteer-history/volunteer_history_list_view.dart';
 import 'package:volunteerexpress/frontend/themes/colors.dart';
 import 'package:volunteerexpress/frontend/custom-widgets/textbuttons/text_only_button.dart';
 
@@ -11,30 +16,68 @@ class VolunteerHistoryPage extends StatefulWidget {
 }
 
 class _VolunteerHistoryPageState extends State<VolunteerHistoryPage> {
+  //late final FirebaseVolunteerHistoryService _volunteerService;
+  //String get uId => AuthService.firebase().currentUser!.id;
+
+  @override
+  void initState() {
+    //_volunteerService =
+    // FirebaseVolunteerHistoryService(firestore: FirebaseFirestore.instance);
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: appBar(),
+      appBar: AppBar(title: const Text('Volunteer History')),
       body: Column(
         children: [
           Expanded(child: listView()), // The list view
           navBar(context), // Add the navBar here
         ],
       ),
+      // **************************************************************
+      // **************************************************************
+      // ************* CONNECTION FROM BACKEND TO FRONTEND ************
+      // **************************************************************
+      // **************************************************************
+      // body: StreamBuilder(
+      //   // Get Stream of all volunteer history
+      //   stream: _volunteerService.allVolunteerHistory(volunteerUid: uId),
+      //   builder: (context, snapshot) {
+      //     switch (snapshot.connectionState) {
+      //       case ConnectionState.waiting:
+      //       case ConnectionState.active:
+      //         if (snapshot.hasData) {
+      //           final allVolHist =
+      //               snapshot.data as Iterable<CloudVolunteerHistory>;
+      //           return VolunteerHistoryListView(
+      //               volunteerHistory: allVolHist,
+      //               onTap: (event) {
+      //                 // ********************
+      //                 //*******Todo**********
+      //                 // ********************
+      //               });
+      //         } else {
+      //           return const CircularProgressIndicator();
+      //         }
+      //       default:
+      //         return const CircularProgressIndicator();
+      //     }
+      //   },
+      // ),
+      // ************************************************************
+      // ************************************************************
+      // ************************************************************
     );
   }
 
-  PreferredSizeWidget appBar() {
-    return AppBar(
-      title: const Text('Volunteer History'),
-      backgroundColor: (primaryAccentColor),
-      titleTextStyle: const TextStyle(
-        color: Colors.white,
-        fontWeight: FontWeight.bold,
-        fontSize: 20,
-      ),
-    );
-  }
+  // Column(
+  //       children: [
+  //         Expanded(child: listView()), // The list view
+  //         navBar(context), // Add the navBar here
+  //       ],
+  //     ),
 
   Widget listView() {
     return ListView.separated(
@@ -49,7 +92,10 @@ class _VolunteerHistoryPageState extends State<VolunteerHistoryPage> {
 
   Widget listViewItem(int index) {
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 13, vertical: 25),
+      margin: const EdgeInsets.symmetric(
+        horizontal: 13,
+        vertical: 25,
+      ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -93,40 +139,44 @@ class _VolunteerHistoryPageState extends State<VolunteerHistoryPage> {
       maxLines: 3,
       overflow: TextOverflow.ellipsis,
       text: const TextSpan(
-        text: 'Event Name ',
+        text: 'Event Name',
         style: TextStyle(
             fontSize: 14, color: Colors.black, fontWeight: FontWeight.bold),
-        children: [
-          TextSpan(
-            text: ' Required Skills ',
-            style: TextStyle(
-              fontWeight: FontWeight.w400,
-              color: Colors.red,
-            ),
-          ),
-          TextSpan(
-            text: ' Event Description',
-            style: TextStyle(
-              fontWeight: FontWeight.w400,
-            ),
-          )
-        ],
+        // children: [
+        //   TextSpan(
+        //     text: ' Required Skills ',
+        //     style: TextStyle(
+        //       fontWeight: FontWeight.w400,
+        //       color: Colors.red,
+        //     ),
+        //   ),
+        //   TextSpan(
+        //     text: ' Event Description',
+        //     style: TextStyle(
+        //       fontWeight: FontWeight.w400,
+        //     ),
+        //   )
+        // ],
       ),
     );
   }
 
   Widget eventFields(int index) {
     return Container(
-      margin: const EdgeInsets.only(top: 5),
+      margin: const EdgeInsets.only(
+        top: 10,
+        right: 20,
+        left: 20,
+      ),
       child: const Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(
-            'Location',
-            style: TextStyle(
-              fontSize: 10,
-            ),
-          ),
+          // Text(
+          //   'Location',
+          //   style: TextStyle(
+          //     fontSize: 10,
+          //   ),
+          // ),
           Text(
             'Date',
             style: TextStyle(

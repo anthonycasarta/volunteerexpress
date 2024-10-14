@@ -39,7 +39,9 @@ void main() {
 
   // Mock Auth Services
   final mockAuthServiceLoggedIn = AuthService(
-      authProvider: FirebaseAuthProvider(MockFirebaseAuth(signedIn: true)));
+      authProvider: FirebaseAuthProvider(MockFirebaseAuth(
+    signedIn: true,
+  )));
   final mockAuthServiceDefault =
       AuthService(authProvider: FirebaseAuthProvider(mockFirebaseAuth));
   final mockAuthServiceNotLoggedIn = AuthService(

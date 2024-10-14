@@ -1,5 +1,5 @@
 
-name: volunteerexpress-ci
+name: volunteerexpress-testing
 on: 
     push:
     pull_request:
