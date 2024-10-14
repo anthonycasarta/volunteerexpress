@@ -1,3 +1,5 @@
+[![volunteerexpress-testing](https://github.com/anthonycasarta/volunteerexpress/actions/workflows/ci.yaml/badge.svg)](https://github.com/anthonycasarta/volunteerexpress/actions/workflows/ci.yaml)
+
 # volunteerexpress
 
 A new Flutter project.
