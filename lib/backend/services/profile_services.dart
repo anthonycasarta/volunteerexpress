@@ -27,20 +27,5 @@ class ProfileServices {
       'preference': preference,
       'dates': dates.map((date) => date.toIso8601String()).toList(),
     });
-
-    // Mocking successful data sending: Show a Snackbar if context is still mounted
-    //if (context.mounted) {
-    //ScaffoldMessenger.of(context).showSnackBar(
-    // const SnackBar(content: Text('Profile saved to Firestore (Mock)')),
-    // );
-    // }
-    // } catch (e) {
-    // Handle any errors that occur during the mock Firestore data sending
-    // if (context.mounted) {
-    // ScaffoldMessenger.of(context).showSnackBar(
-    // SnackBar(content: Text('Error saving profile: $e')),
-    // );
-    // }
-    //}
   }
 }
