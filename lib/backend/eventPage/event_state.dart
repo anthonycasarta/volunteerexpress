@@ -36,7 +36,7 @@ class EventFormState extends EventState {
   const EventFormState({this.event});
 
   @override
-  List<Object> get props => [event ?? const Event(name: '', location: '', date: '', urgency: '', requiredSkills: '', description: '')];
+  List<Object> get props => [event ?? const Event(name: '', location: '', date: '', urgency: '', requiredSkills: '', description: '', adminId: '')];
 }
 
 // State when Error in loading events

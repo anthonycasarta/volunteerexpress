@@ -1,5 +1,6 @@
 import 'package:volunteerexpress/models/event_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:volunteerexpress/backend/services/cloud/firebase/constants/cloud_event_constants.dart'; 
 
 class EventRepository {
   // Dummy list to simulate a data source
@@ -15,13 +16,14 @@ class EventRepository {
     return snapshot.docs.map((doc) {
       final data = doc.data();
       return Event(
-        id: doc.id,
-        name: data['name'],
-        location: data['location'],
-        date: data['date'],
-        urgency: data['urgency'],
-        requiredSkills: data['requiredSkills'],
-        description: data['description'],
+        eventID: doc.id,
+        name: data[eventNameFieldName],
+        location: data[eventLocationFieldName],
+        date: data[eventDateFieldName],
+        urgency: data[eventUrgencyFieldName],
+        requiredSkills: data[eventSkillsFieldName],
+        description: data[eventDescriptionFieldName],
+        adminId: data[adminUidFieldName]
       );
     }).toList();
   }
@@ -29,22 +31,24 @@ class EventRepository {
   // Method to add an event
   Future<void> addEvent(Event event) async {
 
-    DocumentReference docRef = firestore.collection('events').doc(event.id);
+    DocumentReference docRef = firestore.collection('events').doc(event.eventID);
 
     await docRef.set({
-      'name': event.name,
-      'location': event.location,
-      'date': event.date,
-      'urgency': event.urgency,
-      'requiredSkills': event.requiredSkills,
-      'description': event.description,
+      eventIDFieldName: event.eventID,
+      eventNameFieldName: event.name,
+      eventLocationFieldName: event.location,
+      eventDateFieldName: event.date,
+      eventUrgencyFieldName: event.urgency,
+      eventSkillsFieldName: event.requiredSkills,
+      eventDescriptionFieldName: event.description,
+      adminUidFieldName: event.adminId
   });
     
   }
 
   // Method to delete an event
   Future<void> deleteEvent(Event deleteEvent) async {
-    await firestore.collection('events').doc(deleteEvent.id).delete();
+    await firestore.collection('events').doc(deleteEvent.eventID).delete();
     
     /* Local Delete Event
     for (int i = 0; i < _events.length; i++) {
@@ -58,14 +62,15 @@ class EventRepository {
 
   // Method to update an event
   Future<void> updateEvent(Event updateEvent) async {
-    await firestore.collection('events').doc(updateEvent.id).update({
-      'id' : updateEvent.id,
-      'name': updateEvent.name,
-      'location': updateEvent.location,
-      'date': updateEvent.date,
-      'urgency': updateEvent.urgency,
-      'requiredSkills': updateEvent.requiredSkills,
-      'description': updateEvent.description,
+    await firestore.collection('events').doc(updateEvent.eventID).update({
+      eventIDFieldName : updateEvent.eventID,
+      eventNameFieldName: updateEvent.name,
+      eventLocationFieldName: updateEvent.location,
+      eventDateFieldName: updateEvent.date,
+      eventUrgencyFieldName: updateEvent.urgency,
+      eventSkillsFieldName: updateEvent.requiredSkills,
+      eventDescriptionFieldName: updateEvent.description,
+      adminUidFieldName : updateEvent.adminId
     });
     /* Local Update code
     for (int i = 0; i < _events.length; i++) {

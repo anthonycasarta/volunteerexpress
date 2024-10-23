@@ -5,6 +5,7 @@ import 'package:volunteerexpress/frontend/themes/colors.dart';
 import 'package:volunteerexpress/models/event_model.dart';
 import 'package:volunteerexpress/backend/eventPage/event_bloc.dart';
 import 'package:volunteerexpress/backend/eventPage/event_event.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 
 
@@ -105,6 +106,8 @@ class _EventManagementFormState extends State<EventManagementForm> {
 
       skillController.selectedItems.addAll(selectedDropdownItems);
       // print('Selected Items in Controller: ${skillController.selectedItems}');
+    
+      
       setState(() {});
     }
   }
@@ -314,7 +317,7 @@ void resetForm() {
                           if (widget.event != null) {
                           
                             final newEvent = Event(
-                              id: widget.event?.id,
+                              eventID: widget.event?.eventID,
                               name: eventNameController.text,
                               location: eventLocationController.text,
                               //date: selectedDates.isNotEmpty ? selectedDates.first.toIso8601String() : '', // Ensure you have a date
@@ -323,12 +326,18 @@ void resetForm() {
                               //requiredSkills: selectedSkills.join(','), // Handle as needed
                               requiredSkills: skillController.selectedItems.map((item) => item.value).join(','),
                               description: eventDescriptionController.text,
+                              adminId: widget.event?.adminId ?? 'Undefined Admin'
                             );
                             // Update existing event
                             // Call your update function here
                             widget.bloc.add(UpdateEvent(newEvent)); // Example of calling an update event action
                             
                           } else {
+
+                              //final User? user = FirebaseAuth.instance.currentUser;
+                              //final String? adminID = user?.uid;
+                              const String adminID = "Current User";
+
                               final newEvent = Event(
                                 name: eventNameController.text,
                                 location: eventLocationController.text,
@@ -338,6 +347,7 @@ void resetForm() {
                                 // requiredSkills: selectedSkills.join(','), // Handle as needed
                                 requiredSkills: skillController.selectedItems.map((item) => item.value).join(','),
                                 description: eventDescriptionController.text,
+                                adminId: adminID,
                               );
 
                             widget.bloc.add(AddEvent(newEvent)); // Example of calling an add event action

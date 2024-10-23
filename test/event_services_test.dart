@@ -37,13 +37,14 @@ void main() {
 
    test('addEvent adds an event to Firestore', () async {
       const event = Event(
-        id: '1',
+        eventID: '1',
         name: 'New Event',
         location: 'New Location',
         date: '2024-11-01',
         urgency: 'Medium',
         requiredSkills: 'Leadership',
         description: 'This is a new event.',
+        adminId: "Current User"
       );
 
       // Add the event using the repository method
@@ -68,13 +69,14 @@ void main() {
       });
 
       final event = Event(
-        id: docRef.id,
+        eventID: docRef.id,
         name: 'Event to Delete',
         location: 'Some Location',
         date: '2024-12-01',
         urgency: 'Low',
         requiredSkills: 'Creativity',
         description: 'This event will be deleted.',
+        adminId: "Current User",
       );
 
       // Delete the event using the repository method
@@ -98,13 +100,14 @@ void main() {
       });
 
       final updatedEvent = Event(
-        id: docRef.id, 
+        eventID: docRef.id, 
         name: 'Updated Event',
         location: 'Updated Location',
         date: '2024-10-10',
         urgency: 'High',
         requiredSkills: 'Adaptability',
         description: 'This event has been updated.',
+        adminId: "Current User",
       );
 
       // Update the event using the repository method
