@@ -2,6 +2,7 @@ import 'package:fake_cloud_firestore/fake_cloud_firestore.dart';
 import 'package:volunteerexpress/backend/eventPage/event_repository.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:volunteerexpress/models/event_model.dart';
+import 'package:volunteerexpress/backend/services/cloud/firebase/constants/cloud_event_constants.dart'; 
 
 
 void main() {
@@ -19,12 +20,14 @@ void main() {
     
     test('fetchEvents returns a list of events', () async {
       await fakeFirestore.collection('events').add({
-        'name': 'Test Event',
-        'location': 'Test Location',
-        'date': '2024-10-15',
-        'urgency': 'High',
-        'requiredSkills': 'Communication',
-        'description': 'This is a test event.',
+        eventNameFieldName: 'Test Event',
+        eventLocationFieldName: 'Test Location',
+        eventDateFieldName: '2024-10-15',
+        eventUrgencyFieldName: 'High',
+        eventSkillsFieldName: 'Communication',
+        eventDescriptionFieldName: 'This is a test event.',
+        adminUidFieldName: "Current User",
+        eventIDFieldName: "event ID"
     });
 
     final events = await eventRepository.fetchEvents();
@@ -53,7 +56,7 @@ void main() {
       // Verify that the event was added
       final snapshot = await fakeFirestore.collection('events').get();
       expect(snapshot.docs.length, 1);
-      expect(snapshot.docs.first['name'], 'New Event');
+      expect(snapshot.docs.first[eventNameFieldName], 'New Event');
     });
 
 
@@ -91,12 +94,14 @@ void main() {
     test('updateEvent updates an event in Firestore', () async {
       // First, add a fake event to Firestore
       final docRef = await fakeFirestore.collection('events').add({
-        'name': 'Old Event',
-        'location': 'Old Location',
-        'date': '2024-10-10',
-        'urgency': 'Low',
-        'requiredSkills': 'Patience',
-        'description': 'This event will be updated.',
+        eventNameFieldName: 'Old Event',
+        eventLocationFieldName: 'Old Location',
+        eventDateFieldName: '2024-10-10',
+        eventUrgencyFieldName: 'Low',
+        eventSkillsFieldName: 'Patience',
+        eventDescriptionFieldName: 'This event will be updated.',
+        adminUidFieldName: "Current User",
+        eventIDFieldName: "event ID"
       });
 
       final updatedEvent = Event(
@@ -115,8 +120,8 @@ void main() {
 
       // Verify that the event was updated
       final snapshot = await fakeFirestore.collection('events').doc(docRef.id).get();
-      expect(snapshot.data()?['name'], 'Updated Event');
-      expect(snapshot.data()?['location'], 'Updated Location');
+      expect(snapshot.data()?[eventNameFieldName], 'Updated Event');
+      expect(snapshot.data()?[eventLocationFieldName], 'Updated Location');
     });
 
 
