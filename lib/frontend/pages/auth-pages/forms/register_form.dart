@@ -111,31 +111,31 @@ class _RegisterFormState extends State<RegisterForm> {
                   // ****** CODE THAT CONNECTS BACKEND TO FRONTEND ********
                   // ******************************************************
                   //
-                  // // validtion
-                  // if (widget.formKey.currentState!.validate()) {
-                  //   final email = widget.emailController.text;
-                  //   final password = widget.passwordController.text;
-                  //   try {
-                  //     await AuthService.firebase().createUser(
-                  //       email: email,
-                  //       password: password,
-                  //     );
-                  //     //
-                  //     // *****CHECK FOR EMAIL VERIFICATION IN THE FUTURE*****
-                  //     //
+                  // validtion
+                  if (widget.formKey.currentState!.validate()) {
+                    final email = widget.emailController.text;
+                    final password = widget.passwordController.text;
+                    try {
+                      await AuthService.firebase().createUser(
+                        email: email,
+                        password: password,
+                      );
+                      //
+                      // *****CHECK FOR EMAIL VERIFICATION IN THE FUTURE*****
+                      //
 
-                  //     // Unimplemented exceptions
-                  //   } on EmailAlreadyInUseAuthException {
-                  //     dev.log('email already in use'); //placeholder
-                  //   } on WeakPasswordAuthException {
-                  //     dev.log('weak password'); //placeholder
-                  //   } on InvalidEmailAuthException {
-                  //     dev.log('invalid email'); //placeholder
-                  //   } on GenericAuthException catch (e) {
-                  //     dev.log(e.toString()); //placeholder
-                  //   }
-                  // }
-                  //
+                      // Unimplemented exceptions
+                    } on EmailAlreadyInUseAuthException {
+                      dev.log('email already in use'); //placeholder
+                    } on WeakPasswordAuthException {
+                      dev.log('weak password'); //placeholder
+                    } on InvalidEmailAuthException {
+                      dev.log('invalid email'); //placeholder
+                    } on GenericAuthException catch (e) {
+                      dev.log(e.toString()); //placeholder
+                    }
+                  }
+
                   // *******************************************************
                   // *******************************************************
                   //

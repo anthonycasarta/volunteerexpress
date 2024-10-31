@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:volunteerexpress/frontend/constants/routes.dart';
+import 'package:volunteerexpress/frontend/pages/home_page.dart';
 import 'package:volunteerexpress/frontend/pages/matching_form.dart';
 import 'package:volunteerexpress/frontend/pages/auth-pages/login_page.dart';
 import 'package:volunteerexpress/frontend/pages/auth-pages/register_page.dart';
@@ -121,6 +122,7 @@ class MyApp extends StatelessWidget {
 
       home: const LoginPage(),
       routes: {
+        homePageRoute: (context) => const HomePage(),
         loginRoute: (context) => const LoginPage(),
         registerRoute: (context) => const RegisterPage(),
         profileRoute: (context) => const ProfilePage(),
