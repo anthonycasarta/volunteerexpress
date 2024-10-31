@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:volunteerexpress/backend/services/auth/auth_exceptions.dart';
 import 'package:volunteerexpress/backend/services/auth/auth_service.dart';
+import 'package:volunteerexpress/backend/services/cloud/cloud_exceptions/cloud_user_role_exception.dart';
+import 'package:volunteerexpress/backend/services/cloud/firebase/firebase_user_roles_service.dart';
 import 'package:volunteerexpress/frontend/custom-widgets/textbuttons/default_textbutton.dart';
 import 'package:volunteerexpress/frontend/custom-widgets/textfields/email_textformfield.dart';
 import 'package:volunteerexpress/frontend/custom-widgets/textfields/password_textformfield.dart';
@@ -15,12 +17,15 @@ class RegisterForm extends StatefulWidget {
 
   final GlobalKey<FormState> formKey;
 
+  final String role;
+
   const RegisterForm({
     super.key,
     required this.emailController,
     required this.passwordController,
     required this.confirmPasswordController,
     required this.formKey,
+    required this.role,
   });
 
   @override
@@ -31,10 +36,13 @@ class _RegisterFormState extends State<RegisterForm> {
   late bool _isPassObscured;
   late bool _isConfirmObscured; // Holds obscure state
 
+  late final FirebaseUserRolesService _userRolesService;
+
   @override
   void initState() {
     _isPassObscured = true;
     _isConfirmObscured = true;
+    _userRolesService = FirebaseUserRolesService();
     super.initState();
   }
 
@@ -116,10 +124,15 @@ class _RegisterFormState extends State<RegisterForm> {
                     final email = widget.emailController.text;
                     final password = widget.passwordController.text;
                     try {
-                      await AuthService.firebase().createUser(
+                      // Create new user
+                      final user = await AuthService.firebase().createUser(
                         email: email,
                         password: password,
                       );
+
+                      // Assign the user's role
+                      _userRolesService.addRole(
+                          userId: user.id, userRole: widget.role);
                       //
                       // *****CHECK FOR EMAIL VERIFICATION IN THE FUTURE*****
                       //
@@ -132,6 +145,8 @@ class _RegisterFormState extends State<RegisterForm> {
                     } on InvalidEmailAuthException {
                       dev.log('invalid email'); //placeholder
                     } on GenericAuthException catch (e) {
+                      dev.log(e.toString()); //placeholder
+                    } on CouldNotAddUserRoleException catch (e) {
                       dev.log(e.toString()); //placeholder
                     }
                   }

@@ -1,8 +1,8 @@
 class FirebaseCloudStorage {
   // Create a singleton
-  static final FirebaseCloudStorage _sharedInst =
+  static final FirebaseCloudStorage _shared =
       FirebaseCloudStorage._sharedInstance();
   FirebaseCloudStorage._sharedInstance();
 
-  factory FirebaseCloudStorage() => _sharedInst;
+  factory FirebaseCloudStorage() => _shared;
 }

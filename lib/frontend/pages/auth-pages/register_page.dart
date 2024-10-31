@@ -74,6 +74,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     emailController: _emailController,
                     passwordController: _passwordController,
                     confirmPasswordController: _confirmPasswordController,
+                    role: 'volunteer',
                   ),
 
                 // Spacing
@@ -101,6 +102,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     emailController: _emailController,
                     passwordController: _passwordController,
                     confirmPasswordController: _confirmPasswordController,
+                    role: 'admin',
                   ),
 
                 // Spacing

@@ -7,31 +7,46 @@ import 'package:volunteerexpress/backend/services/cloud/firebase/firebase_cloud_
 class FirebaseUserRolesService {
   final FirebaseFirestore firestore;
 
-  FirebaseUserRolesService({required this.firestore});
+  // Private constructor
+  FirebaseUserRolesService._sharedInstance(this.firestore);
 
-  // Use the singleton instance of FirebaseCloudStorage
-  static final FirebaseCloudStorage _firebaseCloudStorage =
-      FirebaseCloudStorage();
+  // Singleton instance
+  static FirebaseUserRolesService? _shared;
+
+  // Factory constructor
+  factory FirebaseUserRolesService({FirebaseFirestore? firestore}) {
+    // If _instance is null, create a new instance
+    _shared ??= FirebaseUserRolesService._sharedInstance(
+      firestore ?? FirebaseFirestore.instance,
+    );
+    return _shared!;
+  }
 
   late final userRoles = firestore.collection('user_roles');
 
-  Future<CloudUserRole> getRole({required userId}) async {
+  Future<String> getRole({required userId}) async {
     try {
-      // return await userRoles
-      //     .where(
-      //       userRoleUidFieldName,
-      //       isEqualTo: userId,
-      //     )
-      //     .get();
+      return await userRoles
+          .where(
+            userRoleUidFieldName,
+            isEqualTo: userId,
+          )
+          .get()
+          .then(
+              (value) => value.docs.first.data()[userRoleFieldName] as String);
     } catch (e) {
       throw CouldNotGetUserRoleException();
     }
   }
 
   void addRole({required String userId, required String userRole}) async {
-    await userRoles.add({
-      userRoleFieldName: userRole,
-      userRoleUidFieldName: userId,
-    });
+    try {
+      await userRoles.add({
+        userRoleFieldName: userRole,
+        userRoleUidFieldName: userId,
+      });
+    } catch (e) {
+      throw CouldNotAddUserRoleException();
+    }
   }
 }
