@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:volunteerexpress/frontend/constants/routes.dart';
 import 'package:volunteerexpress/frontend/custom-widgets/textbuttons/text_only_button.dart';
 import 'package:volunteerexpress/frontend/themes/colors.dart';
-
-//import 'package:volunteerexpress/backend/services/profile_services.dart';
+import 'package:volunteerexpress/backend/services/profile_services.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -18,6 +18,7 @@ class _ProfilePageState extends State<ProfilePage> {
   late final TextEditingController address1Controller;
   late final TextEditingController cityController;
   late final TextEditingController zipController;
+  final ProfileServices _profileServices = ProfileServices(firestore: FirebaseFirestore.instance); // Real Firestore // Instance of ProfileServices
 
   @override
   void initState() {
@@ -234,13 +235,13 @@ class _ProfilePageState extends State<ProfilePage> {
                   ),
                   TextOnlyButton(
                     onPressed: () {
-                      //THIS IS BACKEND CODE IMPLEMENTATION
-                      // String fullName = nameController.text;
-                      // String address = address1Controller.text;
-                      // String city = cityController.text;
-                      // String zip = zipController.text; // Make sure you have a controller for preference 
+                      // THIS IS BACKEND CODE IMPLEMENTATION
+                      String fullName = nameController.text;
+                      String address = address1Controller.text;
+                      String city = cityController.text;
+                      String zip = zipController.text; // Make sure you have a controller for preference 
 
-                      // ProfileServices().saveProfileToFile(fullName, address, city, zip, preference.toString(), dates, context);
+                      _profileServices.saveProfileToFirestore(fullName, address, city, selectedState.toString(), zip, preference.toString(), dates);
                     },
                     fontSize: 20,
                     label: 'Save Changes',

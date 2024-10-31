@@ -8,7 +8,7 @@ class ProfileServices {
 
   // Constructor accepts an instance of FirebaseFirestore
   ProfileServices({required this.firestore});
-  Future<void> saveProfileToFirestore(
+  Future<void> saveProfileToFirestore (
       String fullName,
       String address,
       String city,
@@ -18,7 +18,7 @@ class ProfileServices {
       List<DateTime> dates) async {
     // try {
 
-    await firestore.collection('profiles').add({
+    firestore.collection('PROFILE').add({
       'fullName': fullName,
       'address': address,
       'city': city,
