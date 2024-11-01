@@ -22,24 +22,38 @@ class _MatchingFormPageState extends State<MatchingFormPage> {
   bool secondValue = false;
   bool thirdValue = false;
   bool fourthValue = false;
-  final matchedEvents = [
-    "Hands-on Work",
-    "Delivery-Driving",
-    "Sales Assistance",
-    "Food Packing"
-  ];
+  List<String> eventNames = [];
+  List<String> eventSkills = [];
   String? selectedEvent;
   List<Map<String, dynamic>> matchedVolunteers = [];
   String selectedDate = "";
   // Add Firebase initialization in initState
+  final MatchingServices _matchingServices =
+      MatchingServices(firestore: FirebaseFirestore.instance);
   @override
   void initState() {
     super.initState();
     dateController = TextEditingController();
+    _fetchEventsFromFirestore();
   }
 
-  final MatchingServices _matchingServices =
-      MatchingServices(firestore: FirebaseFirestore.instance);
+  Future<void> _fetchEventsFromFirestore() async {
+    try {
+      QuerySnapshot snapshot =
+          await FirebaseFirestore.instance.collection('EVENT').get();
+      setState(() {
+        eventNames =
+            snapshot.docs.map((doc) => doc['event_name'] as String).toList();
+        eventSkills =
+            snapshot.docs.map((doc) => doc['event_skills'] as String).toList();
+      });
+    } catch (e) {
+      print('Error fetching events $e');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error fetching events: $e')),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -84,7 +98,7 @@ class _MatchingFormPageState extends State<MatchingFormPage> {
                   decoration: const InputDecoration(
                     labelText: "Choose an Event",
                   ),
-                  items: matchedEvents.map((String value) {
+                  items: eventNames.map((String value) {
                     return DropdownMenuItem<String>(
                       value: value,
                       child: Text(value),
@@ -147,9 +161,10 @@ class _MatchingFormPageState extends State<MatchingFormPage> {
                       );
                       return;
                     }
-                    matchedVolunteers =
-                        await _matchingServices.displayMatchedVolunteers(
-                            selectedEvent.toString(), selectedDate);
+                    int selectedIndex = eventNames.indexOf(selectedEvent!);
+                    String skillsForEvent = eventSkills[selectedIndex];
+                    matchedVolunteers = await _matchingServices
+                        .displayMatchedVolunteers(selectedDate);
                     if (matchedVolunteers.isEmpty) {
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(

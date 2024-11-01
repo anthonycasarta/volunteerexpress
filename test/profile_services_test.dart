@@ -14,7 +14,7 @@ void main() {
         'Conroe',
         'TX',
         '77385',
-        'Delivery Driving',
+        ['Delivery Driving'],
         dates);
 
     final snapshot = await fakeFirestore.collection('PROFILE').get();
@@ -26,7 +26,7 @@ void main() {
     expect(profile.get('city'), 'Conroe');
     expect(profile.get('state'), 'TX');
     expect(profile.get('zipCode'), '77385');
-    expect(profile.get('preference'), 'Delivery Driving');
+    expect(profile.get('skills'), ['Delivery Driving']);
     expect(profile.get('dates'), [dates.first.toIso8601String()]);
   });
 }
