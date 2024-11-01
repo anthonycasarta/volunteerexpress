@@ -5,9 +5,9 @@ class MatchingServices {
   final FirebaseFirestore firestore;
 
   MatchingServices({required this.firestore});
-  Future<List<Map<String, dynamic>>> displayMatchedVolunteers(String userpreference,String targetDate) async{//, String targetDate ) async {
+  Future<List<Map<String, dynamic>>> displayMatchedVolunteers(String targetDate) async{//, String targetDate ) async {
     QuerySnapshot querySnapshot = await firestore.collection('PROFILE')
-    .where('preference',isEqualTo: userpreference)
+    //.where('skills', isEqualTo: skill)
     .where('dates', arrayContains: targetDate)
     .get();
 
