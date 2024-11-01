@@ -12,12 +12,15 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:volunteerexpress/backend/eventPage/event_bloc.dart';
 import 'package:volunteerexpress/backend/eventPage/event_repository.dart';
 import 'package:fake_cloud_firestore/fake_cloud_firestore.dart';
-
+import 'package:firebase_core/firebase_core.dart';
 void main() {
+ WidgetsFlutterBinding.ensureInitialized();
+  Firebase.initializeApp(); 
   runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
+  
   const MyApp({super.key});
 
   // This widget is the root of your application.

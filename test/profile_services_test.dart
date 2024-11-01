@@ -17,7 +17,7 @@ void main() {
         'Delivery Driving',
         dates);
 
-    final snapshot = await fakeFirestore.collection('profiles').get();
+    final snapshot = await fakeFirestore.collection('PROFILE').get();
     expect(snapshot.docs.length, 1); // Ensure one document is added
 
     final profile = snapshot.docs.first;
