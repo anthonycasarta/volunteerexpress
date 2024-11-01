@@ -5,12 +5,12 @@ import 'package:volunteerexpress/backend/services/matching_services.dart';
 void main() {
   test('Matching Services displays matched volunteers correctly', () async {
     final fakeFirestore = FakeFirebaseFirestore();
-    await fakeFirestore.collection('profiles').add({
+    await fakeFirestore.collection('PROFILE').add({
       'fullName': 'Zachary Pierce',
       'preference': 'Delivery Driving',
       'dates': ['2024-10-13T00:00:00.000Z'],//ISO8601 date string in case anyone is wondering
     });
-    await fakeFirestore.collection('profiles').add({
+    await fakeFirestore.collection('PROFILE').add({
       'fullName': 'Tom Brady',
       'preference': 'Hands-on work',
       'dates': ['2024-10-14T00:00:00.000Z'], //Different date

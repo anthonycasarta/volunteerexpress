@@ -194,12 +194,12 @@ class _ProfilePageState extends State<ProfilePage> {
                     },
                     dropdownMenuEntries: const <DropdownMenuEntry<String>>[
                       DropdownMenuEntry(
-                          value: 'Hands-on', label: 'Hands-on Work'),
+                          value: 'Hands-on Work', label: 'Hands-on Work'),
                       DropdownMenuEntry(
-                          value: 'Delivery', label: 'Delivery-Driving'),
+                          value: 'Delivery-Driving', label: 'Delivery-Driving'),
                       DropdownMenuEntry(
-                          value: 'Sales', label: 'Sales Assistance'),
-                      DropdownMenuEntry(value: 'Food', label: 'Food Packing'),
+                          value: 'Sales Assistance', label: 'Sales Assistance'),
+                      DropdownMenuEntry(value: 'Food Packing', label: 'Food Packing'),
                     ],
                   ),
                   const SizedBox(height: 20),
