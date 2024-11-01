@@ -3,6 +3,7 @@ import 'package:volunteerexpress/backend/services/auth/auth_exceptions.dart';
 import 'package:volunteerexpress/backend/services/auth/auth_service.dart';
 import 'package:volunteerexpress/backend/services/cloud/cloud_exceptions/cloud_user_role_exception.dart';
 import 'package:volunteerexpress/backend/services/cloud/firebase/firebase_user_roles_service.dart';
+import 'package:volunteerexpress/frontend/constants/routes.dart';
 import 'package:volunteerexpress/frontend/custom-widgets/textbuttons/default_textbutton.dart';
 import 'package:volunteerexpress/frontend/custom-widgets/textfields/email_textformfield.dart';
 import 'package:volunteerexpress/frontend/custom-widgets/textfields/password_textformfield.dart';
@@ -93,6 +94,7 @@ class _RegisterFormState extends State<RegisterForm> {
               isConfirmPass: true,
               hintText: 'Confirm Password',
               controller: widget.confirmPasswordController,
+              compareController: widget.passwordController,
               suffixIcon: IconButton(
                 // Set whether text is hidden or not
                 // on button press
@@ -120,6 +122,7 @@ class _RegisterFormState extends State<RegisterForm> {
                   // ******************************************************
                   //
                   // validtion
+                  dev.log(widget.formKey.currentState.toString());
                   if (widget.formKey.currentState!.validate()) {
                     final email = widget.emailController.text;
                     final password = widget.passwordController.text;
@@ -130,9 +133,18 @@ class _RegisterFormState extends State<RegisterForm> {
                         password: password,
                       );
 
+                      dev.log(user.toString());
+
                       // Assign the user's role
                       _userRolesService.addRole(
                           userId: user.id, userRole: widget.role);
+
+                      // if (context.mounted) {
+                      //   Navigator.of(context).pushNamedAndRemoveUntil(
+                      //     loginRoute,
+                      //     (route) => false,
+                      //   );
+                      // }
                       //
                       // *****CHECK FOR EMAIL VERIFICATION IN THE FUTURE*****
                       //

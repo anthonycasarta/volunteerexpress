@@ -27,23 +27,24 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('HOME'),
-      ),
-      body: FutureBuilder(
-          future: AuthService.firebase().initialize(),
-          builder: (context, snapshot) {
-            switch (snapshot.connectionState) {
-              case ConnectionState.done:
-                if (userRole == 'admin') {
-                  return const Text('ADMIN DONE');
-                }
-                return const Text('VOLUNTEER DONE');
-
-              default:
-                return const Text('LOADING.....');
-            }
-          }),
-    );
+        appBar: AppBar(
+          title: const Text('HOME'),
+        ),
+        body: FutureBuilder(
+            future: _userRolesService.getRole(userId: uId),
+            builder: (context, snapshot) {
+              switch (snapshot.connectionState) {
+                case ConnectionState.done:
+                  userRole = snapshot.data!;
+                  if (userRole == 'admin') {
+                    return const Text('ADMIN');
+                  } else if (userRole == 'volunteer') {
+                    return const Text('VOLUNTEER');
+                  }
+                  return const Text('DONE');
+                default:
+                  return const Text('LOADING.....');
+              }
+            }));
   }
 }

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:volunteerexpress/frontend/themes/colors.dart';
 
+import 'dart:developer' as dev show log;
+
 class PasswordTextFormField extends StatelessWidget {
   final String hintText;
   final TextEditingController controller;
@@ -36,6 +38,7 @@ class PasswordTextFormField extends StatelessWidget {
         if (value == null || value.isEmpty) {
           return '**Enter a Password**';
         } else if (isConfirmPass) {
+          dev.log(compareController!.text.toString());
           if (controller.text != compareController!.text) {
             return '**Passwords do not match**';
           }

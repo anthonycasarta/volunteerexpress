@@ -39,13 +39,15 @@ void main() {
 
   // Mock Auth Services
   final mockAuthServiceLoggedIn = AuthService(
-      authProvider: FirebaseAuthProvider(MockFirebaseAuth(
+      authProvider: FirebaseAuthProvider(
+          firebaseAuth: MockFirebaseAuth(
     signedIn: true,
   )));
-  final mockAuthServiceDefault =
-      AuthService(authProvider: FirebaseAuthProvider(mockFirebaseAuth));
+  final mockAuthServiceDefault = AuthService(
+      authProvider: FirebaseAuthProvider(firebaseAuth: mockFirebaseAuth));
   final mockAuthServiceNotLoggedIn = AuthService(
-      authProvider: FirebaseAuthProvider(MockFirebaseAuth(signedIn: false)));
+      authProvider: FirebaseAuthProvider(
+          firebaseAuth: MockFirebaseAuth(signedIn: false)));
 
   // Testing variables
   const invalidEmail = 'email.com';
