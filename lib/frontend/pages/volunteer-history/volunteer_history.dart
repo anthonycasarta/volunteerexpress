@@ -4,6 +4,7 @@ import 'package:volunteerexpress/backend/services/auth/auth_service.dart';
 import 'package:volunteerexpress/backend/services/cloud/cloud_volunteer_history.dart';
 import 'package:volunteerexpress/backend/services/cloud/firebase/firebase_volunteer_history_provider.dart';
 import 'package:volunteerexpress/frontend/constants/routes.dart';
+import 'package:volunteerexpress/frontend/enums/menu_action_enums.dart';
 import 'package:volunteerexpress/frontend/pages/volunteer-history/volunteer_history_list_view.dart';
 import 'package:volunteerexpress/frontend/themes/colors.dart';
 import 'package:volunteerexpress/frontend/custom-widgets/textbuttons/text_only_button.dart';
@@ -29,7 +30,28 @@ class _VolunteerHistoryPageState extends State<VolunteerHistoryPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Volunteer History')),
+      appBar: AppBar(
+        title: const Text('Volunteer History'),
+        actions: [
+          PopupMenuButton<MenuAction>(
+            itemBuilder: (context) {
+              return const [
+                PopupMenuItem<MenuAction>(
+                    value: MenuAction.logout, child: Text('Log out')),
+              ];
+            },
+            onSelected: (value) async {
+              await AuthService.firebase().logOut();
+              if (context.mounted) {
+                Navigator.of(context).pushNamedAndRemoveUntil(
+                  loginRoute,
+                  (route) => false,
+                );
+              }
+            },
+          )
+        ],
+      ),
       body: Column(
         children: [
           Expanded(child: listView()), // The list view
@@ -222,9 +244,6 @@ class _VolunteerHistoryPageState extends State<VolunteerHistoryPage> {
                 onPressed: () =>
                     Navigator.pushNamed(context, notificationRoute),
                 label: "Notifications"),
-            TextOnlyButton(
-                onPressed: () => Navigator.pushNamed(context, loginRoute),
-                label: "Logout"),
           ],
         ),
       ),

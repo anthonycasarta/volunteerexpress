@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:volunteerexpress/backend/services/auth/auth_service.dart';
 import 'package:volunteerexpress/frontend/constants/routes.dart';
 import 'package:volunteerexpress/frontend/custom-widgets/textbuttons/text_only_button.dart';
+import 'package:volunteerexpress/frontend/enums/menu_action_enums.dart';
 import 'package:volunteerexpress/frontend/themes/colors.dart';
-
-//import 'package:volunteerexpress/backend/services/profile_services.dart';
+import 'package:volunteerexpress/backend/services/profile_services.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -18,6 +20,9 @@ class _ProfilePageState extends State<ProfilePage> {
   late final TextEditingController address1Controller;
   late final TextEditingController cityController;
   late final TextEditingController zipController;
+  final ProfileServices _profileServices = ProfileServices(
+      firestore: FirebaseFirestore
+          .instance); // Real Firestore // Instance of ProfileServices
 
   @override
   void initState() {
@@ -66,6 +71,25 @@ class _ProfilePageState extends State<ProfilePage> {
         title: const Text('Profile Management',
             style: TextStyle(color: textColorLight)),
         backgroundColor: primaryAccentColor,
+        actions: [
+          PopupMenuButton<MenuAction>(
+            itemBuilder: (context) {
+              return const [
+                PopupMenuItem<MenuAction>(
+                    value: MenuAction.logout, child: Text('Log out')),
+              ];
+            },
+            onSelected: (value) async {
+              await AuthService.firebase().logOut();
+              if (context.mounted) {
+                Navigator.of(context).pushNamedAndRemoveUntil(
+                  loginRoute,
+                  (route) => false,
+                );
+              }
+            },
+          )
+        ],
       ),
       body: Container(
         color: majorColorLightMode,
@@ -193,12 +217,13 @@ class _ProfilePageState extends State<ProfilePage> {
                     },
                     dropdownMenuEntries: const <DropdownMenuEntry<String>>[
                       DropdownMenuEntry(
-                          value: 'Hands-on', label: 'Hands-on Work'),
+                          value: 'Hands-on Work', label: 'Hands-on Work'),
                       DropdownMenuEntry(
-                          value: 'Delivery', label: 'Delivery-Driving'),
+                          value: 'Delivery-Driving', label: 'Delivery-Driving'),
                       DropdownMenuEntry(
-                          value: 'Sales', label: 'Sales Assistance'),
-                      DropdownMenuEntry(value: 'Food', label: 'Food Packing'),
+                          value: 'Sales Assistance', label: 'Sales Assistance'),
+                      DropdownMenuEntry(
+                          value: 'Food Packing', label: 'Food Packing'),
                     ],
                   ),
                   const SizedBox(height: 20),
@@ -234,13 +259,21 @@ class _ProfilePageState extends State<ProfilePage> {
                   ),
                   TextOnlyButton(
                     onPressed: () {
-                      //THIS IS BACKEND CODE IMPLEMENTATION
-                      // String fullName = nameController.text;
-                      // String address = address1Controller.text;
-                      // String city = cityController.text;
-                      // String zip = zipController.text; // Make sure you have a controller for preference 
+                      // THIS IS BACKEND CODE IMPLEMENTATION
+                      String fullName = nameController.text;
+                      String address = address1Controller.text;
+                      String city = cityController.text;
+                      String zip = zipController
+                          .text; // Make sure you have a controller for preference
 
-                      // ProfileServices().saveProfileToFile(fullName, address, city, zip, preference.toString(), dates, context);
+                      _profileServices.saveProfileToFirestore(
+                          fullName,
+                          address,
+                          city,
+                          selectedState.toString(),
+                          zip,
+                          preference.toString(),
+                          dates);
                     },
                     fontSize: 20,
                     label: 'Save Changes',
@@ -267,10 +300,6 @@ class _ProfilePageState extends State<ProfilePage> {
                               onPressed: () => Navigator.pushNamed(
                                   context, matchingFormRoute),
                               label: "Matching Form"),
-                          TextOnlyButton(
-                              onPressed: () =>
-                                  Navigator.pushNamed(context, loginRoute),
-                              label: "Logout"),
                         ],
                       ),
                     ),
