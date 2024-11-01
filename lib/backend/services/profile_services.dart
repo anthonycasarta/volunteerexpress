@@ -14,7 +14,7 @@ class ProfileServices {
       String city,
       String state,
       String zipCode,
-      String preference,
+      List<String> selectedSkills,
       List<DateTime> dates) async {
     // try {
 
@@ -24,7 +24,7 @@ class ProfileServices {
       'city': city,
       'state': state,
       'zipCode': zipCode,
-      'preference': preference,
+      'skills': selectedSkills,
       'dates': dates.map((date) => date.toIso8601String()).toList(),
     });
   }

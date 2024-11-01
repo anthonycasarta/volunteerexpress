@@ -42,7 +42,15 @@ class _ProfilePageState extends State<ProfilePage> {
 
   List<DateTime> dates = [];
   String? selectedState;
-  String? preference;
+  List<String> selectedSkills = [];
+  final List<String> allSkills = [
+    'Leadership',
+    'Problem Solving',
+    'Creativity',
+    'Adaptability',
+    'Teamwork',
+    'Communication',
+  ];
 
   Future<void> selectDate() async {
     DateTime? picked = await showDatePicker(
@@ -57,6 +65,44 @@ class _ProfilePageState extends State<ProfilePage> {
         dateController.text = picked.toString().split(" ")[0];
       });
     }
+  }
+    void showSkillsDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Select Your Skills'),
+          content: StatefulBuilder(
+            builder: (BuildContext context, StateSetter setState) {
+              return Column(
+                mainAxisSize: MainAxisSize.min,
+                children: allSkills.map((skill) {
+                  return CheckboxListTile(
+                    title: Text(skill),
+                    value: selectedSkills.contains(skill),
+                    onChanged: (bool? value) {
+                      setState(() {
+                        if (value == true) {
+                          selectedSkills.add(skill);
+                        } else {
+                          selectedSkills.remove(skill);
+                        }
+                      });
+                    },
+                  );
+                }).toList(),
+              );
+            },
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text('OK'),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   @override
@@ -180,27 +226,17 @@ class _ProfilePageState extends State<ProfilePage> {
                     isRequired: true,
                     maxLength: 9,
                   ),
-                  const Text(
-                    'Select your work preference:',
+                    const Text(
+                    'Choose your skills:',
                     style: TextStyle(color: textColorDark, fontSize: 24),
                   ),
-                  DropdownMenu<String>(
-                    onSelected: (String? newValue) {
-                      if (newValue != null) {
-                        setState(() {
-                          preference = newValue;
-                        });
-                      }
-                    },
-                    dropdownMenuEntries: const <DropdownMenuEntry<String>>[
-                      DropdownMenuEntry(
-                          value: 'Hands-on Work', label: 'Hands-on Work'),
-                      DropdownMenuEntry(
-                          value: 'Delivery-Driving', label: 'Delivery-Driving'),
-                      DropdownMenuEntry(
-                          value: 'Sales Assistance', label: 'Sales Assistance'),
-                      DropdownMenuEntry(value: 'Food Packing', label: 'Food Packing'),
-                    ],
+                  ElevatedButton(
+                    onPressed: showSkillsDialog,
+                    child: const Text('Select Skills'),
+                  ),
+                  Text(
+                    'Selected Skills: ${selectedSkills.join(", ")}',
+                    style: const TextStyle(color: textColorDark, fontSize: 16),
                   ),
                   const SizedBox(height: 20),
                   const Text(
@@ -241,7 +277,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       String city = cityController.text;
                       String zip = zipController.text; // Make sure you have a controller for preference 
 
-                      _profileServices.saveProfileToFirestore(fullName, address, city, selectedState.toString(), zip, preference.toString(), dates);
+                      _profileServices.saveProfileToFirestore(fullName, address, city, selectedState.toString(), zip, selectedSkills, dates);
                     },
                     fontSize: 20,
                     label: 'Save Changes',

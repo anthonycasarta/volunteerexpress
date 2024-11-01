@@ -18,7 +18,7 @@ void main() {
 
     final matchingServices = MatchingServices(firestore: fakeFirestore);
     List<Map<String, dynamic>> matchedVolunteers =
-        await matchingServices.displayMatchedVolunteers('Delivery Driving','2024-10-13T00:00:00.000Z');
+        await matchingServices.displayMatchedVolunteers('2024-10-13T00:00:00.000Z');
 
     expect(matchedVolunteers.length, 1);
     expect(matchedVolunteers.first['fullName'], 'Zachary Pierce');
