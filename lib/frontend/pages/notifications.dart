@@ -11,7 +11,7 @@ class NotificationViewPage extends StatefulWidget {
 }
 
 class _NotificationViewPageState extends State<NotificationViewPage> {
-  //final NotificationServices notificationServices = NotificationServices(firestore: FirebaseFirestore.instance);
+  final NotificationServices notificationServices = NotificationServices(firestore: FirebaseFirestore.instance);
   List<Map<String, dynamic>> notifications = [];
 
   @override
@@ -21,9 +21,9 @@ class _NotificationViewPageState extends State<NotificationViewPage> {
   }
 
   Future<void> loadNotifications() async {
-    //List<Map<String, dynamic>> fetchedNotifications = await notificationServices.fetchNotifications();
+    List<Map<String, dynamic>> fetchedNotifications = await notificationServices.fetchNotifications();
     setState(() {
-      //notifications = fetchedNotifications;
+      notifications = fetchedNotifications;
     });
   }
   
