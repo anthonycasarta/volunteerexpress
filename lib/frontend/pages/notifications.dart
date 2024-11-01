@@ -129,7 +129,7 @@ class _NotificationViewPageState extends State<NotificationViewPage> {
   }
 
   Widget timeAndDate(int index) {
-    DateTime dateTime = notifications[index]['time'] as DateTime;
+    DateTime dateTime = notifications[index]['time'];
     return Container(
       margin: const EdgeInsets.only(top: 5),
       child: Row(
@@ -142,7 +142,7 @@ class _NotificationViewPageState extends State<NotificationViewPage> {
             ),
           ),
           Text(
-            '${dateTime.hour}:${dateTime.minute} ${dateTime.hour > 12 ? 'pm' : 'am'}',
+            '${dateTime.hour % 12 == 0 ? 12 : dateTime.hour % 12}:${dateTime.minute.toString().padLeft(2, '0')} ${dateTime.hour >= 12 ? 'pm' : 'am'}',
             style: const TextStyle(
               fontSize: 10,
             ),
