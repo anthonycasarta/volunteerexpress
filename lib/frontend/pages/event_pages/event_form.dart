@@ -5,7 +5,10 @@ import 'package:volunteerexpress/frontend/themes/colors.dart';
 import 'package:volunteerexpress/models/event_model.dart';
 import 'package:volunteerexpress/backend/eventPage/event_bloc.dart';
 import 'package:volunteerexpress/backend/eventPage/event_event.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:volunteerexpress/backend/services/auth/auth_service.dart';
+import 'package:volunteerexpress/backend/services/auth/auth_user.dart';
+
+//import 'package:firebase_auth/firebase_auth.dart';
 
 
 
@@ -334,13 +337,18 @@ void resetForm() {
                             
                           } else {
 
-                              final User? user = FirebaseAuth.instance.currentUser;
-                              String? adminID = user?.uid;
-                              //const String adminID = "Current User";
-                              if (user == null) {
-                                 // User is not logged in, handle accordingly (e.g., show a message or redirect)
-                                  adminID = "No User Logged in";
+                              final authService = AuthService.firebase();
+                              final AuthUser? currentUser = authService.currentUser;
+                              String? adminID;
+                              if (currentUser == null) {
+                                // User is not logged in, handle accordingly
+                                adminID = "No User Logged in";
+                              } else {
+                                // User is logged in, get the user ID
+                                adminID = currentUser.id; // Assuming AuthUser has an 'id' property for user ID
                               }
+
+                              //const String adminID = "Current User";
 
                               final newEvent = Event(
                                 name: eventNameController.text,
@@ -351,7 +359,7 @@ void resetForm() {
                                 // requiredSkills: selectedSkills.join(','), // Handle as needed
                                 requiredSkills: skillController.selectedItems.map((item) => item.value).join(','),
                                 description: eventDescriptionController.text,
-                                adminId: adminID ?? "User Not Defined" ,
+                                adminId: adminID ?? "Email Not Found",
                               );
 
                             widget.bloc.add(AddEvent(newEvent)); // Example of calling an add event action
