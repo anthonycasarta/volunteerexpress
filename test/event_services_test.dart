@@ -19,7 +19,7 @@ void main() {
   group('EventRepository with FakeFirebaseFirestore', () {
     
     test('fetchEvents returns a list of events', () async {
-      await fakeFirestore.collection('events').add({
+      await fakeFirestore.collection('EVENT').add({
         eventNameFieldName: 'Test Event',
         eventLocationFieldName: 'Test Location',
         eventDateFieldName: '2024-10-15',
@@ -54,7 +54,7 @@ void main() {
       await eventRepository.addEvent(event);
 
       // Verify that the event was added
-      final snapshot = await fakeFirestore.collection('events').get();
+      final snapshot = await fakeFirestore.collection('EVENT').get();
       expect(snapshot.docs.length, 1);
       expect(snapshot.docs.first[eventNameFieldName], 'New Event');
     });
@@ -62,7 +62,7 @@ void main() {
 
     test('deleteEvent deletes an event from Firestore', () async {
       // First, add a fake event to Firestore
-      final docRef = await fakeFirestore.collection('events').add({
+      final docRef = await fakeFirestore.collection('EVENT').add({
         'name': 'Event to Delete',
         'location': 'Some Location',
         'date': '2024-12-01',
@@ -86,14 +86,14 @@ void main() {
       await eventRepository.deleteEvent(event);
 
       // Verify that the event was deleted
-      final snapshot = await fakeFirestore.collection('events').get();
+      final snapshot = await fakeFirestore.collection('EVENT').get();
       expect(snapshot.docs.isEmpty, true);
     });
 
 
     test('updateEvent updates an event in Firestore', () async {
       // First, add a fake event to Firestore
-      final docRef = await fakeFirestore.collection('events').add({
+      final docRef = await fakeFirestore.collection('EVENT').add({
         eventNameFieldName: 'Old Event',
         eventLocationFieldName: 'Old Location',
         eventDateFieldName: '2024-10-10',
@@ -119,7 +119,7 @@ void main() {
       await eventRepository.updateEvent(updatedEvent);
 
       // Verify that the event was updated
-      final snapshot = await fakeFirestore.collection('events').doc(docRef.id).get();
+      final snapshot = await fakeFirestore.collection('EVENT').doc(docRef.id).get();
       expect(snapshot.data()?[eventNameFieldName], 'Updated Event');
       expect(snapshot.data()?[eventLocationFieldName], 'Updated Location');
     });

@@ -12,7 +12,7 @@ class EventRepository {
   Future<List<Event>> fetchEvents() async {
     // Simulate a delay for fetching data
     //await Future.delayed(const Duration(seconds: 2));
-    final snapshot = await firestore.collection('events').get();
+    final snapshot = await firestore.collection('EVENT').get();
     return snapshot.docs.map((doc) {
       final data = doc.data();
       return Event(
@@ -31,7 +31,7 @@ class EventRepository {
   // Method to add an event
   Future<void> addEvent(Event event) async {
 
-    DocumentReference docRef = firestore.collection('events').doc();
+    DocumentReference docRef = firestore.collection('EVENT').doc();
     //DocumentReference docRef = firestore.collection('events').doc(event.eventID);
 
     await docRef.set({
@@ -49,7 +49,7 @@ class EventRepository {
 
   // Method to delete an event
   Future<void> deleteEvent(Event deleteEvent) async {
-    await firestore.collection('events').doc(deleteEvent.eventID).delete();
+    await firestore.collection('EVENT').doc(deleteEvent.eventID).delete();
     
     /* Local Delete Event
     for (int i = 0; i < _events.length; i++) {
@@ -63,7 +63,7 @@ class EventRepository {
 
   // Method to update an event
   Future<void> updateEvent(Event updateEvent) async {
-    await firestore.collection('events').doc(updateEvent.eventID).update({
+    await firestore.collection('EVENT').doc(updateEvent.eventID).update({
       eventIDFieldName : updateEvent.eventID,
       eventNameFieldName: updateEvent.name,
       eventLocationFieldName: updateEvent.location,

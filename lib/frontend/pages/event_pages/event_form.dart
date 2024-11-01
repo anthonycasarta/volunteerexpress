@@ -359,7 +359,7 @@ void resetForm() {
                                 // requiredSkills: selectedSkills.join(','), // Handle as needed
                                 requiredSkills: skillController.selectedItems.map((item) => item.value).join(','),
                                 description: eventDescriptionController.text,
-                                adminId: adminID ?? "Email Not Found",
+                                adminId: adminID,
                               );
 
                             widget.bloc.add(AddEvent(newEvent)); // Example of calling an add event action
