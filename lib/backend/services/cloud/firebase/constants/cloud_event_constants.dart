@@ -1,4 +1,4 @@
-const adminUidFieldName = 'admin_id';
+const adminUidFieldName = 'user_id';
 const eventNameFieldName = 'event_name';
 const eventDescriptionFieldName = 'event_description';
 const eventLocationFieldName = 'event_location';

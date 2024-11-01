@@ -12,13 +12,31 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:volunteerexpress/backend/eventPage/event_bloc.dart';
 import 'package:volunteerexpress/backend/eventPage/event_repository.dart';
 import 'package:fake_cloud_firestore/fake_cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:volunteerexpress/firebase_options.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
-void main() {
-  runApp(const MyApp());
+
+
+void main() async {
+
+  WidgetsFlutterBinding.ensureInitialized();
+  
+  // Make sure the function is async so you can use await
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+
+  final FirebaseFirestore firestore = FirebaseFirestore.instance;
+  
+
+  runApp(MyApp(firestore: firestore));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final FirebaseFirestore firestore;
+
+  const MyApp({super.key, required this.firestore});
 
   // This widget is the root of your application.
   @override
@@ -128,7 +146,7 @@ class MyApp extends StatelessWidget {
         volunteerHistoryRoute: (conttext) => const VolunteerHistoryPage(),
         eventPageRoute: (context) => BlocProvider(
               create: (context) => EventBloc(EventRepository(
-                  firestore: FakeFirebaseFirestore())), // Initialize EventBloc
+                  firestore: firestore)), // Initialize EventBloc
               child: const EventPage(),
             ),
         matchingFormRoute: (context) => const MatchingFormPage(),

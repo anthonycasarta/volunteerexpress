@@ -334,9 +334,13 @@ void resetForm() {
                             
                           } else {
 
-                              //final User? user = FirebaseAuth.instance.currentUser;
-                              //final String? adminID = user?.uid;
-                              const String adminID = "Current User";
+                              final User? user = FirebaseAuth.instance.currentUser;
+                              String? adminID = user?.uid;
+                              //const String adminID = "Current User";
+                              if (user == null) {
+                                 // User is not logged in, handle accordingly (e.g., show a message or redirect)
+                                  adminID = "No User Logged in";
+                              }
 
                               final newEvent = Event(
                                 name: eventNameController.text,
@@ -347,7 +351,7 @@ void resetForm() {
                                 // requiredSkills: selectedSkills.join(','), // Handle as needed
                                 requiredSkills: skillController.selectedItems.map((item) => item.value).join(','),
                                 description: eventDescriptionController.text,
-                                adminId: adminID,
+                                adminId: adminID ?? "User Not Defined" ,
                               );
 
                             widget.bloc.add(AddEvent(newEvent)); // Example of calling an add event action

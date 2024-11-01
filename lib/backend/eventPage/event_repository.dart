@@ -31,10 +31,11 @@ class EventRepository {
   // Method to add an event
   Future<void> addEvent(Event event) async {
 
-    DocumentReference docRef = firestore.collection('events').doc(event.eventID);
+    DocumentReference docRef = firestore.collection('events').doc();
+    //DocumentReference docRef = firestore.collection('events').doc(event.eventID);
 
     await docRef.set({
-      eventIDFieldName: event.eventID,
+      eventIDFieldName: docRef.id,
       eventNameFieldName: event.name,
       eventLocationFieldName: event.location,
       eventDateFieldName: event.date,
