@@ -14,12 +14,12 @@ void main() {
 
   group('NotificationService Tests', () {
     test('should return a list of notifications', () async {
-      await fakeFirestore.collection('notifications').add({
+      await fakeFirestore.collection('NOTIFICATION').add({
         'title': 'Event Tomorrow',
         'description': 'Event at 2PM tomorrow.',
         'time': Timestamp.fromDate(DateTime.now().subtract(const Duration(hours: 1))),
       });
-      await fakeFirestore.collection('notifications').add({
+      await fakeFirestore.collection('NOTIFICATION').add({
         'title': 'New Event Available',
         'description': 'New Event available now!',
         'time': Timestamp.fromDate(DateTime.now().subtract(const Duration(days: 1))),
@@ -48,7 +48,7 @@ void main() {
         now,
       );
 
-      final snapshot = await fakeFirestore.collection('notifications').get();
+      final snapshot = await fakeFirestore.collection('NOTIFICATION').get();
       final notifications = snapshot.docs.map((doc) => doc.data()).toList();
 
       expect(notifications.length, 1);
