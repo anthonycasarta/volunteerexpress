@@ -139,12 +139,12 @@ class _RegisterFormState extends State<RegisterForm> {
                       _userRolesService.addRole(
                           userId: user.id, userRole: widget.role);
 
-                      // if (context.mounted) {
-                      //   Navigator.of(context).pushNamedAndRemoveUntil(
-                      //     loginRoute,
-                      //     (route) => false,
-                      //   );
-                      // }
+                      if (context.mounted) {
+                        Navigator.of(context).pushNamedAndRemoveUntil(
+                          loginRoute,
+                          (route) => false,
+                        );
+                      }
                       //
                       // *****CHECK FOR EMAIL VERIFICATION IN THE FUTURE*****
                       //
