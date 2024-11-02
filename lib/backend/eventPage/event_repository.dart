@@ -1,12 +1,15 @@
+import 'package:volunteerexpress/backend/services/cloud/firebase/constants/cloud_volunteer_history_constants.dart';
 import 'package:volunteerexpress/models/event_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:volunteerexpress/backend/services/cloud/firebase/constants/cloud_event_constants.dart'; 
+import 'package:volunteerexpress/backend/services/cloud/firebase/constants/cloud_event_constants.dart';
 
 class EventRepository {
   // Dummy list to simulate a data source
   final FirebaseFirestore firestore;
 
   EventRepository({required this.firestore});
+
+  late final event = firestore.collection('EVENT');
 
   // Method to fetch events
   Future<List<Event>> fetchEvents() async {
@@ -16,21 +19,19 @@ class EventRepository {
     return snapshot.docs.map((doc) {
       final data = doc.data();
       return Event(
-        eventID: doc.id,
-        name: data[eventNameFieldName],
-        location: data[eventLocationFieldName],
-        date: data[eventDateFieldName],
-        urgency: data[eventUrgencyFieldName],
-        requiredSkills: data[eventSkillsFieldName],
-        description: data[eventDescriptionFieldName],
-        adminId: data[adminUidFieldName]
-      );
+          eventID: doc.id,
+          name: data[eventNameFieldName],
+          location: data[eventLocationFieldName],
+          date: data[eventDateFieldName],
+          urgency: data[eventUrgencyFieldName],
+          requiredSkills: data[eventSkillsFieldName],
+          description: data[eventDescriptionFieldName],
+          adminId: data[adminUidFieldName]);
     }).toList();
   }
 
   // Method to add an event
   Future<void> addEvent(Event event) async {
-
     DocumentReference docRef = firestore.collection('EVENT').doc();
     //DocumentReference docRef = firestore.collection('events').doc(event.eventID);
 
@@ -43,14 +44,13 @@ class EventRepository {
       eventSkillsFieldName: event.requiredSkills,
       eventDescriptionFieldName: event.description,
       adminUidFieldName: event.adminId
-  });
-    
+    });
   }
 
   // Method to delete an event
   Future<void> deleteEvent(Event deleteEvent) async {
     await firestore.collection('EVENT').doc(deleteEvent.eventID).delete();
-    
+
     /* Local Delete Event
     for (int i = 0; i < _events.length; i++) {
       if (_events[i].id == deleteEvent.id) {
@@ -64,14 +64,14 @@ class EventRepository {
   // Method to update an event
   Future<void> updateEvent(Event updateEvent) async {
     await firestore.collection('EVENT').doc(updateEvent.eventID).update({
-      eventIDFieldName : updateEvent.eventID,
+      eventIDFieldName: updateEvent.eventID,
       eventNameFieldName: updateEvent.name,
       eventLocationFieldName: updateEvent.location,
       eventDateFieldName: updateEvent.date,
       eventUrgencyFieldName: updateEvent.urgency,
       eventSkillsFieldName: updateEvent.requiredSkills,
       eventDescriptionFieldName: updateEvent.description,
-      adminUidFieldName : updateEvent.adminId
+      adminUidFieldName: updateEvent.adminId
     });
     /* Local Update code
     for (int i = 0; i < _events.length; i++) {
@@ -81,5 +81,25 @@ class EventRepository {
       }
     }
     */
+  }
+
+  Future<Event> getEvent({required String eventId}) async {
+    final data = await event
+        .where(
+          eventIDFieldName,
+          isEqualTo: eventId,
+        )
+        .get()
+        .then((value) => value.docs.first.data());
+
+    return Event(
+        eventID: eventId,
+        name: data[eventNameFieldName],
+        location: data[eventLocationFieldName],
+        date: data[eventDateFieldName],
+        urgency: data[eventUrgencyFieldName],
+        requiredSkills: data[eventSkillsFieldName],
+        description: data[eventDescriptionFieldName],
+        adminId: data[adminUidFieldName]);
   }
 }

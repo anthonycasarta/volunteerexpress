@@ -2,14 +2,26 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:volunteerexpress/backend/services/cloud/cloud_exceptions/cloud_volunteer_history_exceptions.dart';
 import 'package:volunteerexpress/backend/services/cloud/cloud_volunteer_history.dart';
 import 'package:volunteerexpress/backend/services/cloud/firebase/constants/cloud_volunteer_history_constants.dart';
-import 'package:volunteerexpress/backend/services/cloud/firebase/firebase_cloud_storage.dart';
 
-class FirebaseVolunteerHistoryService implements FirebaseCloudStorage {
+class FirebaseVolunteerHistoryService {
   final FirebaseFirestore firestore;
 
-  FirebaseVolunteerHistoryService({required this.firestore});
-  // Variable containing the table/collection of volunteer history
+  // Private constructor
+  FirebaseVolunteerHistoryService._sharedInstance(this.firestore);
 
+  // Singleton instance
+  static FirebaseVolunteerHistoryService? _shared;
+
+  // Factory constructor
+  factory FirebaseVolunteerHistoryService({FirebaseFirestore? firestore}) {
+    // If _instance is null, create a new instance
+    _shared ??= FirebaseVolunteerHistoryService._sharedInstance(
+      firestore ?? FirebaseFirestore.instance,
+    );
+    return _shared!;
+  }
+
+  // Variable containing the table/collection of volunteer history
   late final volunteerHistory = firestore.collection('volunteer_history');
 
   // Update the staus of a volunteer in an event

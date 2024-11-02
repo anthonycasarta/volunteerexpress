@@ -9,7 +9,7 @@ import 'package:volunteerexpress/frontend/pages/auth-pages/login_page.dart';
 import 'package:volunteerexpress/frontend/pages/auth-pages/register_page.dart';
 import 'package:volunteerexpress/frontend/pages/notifications.dart';
 import 'package:volunteerexpress/frontend/pages/profile.dart';
-import 'package:volunteerexpress/frontend/pages/volunteer-history/volunteer_history.dart';
+import 'package:volunteerexpress/frontend/pages/volunteer-history/volunteer_history_page.dart';
 import 'package:volunteerexpress/frontend/themes/colors.dart';
 import 'package:volunteerexpress/frontend/pages/event_page.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
