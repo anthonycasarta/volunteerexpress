@@ -5,8 +5,7 @@ class NotificationServices {
 
   NotificationServices({required this.firestore});
   Future<List<Map<String, dynamic>>> fetchNotifications() async {
-    //try {
-      QuerySnapshot querySnapshot = await firestore.collection('notifications').get();
+      QuerySnapshot querySnapshot = await firestore.collection('NOTIFICATION').get();
 
       List<Map<String, dynamic>> notifications = querySnapshot.docs.map((doc) {
         return {
@@ -17,21 +16,13 @@ class NotificationServices {
       }).toList();
 
       return notifications;
-    //} catch (e) {
-      //print('Error fetching notifications: $e');
-      //return [];
-    //}
   }
 
   Future<void> addNotification(String title, String description, DateTime time) async {
-    //try {
-      await firestore.collection('notifications').add({
+      await firestore.collection('NOTIFICATION').add({
         'title': title,
         'description': description,
         'time': Timestamp.fromDate(time),
       });
-    //} catch (e) {
-      //print('Error adding notification: $e');
-    //}
   }
 }
