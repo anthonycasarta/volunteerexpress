@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:volunteerexpress/backend/services/cloud/cloud_exceptions/cloud_user_role_exception.dart';
 import 'package:volunteerexpress/backend/services/cloud/cloud_user_role.dart';
 import 'package:volunteerexpress/backend/services/cloud/firebase/constants/cloud_user_roles_constants.dart';
-import 'package:volunteerexpress/backend/services/cloud/firebase/firebase_cloud_storage.dart';
 
 class FirebaseUserRolesService {
   final FirebaseFirestore firestore;

@@ -5,7 +5,7 @@ import 'package:mock_exceptions/mock_exceptions.dart';
 import 'package:volunteerexpress/backend/services/cloud/cloud_exceptions/cloud_volunteer_history_exceptions.dart';
 import 'package:volunteerexpress/backend/services/cloud/cloud_volunteer_history.dart';
 import 'package:volunteerexpress/backend/services/cloud/firebase/constants/cloud_volunteer_history_constants.dart';
-import 'package:volunteerexpress/backend/services/cloud/firebase/firebase_volunteer_history_provider.dart';
+import 'package:volunteerexpress/backend/services/cloud/firebase/firebase_volunteer_history_service.dart';
 
 void main() async {
   // Mock Firestore

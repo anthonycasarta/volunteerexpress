@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:volunteerexpress/backend/services/auth/auth_service.dart';
 import 'package:volunteerexpress/backend/services/cloud/cloud_volunteer_history.dart';
-import 'package:volunteerexpress/backend/services/cloud/firebase/firebase_volunteer_history_provider.dart';
+import 'package:volunteerexpress/backend/services/cloud/firebase/firebase_volunteer_history_service.dart';
 import 'package:volunteerexpress/frontend/constants/routes.dart';
 import 'package:volunteerexpress/frontend/enums/menu_action_enums.dart';
 import 'package:volunteerexpress/frontend/pages/volunteer-history/volunteer_history_list_view.dart';
@@ -17,13 +17,13 @@ class VolunteerHistoryPage extends StatefulWidget {
 }
 
 class _VolunteerHistoryPageState extends State<VolunteerHistoryPage> {
-  //late final FirebaseVolunteerHistoryService _volunteerService;
-  //String get uId => AuthService.firebase().currentUser!.id;
+  late final FirebaseVolunteerHistoryService _volunteerService;
+  String get uId => AuthService.firebase().currentUser!.id;
 
   @override
   void initState() {
-    //_volunteerService =
-    // FirebaseVolunteerHistoryService(firestore: FirebaseFirestore.instance);
+    _volunteerService =
+        FirebaseVolunteerHistoryService(firestore: FirebaseFirestore.instance);
     super.initState();
   }
 
@@ -52,12 +52,41 @@ class _VolunteerHistoryPageState extends State<VolunteerHistoryPage> {
           )
         ],
       ),
-      body: Column(
-        children: [
-          Expanded(child: listView()), // The list view
-          navBar(context), // Add the navBar here
-        ],
+      // **************************************************************
+      // **************************************************************
+      // ************* CONNECTION FROM BACKEND TO FRONTEND ************
+      // **************************************************************
+      // **************************************************************
+      //
+      body: StreamBuilder(
+        // Get Stream of all volunteer history
+        stream: _volunteerService.allVolunteerHistory(volunteerUid: uId),
+        builder: (context, snapshot) {
+          switch (snapshot.connectionState) {
+            case ConnectionState.waiting:
+            case ConnectionState.active:
+              if (snapshot.hasData) {
+                final allVolHist =
+                    snapshot.data as Iterable<CloudVolunteerHistory>;
+                return VolunteerHistoryListView(
+                    volunteerHistory: allVolHist,
+                    onTap: (event) {
+                      // ********************
+                      //*******Todo**********
+                      // ********************
+                    });
+              } else {
+                return const CircularProgressIndicator();
+              }
+            default:
+              return const CircularProgressIndicator();
+          }
+        },
       ),
+      //
+      // ************************************************************
+      // ************************************************************
+      // ************************************************************
       // **************************************************************
       // **************************************************************
       // ************* CONNECTION FROM BACKEND TO FRONTEND ************
