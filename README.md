@@ -59,4 +59,5 @@ flutter pub get
 ```
 
 **Emulator Issues:** Ensure that your emulator is running in a compatible version. Ensure that only one emulator (iOS or Android) is running to avoid any connection issues. Restart the emulator or use a different device if issues persist.
+
 **Plugin Version Conflicts:** If you run into plugin version conflicts, ensure all dependencies in pubspec.yaml are compatible with your Flutter SDK version, or use **flutter pub upgrade** to resolve any version mismatches.
