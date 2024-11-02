@@ -9,6 +9,8 @@ Welcome to **VolunteerExpress**! This application is built using Flutter and Fir
 - [Flutter](https://flutter.dev/docs/get-started/install) SDK installed
 - [VS Code](https://code.visualstudio.com/) preferably, or another code editor of your choice
 - iOS or Android emulator installed (no web support currently)
+  **Note:** The installation of Xcode on a device compatible with MacOS is required for the iOS emulator.
+  Similarly, Android Studio is required to run an Android emulator.
 
 ## Setup Instructions
 
