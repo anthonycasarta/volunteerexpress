@@ -39,7 +39,11 @@ Alternatively, you can use VS Code by pressing F5 or selecting Run > Start Debug
 
 ### 4. Once the Application is Running
 Once you the application opens in your desired emulator, the Login page should be displayed. 
-**For first time users**, click on 'Already have an account? Log in here.', register with any email address (real or fake as of now) and password. **NOTE:** you have the choice of choosing either Admin or Volunteer account types. Once you hit 'Register', you should be re-directed to the Login page where you are prompted to login with your newly registerd account.
+
+**For first time users**, click on 'Already have an account? Log in here.', register with any email address (real or fake as of now) and password. 
+
+**NOTE:** you have the choice of choosing either Admin or Volunteer account types. Once you hit 'Register', you should be re-directed to the Login page where you are prompted to login with your newly registerd account.
+
 Once you have logged in, you will be redirected to the home page which demonstrates your account type (admin or volunteer) at the top, as well as a list of buttons that take you to the various menus the application offers.
 To log out, simply hit the three-dotted button at the top right of the screen at any time you desire.
 
