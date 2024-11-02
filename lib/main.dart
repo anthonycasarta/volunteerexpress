@@ -1,5 +1,9 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:volunteerexpress/backend/services/auth/auth_service.dart';
 import 'package:volunteerexpress/frontend/constants/routes.dart';
+import 'package:volunteerexpress/frontend/pages/home_page.dart';
+
 import 'package:volunteerexpress/frontend/pages/matching_form.dart';
 import 'package:volunteerexpress/frontend/pages/auth-pages/login_page.dart';
 import 'package:volunteerexpress/frontend/pages/auth-pages/register_page.dart';
@@ -16,19 +20,15 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:volunteerexpress/firebase_options.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-
-
 void main() async {
-
   WidgetsFlutterBinding.ensureInitialized();
-  
+
   // Make sure the function is async so you can use await
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
-  
 
   runApp(MyApp(firestore: firestore));
 }
@@ -137,13 +137,14 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
 
-      home: const LoginPage(),
+      home: const Routes(),
       routes: {
+        homePageRoute: (context) => const HomePage(),
         loginRoute: (context) => const LoginPage(),
         registerRoute: (context) => const RegisterPage(),
         profileRoute: (context) => const ProfilePage(),
         notificationRoute: (context) => const NotificationViewPage(),
-        volunteerHistoryRoute: (conttext) => const VolunteerHistoryPage(),
+        volunteerHistoryRoute: (context) => const VolunteerHistoryPage(),
         eventPageRoute: (context) => BlocProvider(
               create: (context) => EventBloc(EventRepository(
                   firestore: firestore)), // Initialize EventBloc
@@ -151,6 +152,37 @@ class MyApp extends StatelessWidget {
             ),
         matchingFormRoute: (context) => const MatchingFormPage(),
       },
+    );
+  }
+}
+
+class Routes extends StatefulWidget {
+  const Routes({super.key});
+
+  @override
+  State<Routes> createState() => _RoutesState();
+}
+
+class _RoutesState extends State<Routes> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: FutureBuilder(
+          future: AuthService.firebase().initialize(),
+          builder: (context, snapshot) {
+            switch (snapshot.connectionState) {
+              case ConnectionState.done:
+                final user = AuthService.firebase().currentUser;
+                if (user != null) {
+                  return const HomePage();
+                } else {
+                  return const LoginPage();
+                }
+
+              default:
+                return const Text('LOADING.....');
+            }
+          }),
     );
   }
 }

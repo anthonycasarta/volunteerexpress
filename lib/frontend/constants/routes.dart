@@ -5,3 +5,4 @@ const notificationRoute = '/notifications/';
 const volunteerHistoryRoute = '/volunteer-history/';
 const eventPageRoute = '/event_page/';
 const matchingFormRoute = '/matching-form/';
+const homePageRoute = '/home-page/';

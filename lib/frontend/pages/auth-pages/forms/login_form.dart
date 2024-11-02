@@ -85,38 +85,38 @@ class _LoginFormState extends State<LoginForm> {
                   // ****** CODE THAT CONNECTS BACKEND TO FRONTEND ********
                   // ******************************************************
                   //
-                  //if (widget.formKey.currentState!.validate()) {
-                  // final email = widget.emailController.text;
-                  // final password = widget.passwordController.text;
-                  // try {
-                  //   await AuthService.firebase().logIn(
-                  //     email: email,
-                  //     password: password,
-                  //   );
-                  //   //
-                  //   // *****CHECK FOR EMAIL VERIFICATION IN THE FUTURE*****
-                  //   //
+                  if (widget.formKey.currentState!.validate()) {
+                    final email = widget.emailController.text;
+                    final password = widget.passwordController.text;
+                    try {
+                      await AuthService.firebase().logIn(
+                        email: email,
+                        password: password,
+                      );
+                      //
+                      // *****CHECK FOR EMAIL VERIFICATION IN THE FUTURE*****
+                      //
 
-                  //   // Unimplemented exceptions
-                  // } on UserNotLoggedInAuthException {
-                  //   dev.log('user not logged in'); //placeholder
-                  // } on InvalidCredentialAuthException {
-                  //   dev.log('invalid credential'); //pladeholder
-                  // } on GenericAuthException catch (e) {
-                  //   dev.log(e.toString()); //placeholder
-                  // }
-                  //
-                  // *******************************************************
-                  // *******************************************************
-                  //
-                  // Go to profile page on button press
-                  if (context.mounted) {
-                    Navigator.of(context).pushNamedAndRemoveUntil(
-                      profileRoute,
-                      (route) => false,
-                    );
+                      // Unimplemented exceptions
+                    } on UserNotLoggedInAuthException {
+                      dev.log('user not logged in'); //placeholder
+                    } on InvalidCredentialAuthException {
+                      dev.log('invalid credential'); //pladeholder
+                    } on GenericAuthException catch (e) {
+                      dev.log(e.toString()); //placeholder
+                    }
+
+                    // *******************************************************
+                    // *******************************************************
+                    //
+                    // Go to profile page on button press
+                    if (context.mounted) {
+                      Navigator.of(context).pushNamedAndRemoveUntil(
+                        homePageRoute,
+                        (route) => false,
+                      );
+                    }
                   }
-                  // }
                 },
                 label: 'Log in',
               ),

@@ -8,9 +8,13 @@ import 'package:firebase_auth/firebase_auth.dart' as firebase_auth
 import 'package:volunteerexpress/firebase_options.dart';
 
 class FirebaseAuthProvider implements AuthProvider {
-  final firebase_auth.FirebaseAuth firebaseAuth;
+  final firebase_auth.FirebaseAuth _firebaseAuth;
 
-  FirebaseAuthProvider(this.firebaseAuth);
+  // Constructor allows passing a custom FirebaseAuth instance (for testing)
+  FirebaseAuthProvider({firebase_auth.FirebaseAuth? firebaseAuth})
+      : _firebaseAuth = firebaseAuth ??
+            firebase_auth
+                .FirebaseAuth.instance; // Default to FirebaseAuth.instance
 
   @override
   Future<AuthUser> createUser({
@@ -19,7 +23,7 @@ class FirebaseAuthProvider implements AuthProvider {
   }) async {
     try {
       // create a user
-      await firebaseAuth.createUserWithEmailAndPassword(
+      await _firebaseAuth.createUserWithEmailAndPassword(
         email: email,
         password: password,
       );
@@ -27,6 +31,7 @@ class FirebaseAuthProvider implements AuthProvider {
       if (user != null) {
         return user;
       }
+
       throw UserNotLoggedInAuthException();
 
       // Firebase exceptions
@@ -52,7 +57,7 @@ class FirebaseAuthProvider implements AuthProvider {
 
   @override
   AuthUser? get currentUser {
-    final user = firebaseAuth.currentUser; // get user
+    final user = _firebaseAuth.currentUser; // get user
     // check if there is a user
     if (user != null) {
       return AuthUser.fromFirebase(user); // return user
@@ -67,7 +72,7 @@ class FirebaseAuthProvider implements AuthProvider {
     required String password,
   }) async {
     try {
-      await firebaseAuth.signInWithEmailAndPassword(
+      await _firebaseAuth.signInWithEmailAndPassword(
         email: email,
         password: password,
       );
@@ -96,9 +101,9 @@ class FirebaseAuthProvider implements AuthProvider {
 
   @override
   Future<void> logOut() async {
-    final user = firebaseAuth.currentUser;
+    final user = _firebaseAuth.currentUser;
     if (user != null) {
-      await firebaseAuth.signOut(); // sign out if current user exists
+      await _firebaseAuth.signOut(); // sign out if current user exists
     } else {
       throw UserNotLoggedInAuthException();
     }
@@ -106,7 +111,7 @@ class FirebaseAuthProvider implements AuthProvider {
 
   @override
   Future<void> sendEmailVerification() async {
-    final user = firebaseAuth.currentUser; // get user
+    final user = _firebaseAuth.currentUser; // get user
     if (user != null) {
       await user
           .sendEmailVerification(); // send email verification if a user exists

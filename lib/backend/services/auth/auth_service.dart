@@ -10,7 +10,7 @@ class AuthService implements provider.AuthProvider {
 
   // Return instance of AuthService that uses Firebase as the AuthProvider
   factory AuthService.firebase() =>
-      AuthService(authProvider: FirebaseAuthProvider(FirebaseAuth.instance));
+      AuthService(authProvider: FirebaseAuthProvider());
 
   @override
   Future<AuthUser> createUser({

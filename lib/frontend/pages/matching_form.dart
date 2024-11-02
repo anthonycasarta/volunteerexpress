@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:volunteerexpress/backend/services/auth/auth_service.dart';
 import 'package:volunteerexpress/backend/services/matching_services.dart';
 import 'package:volunteerexpress/frontend/constants/routes.dart';
 import 'package:volunteerexpress/frontend/custom-widgets/textbuttons/text_only_button.dart';
+import 'package:volunteerexpress/frontend/enums/menu_action_enums.dart';
 import 'package:volunteerexpress/frontend/themes/colors.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:volunteerexpress/backend/services/matching_services.dart';
@@ -13,46 +15,45 @@ class MatchingFormPage extends StatefulWidget {
   @override
   State<MatchingFormPage> createState() => _MatchingFormPageState();
 }
- 
+
 class _MatchingFormPageState extends State<MatchingFormPage> {
   late final TextEditingController dateController;
   bool firstValue = false;
   bool secondValue = false;
   bool thirdValue = false;
   bool fourthValue = false;
- List<String> eventNames = []; 
- List<String> eventSkills =[];
+  List<String> eventNames = [];
+  List<String> eventSkills = [];
   String? selectedEvent;
   List<Map<String, dynamic>> matchedVolunteers = [];
-  String selectedDate  = "";
+  String selectedDate = "";
   // Add Firebase initialization in initState
-  final MatchingServices _matchingServices = MatchingServices(firestore: FirebaseFirestore.instance);
+  final MatchingServices _matchingServices =
+      MatchingServices(firestore: FirebaseFirestore.instance);
   @override
   void initState() {
     super.initState();
     dateController = TextEditingController();
     _fetchEventsFromFirestore();
-   
   }
-  Future<void> _fetchEventsFromFirestore()async{
-    try {
-      QuerySnapshot snapshot = 
-        await FirebaseFirestore.instance.collection('EVENT').get();
-      setState(() {
-        eventNames = snapshot.docs
-          .map((doc)=>doc['event_name'] as String).toList();
-        eventSkills = snapshot.docs.map((doc)=>doc['event_skills'] as String).toList();
-  
-      });
 
-    } catch (e){
+  Future<void> _fetchEventsFromFirestore() async {
+    try {
+      QuerySnapshot snapshot =
+          await FirebaseFirestore.instance.collection('EVENT').get();
+      setState(() {
+        eventNames =
+            snapshot.docs.map((doc) => doc['event_name'] as String).toList();
+        eventSkills =
+            snapshot.docs.map((doc) => doc['event_skills'] as String).toList();
+      });
+    } catch (e) {
       print('Error fetching events $e');
       ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error fetching events: $e')),
+        SnackBar(content: Text('Error fetching events: $e')),
       );
     }
   }
- 
 
   @override
   Widget build(BuildContext context) {
@@ -62,6 +63,25 @@ class _MatchingFormPageState extends State<MatchingFormPage> {
         backgroundColor: primaryAccentColor,
         foregroundColor: Colors.white,
         centerTitle: true,
+        actions: [
+          PopupMenuButton<MenuAction>(
+            itemBuilder: (context) {
+              return const [
+                PopupMenuItem<MenuAction>(
+                    value: MenuAction.logout, child: Text('Log out')),
+              ];
+            },
+            onSelected: (value) async {
+              await AuthService.firebase().logOut();
+              if (context.mounted) {
+                Navigator.of(context).pushNamedAndRemoveUntil(
+                  loginRoute,
+                  (route) => false,
+                );
+              }
+            },
+          )
+        ],
       ),
       body: Center(
         child: Padding(
@@ -78,7 +98,7 @@ class _MatchingFormPageState extends State<MatchingFormPage> {
                   decoration: const InputDecoration(
                     labelText: "Choose an Event",
                   ),
-                  items:eventNames.map((String value) {
+                  items: eventNames.map((String value) {
                     return DropdownMenuItem<String>(
                       value: value,
                       child: Text(value),
@@ -98,37 +118,34 @@ class _MatchingFormPageState extends State<MatchingFormPage> {
                 ),
               ),
               Container(
-                width: 500,
-                height: 90,
-                padding: const EdgeInsets.symmetric(vertical: 10),
-                child: TextFormField(
-                  readOnly: true,
-                  decoration: const InputDecoration(
-                    labelText: "Select a Date"
-                  ),
-                  controller: dateController,
-                  onTap: () async {
-                    DateTime? pickedDate = await showDatePicker(
-                      context: context, 
-                      initialDate: DateTime.now(), 
-                      firstDate: DateTime(2000),
-                      lastDate: DateTime(2101));
-                      if (pickedDate != null){
+                  width: 500,
+                  height: 90,
+                  padding: const EdgeInsets.symmetric(vertical: 10),
+                  child: TextFormField(
+                    readOnly: true,
+                    decoration:
+                        const InputDecoration(labelText: "Select a Date"),
+                    controller: dateController,
+                    onTap: () async {
+                      DateTime? pickedDate = await showDatePicker(
+                          context: context,
+                          initialDate: DateTime.now(),
+                          firstDate: DateTime(2000),
+                          lastDate: DateTime(2101));
+                      if (pickedDate != null) {
                         setState(() {
-                          dateController.text =
-                          pickedDate.toIso8601String(); 
+                          dateController.text = pickedDate.toIso8601String();
                           selectedDate = pickedDate.toIso8601String();
                         });
                       }
-                  },
-                  validator: (value){
-                    if (value == null || value.isEmpty){
-                      return 'Please select a date';
-                    }
-                    return null;
-                  },
-                )
-              ),
+                    },
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please select a date';
+                      }
+                      return null;
+                    },
+                  )),
               const SizedBox(height: 20),
               Container(
                 width: 300,
@@ -137,27 +154,26 @@ class _MatchingFormPageState extends State<MatchingFormPage> {
                 child: ElevatedButton(
                   onPressed: () async {
                     if (selectedEvent == null) {
-                     ScaffoldMessenger.of(context).showSnackBar(
-                     const SnackBar(
-                    content: Text('Please select an event'),
-                    ),
-                    );
-                     return;
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('Please select an event'),
+                        ),
+                      );
+                      return;
                     }
                     int selectedIndex = eventNames.indexOf(selectedEvent!);
                     String skillsForEvent = eventSkills[selectedIndex];
-                    matchedVolunteers = await _matchingServices.displayMatchedVolunteers(selectedDate); 
+                    matchedVolunteers = await _matchingServices
+                        .displayMatchedVolunteers(selectedDate);
                     if (matchedVolunteers.isEmpty) {
-                     ScaffoldMessenger.of(context).showSnackBar(
-                     const SnackBar(
-                      content: Text('No Volunteers matched the event'),
-                    ),
-                    );
-                     } else {
-                     showMatchedVolunteersDialog(context);
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('No Volunteers matched the event'),
+                        ),
+                      );
+                    } else {
+                      showMatchedVolunteersDialog(context);
                     }
-                    
-                     
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: primaryAccentColor,
@@ -193,10 +209,6 @@ class _MatchingFormPageState extends State<MatchingFormPage> {
                           onPressed: () =>
                               Navigator.pushNamed(context, notificationRoute),
                           label: "Notifications"),
-                      TextOnlyButton(
-                          onPressed: () =>
-                              Navigator.pushNamed(context, loginRoute),
-                          label: "Logout"),
                     ],
                   ),
                 ),
@@ -232,5 +244,4 @@ class _MatchingFormPageState extends State<MatchingFormPage> {
       },
     );
   }
-
 }

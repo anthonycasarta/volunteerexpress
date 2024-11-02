@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:volunteerexpress/backend/services/auth/auth_exceptions.dart';
 import 'package:volunteerexpress/backend/services/auth/auth_service.dart';
+import 'package:volunteerexpress/backend/services/cloud/cloud_exceptions/cloud_user_role_exception.dart';
+import 'package:volunteerexpress/backend/services/cloud/firebase/firebase_user_roles_service.dart';
+import 'package:volunteerexpress/frontend/constants/routes.dart';
 import 'package:volunteerexpress/frontend/custom-widgets/textbuttons/default_textbutton.dart';
 import 'package:volunteerexpress/frontend/custom-widgets/textfields/email_textformfield.dart';
 import 'package:volunteerexpress/frontend/custom-widgets/textfields/password_textformfield.dart';
@@ -15,12 +18,15 @@ class RegisterForm extends StatefulWidget {
 
   final GlobalKey<FormState> formKey;
 
+  final String role;
+
   const RegisterForm({
     super.key,
     required this.emailController,
     required this.passwordController,
     required this.confirmPasswordController,
     required this.formKey,
+    required this.role,
   });
 
   @override
@@ -31,10 +37,13 @@ class _RegisterFormState extends State<RegisterForm> {
   late bool _isPassObscured;
   late bool _isConfirmObscured; // Holds obscure state
 
+  late final FirebaseUserRolesService _userRolesService;
+
   @override
   void initState() {
     _isPassObscured = true;
     _isConfirmObscured = true;
+    _userRolesService = FirebaseUserRolesService();
     super.initState();
   }
 
@@ -85,6 +94,7 @@ class _RegisterFormState extends State<RegisterForm> {
               isConfirmPass: true,
               hintText: 'Confirm Password',
               controller: widget.confirmPasswordController,
+              compareController: widget.passwordController,
               suffixIcon: IconButton(
                 // Set whether text is hidden or not
                 // on button press
@@ -111,31 +121,48 @@ class _RegisterFormState extends State<RegisterForm> {
                   // ****** CODE THAT CONNECTS BACKEND TO FRONTEND ********
                   // ******************************************************
                   //
-                  // // validtion
-                  // if (widget.formKey.currentState!.validate()) {
-                  //   final email = widget.emailController.text;
-                  //   final password = widget.passwordController.text;
-                  //   try {
-                  //     await AuthService.firebase().createUser(
-                  //       email: email,
-                  //       password: password,
-                  //     );
-                  //     //
-                  //     // *****CHECK FOR EMAIL VERIFICATION IN THE FUTURE*****
-                  //     //
+                  // validtion
+                  dev.log(widget.formKey.currentState.toString());
+                  if (widget.formKey.currentState!.validate()) {
+                    final email = widget.emailController.text;
+                    final password = widget.passwordController.text;
+                    try {
+                      // Create new user
+                      final user = await AuthService.firebase().createUser(
+                        email: email,
+                        password: password,
+                      );
 
-                  //     // Unimplemented exceptions
-                  //   } on EmailAlreadyInUseAuthException {
-                  //     dev.log('email already in use'); //placeholder
-                  //   } on WeakPasswordAuthException {
-                  //     dev.log('weak password'); //placeholder
-                  //   } on InvalidEmailAuthException {
-                  //     dev.log('invalid email'); //placeholder
-                  //   } on GenericAuthException catch (e) {
-                  //     dev.log(e.toString()); //placeholder
-                  //   }
-                  // }
-                  //
+                      dev.log(user.toString());
+
+                      // Assign the user's role
+                      _userRolesService.addRole(
+                          userId: user.id, userRole: widget.role);
+
+                      if (context.mounted) {
+                        Navigator.of(context).pushNamedAndRemoveUntil(
+                          loginRoute,
+                          (route) => false,
+                        );
+                      }
+                      //
+                      // *****CHECK FOR EMAIL VERIFICATION IN THE FUTURE*****
+                      //
+
+                      // Unimplemented exceptions
+                    } on EmailAlreadyInUseAuthException {
+                      dev.log('email already in use'); //placeholder
+                    } on WeakPasswordAuthException {
+                      dev.log('weak password'); //placeholder
+                    } on InvalidEmailAuthException {
+                      dev.log('invalid email'); //placeholder
+                    } on GenericAuthException catch (e) {
+                      dev.log(e.toString()); //placeholder
+                    } on CouldNotAddUserRoleException catch (e) {
+                      dev.log(e.toString()); //placeholder
+                    }
+                  }
+
                   // *******************************************************
                   // *******************************************************
                   //

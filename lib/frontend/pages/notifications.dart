@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:volunteerexpress/backend/services/auth/auth_service.dart';
+import 'package:volunteerexpress/frontend/constants/routes.dart';
+import 'package:volunteerexpress/frontend/enums/menu_action_enums.dart';
 import 'package:volunteerexpress/frontend/themes/colors.dart';
 import 'package:volunteerexpress/backend/services/notification_services.dart';
 
@@ -15,7 +18,7 @@ class _NotificationViewPageState extends State<NotificationViewPage> {
   List<Map<String, dynamic>> notifications = [];
 
   @override
-  void initState(){
+  void initState() {
     super.initState();
     loadNotifications();
   }
@@ -26,7 +29,7 @@ class _NotificationViewPageState extends State<NotificationViewPage> {
       notifications = fetchedNotifications;
     });
   }
-  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -44,6 +47,25 @@ class _NotificationViewPageState extends State<NotificationViewPage> {
         fontWeight: FontWeight.bold,
         fontSize: 20,
       ),
+      actions: [
+        PopupMenuButton<MenuAction>(
+          itemBuilder: (context) {
+            return const [
+              PopupMenuItem<MenuAction>(
+                  value: MenuAction.logout, child: Text('Log out')),
+            ];
+          },
+          onSelected: (value) async {
+            await AuthService.firebase().logOut();
+            if (context.mounted) {
+              Navigator.of(context).pushNamedAndRemoveUntil(
+                loginRoute,
+                (route) => false,
+              );
+            }
+          },
+        )
+      ],
     );
   }
 
@@ -63,7 +85,7 @@ class _NotificationViewPageState extends State<NotificationViewPage> {
         },
         itemCount: notifications.length);
   }
-  
+
   Widget listViewItem(int index) {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 13, vertical: 10),
