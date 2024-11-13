@@ -7,7 +7,7 @@ class Event {
   final String location;
   final String date;
   final String urgency;
-  final String requiredSkills;
+  final List<String> requiredSkills;
   final String description;
   final String? eventID;
 

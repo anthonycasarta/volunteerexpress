@@ -24,7 +24,7 @@ class EventRepository {
           location: data[eventLocationFieldName],
           date: data[eventDateFieldName],
           urgency: data[eventUrgencyFieldName],
-          requiredSkills: data[eventSkillsFieldName],
+          requiredSkills: List<String>.from(data[eventSkillsFieldName]),
           description: data[eventDescriptionFieldName],
           adminId: data[adminUidFieldName]);
     }).toList();

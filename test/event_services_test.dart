@@ -24,7 +24,7 @@ void main() {
         eventLocationFieldName: 'Test Location',
         eventDateFieldName: '2024-10-15',
         eventUrgencyFieldName: 'High',
-        eventSkillsFieldName: 'Communication',
+        eventSkillsFieldName: ['Communication'],
         eventDescriptionFieldName: 'This is a test event.',
         adminUidFieldName: "Current User",
         eventIDFieldName: "event ID"
@@ -45,7 +45,7 @@ void main() {
         location: 'New Location',
         date: '2024-11-01',
         urgency: 'Medium',
-        requiredSkills: 'Leadership',
+        requiredSkills: ['Leadership', 'Adaptability'],
         description: 'This is a new event.',
         adminId: "Current User"
       );
@@ -77,7 +77,7 @@ void main() {
         location: 'Some Location',
         date: '2024-12-01',
         urgency: 'Low',
-        requiredSkills: 'Creativity',
+        requiredSkills: ['Creativity'],
         description: 'This event will be deleted.',
         adminId: "Current User",
       );
@@ -98,7 +98,7 @@ void main() {
         eventLocationFieldName: 'Old Location',
         eventDateFieldName: '2024-10-10',
         eventUrgencyFieldName: 'Low',
-        eventSkillsFieldName: 'Patience',
+        eventSkillsFieldName: ['Patience'],
         eventDescriptionFieldName: 'This event will be updated.',
         adminUidFieldName: "Current User",
         eventIDFieldName: "event ID"
@@ -110,7 +110,7 @@ void main() {
         location: 'Updated Location',
         date: '2024-10-10',
         urgency: 'High',
-        requiredSkills: 'Adaptability',
+        requiredSkills: ['Adaptability'],
         description: 'This event has been updated.',
         adminId: "Current User",
       );

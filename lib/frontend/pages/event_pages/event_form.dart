@@ -90,7 +90,7 @@ class _EventManagementFormState extends State<EventManagementForm> {
       eventLocationController.text = widget.event!.location;
       selectedUrgency = widget.event!.urgency;
       selectedDates = [DateTime.parse(widget.event!.date)];
-      selectedSkills = widget.event!.requiredSkills.split(',').map((skill) => skill.trim()).toList();
+      selectedSkills = widget.event!.requiredSkills;
       //print(selectedSkills);
       
       // You might need to update the MultiSelectController as well
@@ -327,7 +327,7 @@ void resetForm() {
                               date: '${selectedDates.first.year}-${selectedDates.first.month.toString().padLeft(2, '0')}-${selectedDates.first.day.toString().padLeft(2, '0')}',
                               urgency: selectedUrgency ?? 'Low', // Provide a default if not set
                               //requiredSkills: selectedSkills.join(','), // Handle as needed
-                              requiredSkills: skillController.selectedItems.map((item) => item.value).join(','),
+                              requiredSkills: skillController.selectedItems.map((item) => item.value).toList(),
                               description: eventDescriptionController.text,
                               adminId: widget.event?.adminId ?? 'Undefined Admin'
                             );
@@ -357,7 +357,7 @@ void resetForm() {
                                 date: '${selectedDates.first.year}-${selectedDates.first.month.toString().padLeft(2, '0')}-${selectedDates.first.day.toString().padLeft(2, '0')}',
                                 urgency: selectedUrgency ?? 'Low', // Provide a default if not set
                                 // requiredSkills: selectedSkills.join(','), // Handle as needed
-                                requiredSkills: skillController.selectedItems.map((item) => item.value).join(','),
+                                requiredSkills: skillController.selectedItems.map((item) => item.value).toList(),
                                 description: eventDescriptionController.text,
                                 adminId: adminID,
                               );
