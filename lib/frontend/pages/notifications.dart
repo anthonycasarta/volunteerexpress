@@ -5,6 +5,7 @@ import 'package:volunteerexpress/frontend/constants/routes.dart';
 import 'package:volunteerexpress/frontend/enums/menu_action_enums.dart';
 import 'package:volunteerexpress/frontend/themes/colors.dart';
 import 'package:volunteerexpress/backend/services/notification_services.dart';
+import 'package:volunteerexpress/backend/services/notification_services.dart';
 
 class NotificationViewPage extends StatefulWidget {
   const NotificationViewPage({super.key});
@@ -169,6 +170,29 @@ class _NotificationViewPageState extends State<NotificationViewPage> {
               fontSize: 10,
             ),
           )
+          TextButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => NotificationDetailPage(
+                    title: notifications[index]['title'],
+                    description: notifications[index]['description'],
+                    dateTime: notifications[index]['time'],
+                    requiresAction: notifications[index]['requires_action']
+                  ),
+                ),
+              );
+            },
+            child: const Text(
+              'Open',
+              style: TextStyle(
+                color: primaryAccentColor,
+                fontSize: 10,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
         ],
       ),
     );
