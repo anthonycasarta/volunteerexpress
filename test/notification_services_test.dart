@@ -18,11 +18,13 @@ void main() {
         'title': 'Event Tomorrow',
         'description': 'Event at 2PM tomorrow.',
         'time': Timestamp.fromDate(DateTime.now().subtract(const Duration(hours: 1))),
+        'requires_action': false,
       });
       await fakeFirestore.collection('NOTIFICATION').add({
         'title': 'New Event Available',
         'description': 'New Event available now!',
         'time': Timestamp.fromDate(DateTime.now().subtract(const Duration(days: 1))),
+        'requires_action': true,
       });
 
       final result = await notificationService.fetchNotifications();
@@ -31,6 +33,7 @@ void main() {
       expect(result.length, 2);
       expect(result[0]['title'], 'Event Tomorrow');
       expect(result[1]['description'], 'New Event available now!');
+      expect(result[1]['requires_action'], true);
     });
 
     test('should return an empty list when no notifications are available', () async {
@@ -46,6 +49,7 @@ void main() {
         'New Event',
         'A new event has been added',
         now,
+        false,
       );
 
       final snapshot = await fakeFirestore.collection('NOTIFICATION').get();
@@ -55,6 +59,7 @@ void main() {
       expect(notifications[0]['title'], 'New Event');
       expect(notifications[0]['description'], 'A new event has been added');
       expect((notifications[0]['time'] as Timestamp).toDate(), now);
+      expect(notifications[0]['requires_action'], false);
     });
   });
 }
