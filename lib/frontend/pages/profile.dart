@@ -6,6 +6,8 @@ import 'package:volunteerexpress/frontend/enums/menu_action_enums.dart';
 import 'package:volunteerexpress/frontend/themes/colors.dart';
 import 'package:volunteerexpress/backend/services/profile_services.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -22,7 +24,7 @@ class _ProfilePageState extends State<ProfilePage> {
   late final TextEditingController zipController;
   final ProfileServices _profileServices = ProfileServices(
       firestore: FirebaseFirestore
-          .instance); // Real Firestore // Instance of ProfileServices
+          .instance, auth: FirebaseAuth.instance); // Real Firestore // Instance of ProfileServices
 
   @override
   void initState() {

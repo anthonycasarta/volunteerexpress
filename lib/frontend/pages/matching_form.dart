@@ -26,10 +26,12 @@ class _MatchingFormPageState extends State<MatchingFormPage> {
   List<String> eventNames = [];
   List<List<String>> eventSkills = [];
   List<String> eventDates = [];
+  List<String> eventIds = [];
   String? selectedEvent;
   List<Map<String, dynamic>> matchedVolunteers = [];
   List<Map<String, dynamic>> selectedVolunteers = [];
   String selectedDate = "";
+  String selectedEventID = "";
   // Add Firebase initialization in initState
   final MatchingServices _matchingServices =
       MatchingServices(firestore: FirebaseFirestore.instance);
@@ -54,6 +56,8 @@ class _MatchingFormPageState extends State<MatchingFormPage> {
             }).toList();
         eventDates = 
             snapshot.docs.map((doc) => doc['event_date'] as String).toList();
+        eventIds = 
+        snapshot.docs.map((doc) => doc['event_id'] as String).toList();
       });
     } catch (e) {
       print('Error fetching events $e');
@@ -145,7 +149,7 @@ class _MatchingFormPageState extends State<MatchingFormPage> {
                     String date = eventDates[selectedIndex];
                     DateTime parsedDate = DateTime.parse(date);
                     String isoDate = parsedDate.toIso8601String();
-                    
+                    selectedEventID = eventIds[selectedIndex];
                     matchedVolunteers = await _matchingServices
                         
                         .displayMatchedVolunteers(isoDate,skillsForEvent);
@@ -257,14 +261,28 @@ void showMatchedVolunteersDialog(BuildContext context) {
     },
   );
 }
-void _handleSelectedVolunteers() {
+void _handleSelectedVolunteers() async {
   // Placeholder function to handle the selected volunteers
+ try{
   for (var volunteer in selectedVolunteers) {
-    print("Selected Volunteer: ${volunteer['fullName']}");
-    // Later, perform the desired database actions here
+  
+      String eventID =  selectedEventID;
+      String volID = volunteer['userId'];
+         
+      
+      await _matchingServices.addToVolunteerHistory(
+        eventID, 
+        volID,
+        "Assigned"
+      );
   }
   ScaffoldMessenger.of(context).showSnackBar(
     const SnackBar(content: Text('Volunteers selected successfully')),
   );
+} catch (e) {
+  ScaffoldMessenger.of(context).showSnackBar(
+    SnackBar(content: Text('error assigning volunteers: $e')),
+  );
+}
 }
 }

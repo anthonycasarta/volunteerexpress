@@ -351,7 +351,7 @@ packages:
     source: hosted
     version: "5.3.1"
   firebase_auth_mocks:
-    dependency: "direct dev"
+    dependency: "direct main"
     description:
       name: firebase_auth_mocks
       sha256: "3d4442f2856c03917777e5ddf6bb7ff5fb53e9b04426d1e1146b339bd3f19892"

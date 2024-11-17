@@ -23,4 +23,19 @@ void main() {
     expect(matchedVolunteers.length, 1);
     expect(matchedVolunteers.first['fullName'], 'Zachary Pierce');
   });
+
+
+  test('Add to volunteer history works correctly', () async{
+    final FakeFirestore = FakeFirebaseFirestore();
+    final matchingServices = MatchingServices(firestore: FakeFirestore);
+    await matchingServices.addToVolunteerHistory("123","123","Assigned");
+    final snapshot = await FakeFirestore.collection('volunteer_history').get();
+    
+    expect(snapshot.docs.length, 1);
+    final snap = snapshot.docs.first;
+    expect(snap.get('event_id'), '123');
+    expect(snap.get('vol_id'), '123');
+    expect(snap.get('vol_status'), 'Assigned');
+  });
 }
+
