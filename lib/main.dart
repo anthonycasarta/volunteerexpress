@@ -19,6 +19,7 @@ import 'package:fake_cloud_firestore/fake_cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:volunteerexpress/firebase_options.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:volunteerexpress/frontend/pages/report_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -151,6 +152,7 @@ class MyApp extends StatelessWidget {
               child: const EventPage(),
             ),
         matchingFormRoute: (context) => const MatchingFormPage(),
+        reportPageRoute: (context) => const ReportPage(),
       },
     );
   }

@@ -7,6 +7,7 @@ import 'package:volunteerexpress/backend/eventPage/event_bloc.dart';
 import 'package:volunteerexpress/backend/eventPage/event_event.dart';
 import 'package:volunteerexpress/backend/services/auth/auth_service.dart';
 import 'package:volunteerexpress/backend/services/auth/auth_user.dart';
+import 'package:volunteerexpress/backend/eventPage/event_repository.dart';
 
 //import 'package:firebase_auth/firebase_auth.dart';
 
@@ -25,6 +26,7 @@ class EventManagementForm extends StatefulWidget {
 class _EventManagementFormState extends State<EventManagementForm> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
+  late String userRole = ''; 
   late final TextEditingController eventNameController;
   late final TextEditingController eventDescriptionController;
   late final TextEditingController eventLocationController;
@@ -33,9 +35,9 @@ class _EventManagementFormState extends State<EventManagementForm> {
   List<DateTime> selectedDates = [];
   String? selectedUrgency;
   List<String> selectedSkills = [];
+  bool isReadOnly = false; 
 
   
-
   // Removes and add dates to the picked date list
   Future<void> selectDate(BuildContext context) async {
     DateTime? pickedDate = await showDatePicker(
@@ -77,6 +79,16 @@ class _EventManagementFormState extends State<EventManagementForm> {
   void initState() {
     super.initState();
 
+    final authService = AuthService.firebase();
+    final AuthUser? currentUser = authService.currentUser;
+    widget.bloc.add(FetchUserRole(currentUser!.id));
+
+    //await Future.delayed(const Duration(milliseconds: 50));
+    // print("Fetched role from event page: $userRole");    
+    
+    if (userRole == "volunteer") {
+      isReadOnly = true;
+    }
     
     eventNameController = TextEditingController(text: widget.event?.name ?? '');
     eventDescriptionController = TextEditingController(text: widget.event?.description ?? '');
@@ -126,7 +138,7 @@ class _EventManagementFormState extends State<EventManagementForm> {
   }
 
 // resets the form
-void resetForm() {
+  void resetForm() {
     eventNameController.clear();
     eventLocationController.clear();
     eventDescriptionController.clear();
@@ -136,6 +148,24 @@ void resetForm() {
 
     setState(() {});
   }
+
+
+/*
+  Future<void> fetchUserRole() async {
+    final authService = AuthService.firebase();
+    final AuthUser? currentUser = authService.currentUser;
+
+    if (currentUser != null) {
+      final role = await widget.bloc.add(userSelector(currentUser.id));
+      setState(() {
+        userRole = role;
+      });
+    }
+  }
+
+*/
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -153,6 +183,7 @@ void resetForm() {
               InfoTextBox(
                     // The Event Name Portion 
                     controller: eventNameController,
+                    readOnly: isReadOnly,
                     labelText: 'Event Name',
                     hintText: 'Enter the event name',
                     isRequired: true,
@@ -169,6 +200,7 @@ void resetForm() {
                   const SizedBox(height: 20),
                   InfoTextBox(
                     controller: eventDescriptionController,
+                    readOnly: isReadOnly,
                     labelText: 'Event Description',
                     hintText: 'Enter the event desciption',
                     isRequired: true,
@@ -187,6 +219,7 @@ void resetForm() {
                   const SizedBox(height: 20),
                   InfoTextBox(
                     controller: eventLocationController,
+                    readOnly: isReadOnly,
                     labelText: 'Event Location',
                     hintText: 'Enter the event location',
                     isRequired: true,
@@ -304,6 +337,10 @@ void resetForm() {
                     },
                   ),
 
+                  
+
+
+
                   // Save button 
                   const SizedBox(height: 20),
                   Row(
@@ -362,7 +399,8 @@ void resetForm() {
                                 adminId: adminID,
                               );
 
-                            widget.bloc.add(AddEvent(newEvent)); // Example of calling an add event action
+
+                            widget.bloc.add(AddEvent(newEvent)); 
                           }
                           
                         
@@ -380,6 +418,7 @@ void resetForm() {
 
                       const Spacer(),
 
+                      // Delete Button
                       TextOnlyButton(
                         onPressed: () {
                           // Show a confirmation dialog when Delete Event is pressed
@@ -442,16 +481,19 @@ class InfoTextBox extends StatelessWidget {
   final String labelText;
   final String hintText;
   final bool isRequired;
+  final bool readOnly;
   final int? maxLength;
   final bool isMultiline;
   final int? minLines;
   final String? Function(String?)? validator;
+  
 
   const InfoTextBox({
     super.key,
     required this.controller,
     required this.labelText,
     required this.hintText,
+    required this.readOnly,
     this.isRequired = false,
     this.maxLength,
     this.isMultiline = false,
@@ -465,6 +507,7 @@ class InfoTextBox extends StatelessWidget {
       controller: controller,
       minLines: minLines,
       maxLength: maxLength,
+      readOnly: readOnly,
       maxLines: isMultiline ? null : 1, // Single line by default
       decoration: InputDecoration(
         labelText: labelText,

@@ -4,6 +4,8 @@ import 'package:volunteerexpress/backend/services/cloud/firebase/firebase_user_r
 import 'package:volunteerexpress/frontend/constants/routes.dart';
 import 'package:volunteerexpress/frontend/custom-widgets/textbuttons/text_only_button.dart';
 import 'package:volunteerexpress/frontend/enums/menu_action_enums.dart';
+import 'package:volunteerexpress/frontend/pages/report_page.dart';
+
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -97,6 +99,11 @@ class _HomePageState extends State<HomePage> {
                       onPressed: () =>
                           Navigator.pushNamed(context, matchingFormRoute),
                       label: "Matching Form"),
+                  TextOnlyButton(
+                      onPressed: () =>
+                          Navigator.pushNamed(context, reportPageRoute),
+                      label: "Report Page"
+                  ),
                 ],
               ),
             ),

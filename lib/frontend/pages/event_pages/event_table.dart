@@ -43,8 +43,8 @@ class EventTable extends StatelessWidget   {
                   },
                 );
               }).toList(),
+              showCheckboxColumn: false,
             ),
-            
             ),
             
 
