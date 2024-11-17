@@ -126,7 +126,7 @@ class ReportsService {
         build: (pw.Context context) {
           return pw.Column(
             children: [
-              pw.Text('Event List',
+              pw.Text('Volunteer List',
               style: pw.TextStyle(fontSize: 24, fontWeight: pw.FontWeight.bold)
               ),
               pw.SizedBox(height: 20),
