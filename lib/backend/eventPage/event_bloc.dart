@@ -3,10 +3,9 @@ import 'package:volunteerexpress/backend/eventPage/event_event.dart';
 import 'package:volunteerexpress/backend/eventPage/event_state.dart';
 //import 'package:volunteerexpress/models/event_model.dart';
 import 'package:volunteerexpress/backend/eventPage/event_repository.dart';
- // Add this if you have a repository to manage events
 
 class EventBloc extends Bloc<EventEvent, EventState> {
-  final EventRepository eventRepository; // Assuming you have a repository for events
+  final EventRepository eventRepository; 
 
   EventBloc(this.eventRepository) : super(const EventInitial()) {
     on<LoadEvents>(_onLoadEvents);
@@ -14,6 +13,7 @@ class EventBloc extends Bloc<EventEvent, EventState> {
     on<UpdateEvent>(_onSaveEvent);
     on<AddEvent>(_onAddEvent);
     on<DeleteEvent>(_onDeleteEvent);
+    on<FetchUserRole>(_onFetchUserRole);
   }
 
   Future<void> _onLoadEvents(LoadEvents event, Emitter<EventState> emit) async {
@@ -63,4 +63,20 @@ class EventBloc extends Bloc<EventEvent, EventState> {
     emit(EventError(e.toString())); // Emit an error if deletion fails
   }
 }
+
+  Future<void> _onFetchUserRole(FetchUserRole event, Emitter<EventState> emit) async {
+    emit(const EventLoading());
+    try {
+       
+      final role = await eventRepository.userSelector(event.userID);
+      //print("Fetched role From Bloc: $role");  
+      emit(UserRoleLoaded(role));
+      add(const LoadEvents());
+    } catch (e) {
+      emit(EventError(e.toString())); 
+    }
+  }
+
+
+
 }

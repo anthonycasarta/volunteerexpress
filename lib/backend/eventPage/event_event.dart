@@ -52,3 +52,9 @@ class DeleteEvent extends EventEvent {
   @override
   List<Object?> get props => [event];
 }
+
+class FetchUserRole extends EventEvent {
+  final String userID;
+
+  const FetchUserRole(this.userID);  // Pass user ID to trigger the fetch
+}
