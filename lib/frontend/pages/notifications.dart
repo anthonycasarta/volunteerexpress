@@ -5,7 +5,7 @@ import 'package:volunteerexpress/frontend/constants/routes.dart';
 import 'package:volunteerexpress/frontend/enums/menu_action_enums.dart';
 import 'package:volunteerexpress/frontend/themes/colors.dart';
 import 'package:volunteerexpress/backend/services/notification_services.dart';
-import 'package:volunteerexpress/backend/services/notification_services.dart';
+import 'package:volunteerexpress/frontend/pages/notification_details.dart';
 
 class NotificationViewPage extends StatefulWidget {
   const NotificationViewPage({super.key});
@@ -169,7 +169,7 @@ class _NotificationViewPageState extends State<NotificationViewPage> {
             style: const TextStyle(
               fontSize: 10,
             ),
-          )
+          ),
           TextButton(
             onPressed: () {
               Navigator.push(
