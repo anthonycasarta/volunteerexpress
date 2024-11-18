@@ -80,6 +80,7 @@ void main() {
         'A new event has been added',
         now,
         false,
+        'user12345',
       );
 
       final snapshot = await fakeFirestore.collection('NOTIFICATION').get();
@@ -89,7 +90,8 @@ void main() {
       expect(notifications[0]['title'], 'New Event');
       expect(notifications[0]['description'], 'A new event has been added');
       expect((notifications[0]['time'] as Timestamp).toDate(), now);
-      expect(notifications[0]['requires_action'], false);
+      expect(notifications[0]['is_global'], false);
+      expect(notifications[0]['user_id'], 'user12345');
     });
   });
 }
