@@ -11,7 +11,6 @@ class VolunteerHistoryListView extends StatelessWidget {
   final Iterable<CloudVolunteerHistory> volunteerHistory;
   final VolunteerHistoryCallBack onTap;
   final eventRepo = EventRepository(firestore: FirebaseFirestore.instance);
-  late final Event event;
 
   VolunteerHistoryListView({
     super.key,
@@ -35,7 +34,7 @@ class VolunteerHistoryListView extends StatelessWidget {
               builder: (context, snapshot) {
                 switch (snapshot.connectionState) {
                   case ConnectionState.done:
-                    event = snapshot.data!;
+                    final event = snapshot.data!;
                     return ListTile(
                       onTap: () {
                         //onTap(event);
