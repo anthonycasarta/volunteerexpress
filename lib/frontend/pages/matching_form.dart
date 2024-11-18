@@ -8,6 +8,7 @@ import 'package:volunteerexpress/frontend/themes/colors.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:volunteerexpress/backend/services/matching_services.dart';
 import 'package:intl/intl.dart';
+import 'package:volunteerexpress/backend/services/notification_services.dart';
 //Import for Firebase initialization
 
 class MatchingFormPage extends StatefulWidget {
@@ -263,6 +264,8 @@ void showMatchedVolunteersDialog(BuildContext context) {
 }
 void _handleSelectedVolunteers() async {
   // Placeholder function to handle the selected volunteers
+    final NotificationServices notificationServices = 
+      NotificationServices(firestore: FirebaseFirestore.instance);
  try{
   for (var volunteer in selectedVolunteers) {
   
@@ -275,9 +278,18 @@ void _handleSelectedVolunteers() async {
         volID,
         "Assigned"
       );
+
+      //send notifications to volunteers
+      await notificationServices.addNotification(
+        'Volunteer Assignment', 
+        'You have been assigned to $selectedEvent',
+         DateTime.now(), 
+         false, 
+         volID,
+         );
   }
   ScaffoldMessenger.of(context).showSnackBar(
-    const SnackBar(content: Text('Volunteers selected successfully')),
+    const SnackBar(content: Text('Volunteers selected and notified successfully')),
   );
 } catch (e) {
   ScaffoldMessenger.of(context).showSnackBar(
