@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:volunteerexpress/backend/services/auth/auth_service.dart';
@@ -25,7 +26,9 @@ class _NotificationViewPageState extends State<NotificationViewPage> {
   }
 
   Future<void> loadNotifications() async {
-    List<Map<String, dynamic>> fetchedNotifications = await notificationServices.fetchNotifications();
+    final userID = FirebaseAuth.instance.currentUser?.uid;
+    final fetchedNotifications = await notificationServices.fetchNotificationsForUser(userID);
+
     setState(() {
       notifications = fetchedNotifications;
     });
@@ -179,7 +182,6 @@ class _NotificationViewPageState extends State<NotificationViewPage> {
                     title: notifications[index]['title'],
                     description: notifications[index]['description'],
                     dateTime: notifications[index]['time'],
-                    requiresAction: notifications[index]['requires_action']
                   ),
                 ),
               );

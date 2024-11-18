@@ -13,31 +13,61 @@ void main() {
   });
 
   group('NotificationService Tests', () {
-    test('should return a list of notifications', () async {
+    test('fetchNotificationsForUser should return user-specific and global notifications', () async {
+      // Add global notifications
       await fakeFirestore.collection('NOTIFICATION').add({
-        'title': 'Event Tomorrow',
-        'description': 'Event at 2PM tomorrow.',
-        'time': Timestamp.fromDate(DateTime.now().subtract(const Duration(hours: 1))),
-        'requires_action': false,
-      });
-      await fakeFirestore.collection('NOTIFICATION').add({
-        'title': 'New Event Available',
-        'description': 'New Event available now!',
+        'title': 'Global Event',
+        'description': 'This event is for everyone.',
         'time': Timestamp.fromDate(DateTime.now().subtract(const Duration(days: 1))),
-        'requires_action': true,
+        'is_global': true,
+        'user_id': null,
       });
 
-      final result = await notificationService.fetchNotifications();
+      // Add user-specific notifications
+      await fakeFirestore.collection('NOTIFICATION').add({
+        'title': 'User Event',
+        'description': 'This event is just for you.',
+        'time': Timestamp.fromDate(DateTime.now().subtract(const Duration(hours: 2))),
+        'is_global': false,
+        'user_id': 'user123',
+      });
+
+      final result = await notificationService.fetchNotificationsForUser('user123');
 
       expect(result, isNotEmpty);
       expect(result.length, 2);
-      expect(result[0]['title'], 'Event Tomorrow');
-      expect(result[1]['description'], 'New Event available now!');
-      expect(result[1]['requires_action'], true);
+      expect(result.any((notif) => notif['title'] == 'Global Event'), true);
+      expect(result.any((notif) => notif['title'] == 'User Event'), true);
     });
 
-    test('should return an empty list when no notifications are available', () async {
-      final result = await notificationService.fetchNotifications();
+    test('fetchNotificationsForUser should return only global notifications for other users', () async {
+      // Add global notifications
+      await fakeFirestore.collection('NOTIFICATION').add({
+        'title': 'Global Event',
+        'description': 'This event is for everyone.',
+        'time': Timestamp.fromDate(DateTime.now().subtract(const Duration(days: 1))),
+        'is_global': true,
+        'user_id': null,
+      });
+
+      // Add user-specific notifications
+      await fakeFirestore.collection('NOTIFICATION').add({
+        'title': 'User Event',
+        'description': 'This event is just for a specific user.',
+        'time': Timestamp.fromDate(DateTime.now().subtract(const Duration(hours: 2))),
+        'is_global': false,
+        'user_id': 'user123',
+      });
+
+      final result = await notificationService.fetchNotificationsForUser('user456');
+
+      expect(result, isNotEmpty);
+      expect(result.length, 1);
+      expect(result[0]['title'], 'Global Event');
+    });
+
+    test('fetchNotificationsForUser should return an empty list for unauthenticated users', () async {
+      final result = await notificationService.fetchNotificationsForUser(null);
 
       expect(result, isEmpty);
     });
@@ -50,6 +80,7 @@ void main() {
         'A new event has been added',
         now,
         false,
+        'user12345',
       );
 
       final snapshot = await fakeFirestore.collection('NOTIFICATION').get();
@@ -59,7 +90,8 @@ void main() {
       expect(notifications[0]['title'], 'New Event');
       expect(notifications[0]['description'], 'A new event has been added');
       expect((notifications[0]['time'] as Timestamp).toDate(), now);
-      expect(notifications[0]['requires_action'], false);
+      expect(notifications[0]['is_global'], false);
+      expect(notifications[0]['user_id'], 'user12345');
     });
   });
 }

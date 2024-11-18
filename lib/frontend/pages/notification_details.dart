@@ -5,14 +5,12 @@ class NotificationDetailPage extends StatelessWidget {
   final String title;
   final String description;
   final DateTime dateTime;
-  final bool requiresAction;
 
   const NotificationDetailPage({
     super.key,
     required this.title,
     required this.description,
     required this.dateTime, 
-    required this.requiresAction,
   });
 
   @override
@@ -45,31 +43,9 @@ class NotificationDetailPage extends StatelessWidget {
               style: const TextStyle(fontSize: 16),
             ),
             const SizedBox(height: 20),
-            if (requiresAction) actionButtons(),
           ],
         ),
       ),
-    );
-  }
-  Widget actionButtons() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: [
-        ElevatedButton(
-          onPressed: () {
-            // Handle accept action
-          },
-          style: ElevatedButton.styleFrom(backgroundColor: Colors.green),
-          child: const Text("Accept"),
-        ),
-        ElevatedButton(
-          onPressed: () {
-            // Handle reject action
-          },
-          style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
-          child: const Text("Reject"),
-        ),
-      ],
     );
   }
 }
