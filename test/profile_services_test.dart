@@ -1,11 +1,20 @@
 import 'package:fake_cloud_firestore/fake_cloud_firestore.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:volunteerexpress/backend/services/profile_services.dart';
-
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_auth_mocks/firebase_auth_mocks.dart';
 void main() {
+  
   test('ProfileServices saves profile correctly to Firestore', () async {
     final fakeFirestore = FakeFirebaseFirestore();
-    final profileService = ProfileServices(firestore: fakeFirestore);
+    final auth = MockFirebaseAuth();
+    final user = MockUser(uid: '1234', email: 'testuser@example.com');
+     auth.signInWithEmailAndPassword(
+      email: 'testuser@example.com', 
+      password: 'password123',
+    );
+    final profileService = ProfileServices(firestore: fakeFirestore, auth: auth);
+    User? currentUser = user;
     List<DateTime> dates = [DateTime(2024, 10, 7)];
 
     await profileService.saveProfileToFirestore(
@@ -15,7 +24,8 @@ void main() {
         'TX',
         '77385',
         ['Delivery Driving'],
-        dates);
+        dates,
+        );
 
     final snapshot = await fakeFirestore.collection('PROFILE').get();
     expect(snapshot.docs.length, 1); // Ensure one document is added

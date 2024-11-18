@@ -27,4 +27,21 @@ class MatchingServices {
       return [];
     }
   }
+
+  Future<void> addToVolunteerHistory(
+    String eventId,
+    String volunteerId,
+    String userId,
+  ) async {
+    try{
+      await firestore.collection('volunteer_history').add({
+        'event_id': eventId,
+        'vol_id': volunteerId,
+        'vol_status': 'Assigned',
+
+      });
+    } catch (e) {
+      print("Error adding to volunteer history");
+    }
+  }
 }
