@@ -10,6 +10,7 @@ class EventRepository {
   EventRepository({required this.firestore});
 
   late final event = firestore.collection('EVENT');
+  late final string = firestore.collection('user_roles');
 
   // Method to fetch events
   Future<List<Event>> fetchEvents() async {
@@ -98,8 +99,32 @@ class EventRepository {
         location: data[eventLocationFieldName],
         date: data[eventDateFieldName],
         urgency: data[eventUrgencyFieldName],
-        requiredSkills: data[eventSkillsFieldName],
+        // requiredSkills: data[eventSkillsFieldName],
+        requiredSkills: (data[eventSkillsFieldName] as List<dynamic>).cast<String>(),
         description: data[eventDescriptionFieldName],
         adminId: data[adminUidFieldName]);
   }
+
+  Future<String> userSelector(String currentID) async {
+
+    final data = await string
+      .where('user_id', isEqualTo: currentID)    
+      .get();
+
+     final document = data.docs.first.data();
+
+      //print("Fetched role From repository: $document");   
+
+      if (document['role'] == "volunteer") {
+        return "volunteer";
+      }
+      
+      if (document['role'] == "admin") {
+        return "admin";
+      }
+
+      return "User's Role Not Found";
+      
+  }
+
 }

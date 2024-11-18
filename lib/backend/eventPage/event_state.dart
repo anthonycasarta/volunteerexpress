@@ -39,6 +39,14 @@ class EventFormState extends EventState {
   List<Object> get props => [event ?? const Event(name: '', location: '', date: '', urgency: '', requiredSkills: [], description: '', adminId: '')];
 }
 
+
+class UserRoleLoaded extends EventState {
+  final String role;
+
+  const UserRoleLoaded(this.role);  // Store the fetched role
+}
+
+
 // State when Error in loading events
 class EventError extends EventState {
   final String message;
@@ -48,3 +56,4 @@ class EventError extends EventState {
   @override 
   List<Object> get props => [message];
 }
+
