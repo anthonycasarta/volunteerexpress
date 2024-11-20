@@ -37,6 +37,7 @@ class _LoginFormState extends State<LoginForm> {
 
   @override
   Widget build(BuildContext context) {
+    late final user;
     return FormDecoration(
       form: Form(
         key: widget.formKey, // Key for validation
@@ -89,7 +90,7 @@ class _LoginFormState extends State<LoginForm> {
                     final email = widget.emailController.text;
                     final password = widget.passwordController.text;
                     try {
-                      await AuthService.firebase().logIn(
+                      user = await AuthService.firebase().logIn(
                         email: email,
                         password: password,
                       );
@@ -99,10 +100,40 @@ class _LoginFormState extends State<LoginForm> {
 
                       // Unimplemented exceptions
                     } on UserNotLoggedInAuthException {
-                      dev.log('user not logged in'); //placeholder
+                      dev.log('user not logged in');
+                      if (context.mounted) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text(
+                                'No user found. Please check your credentials.'),
+                            backgroundColor:
+                                Colors.red, // Optional: Set a color
+                          ),
+                        );
+                      } //placeholder
                     } on InvalidCredentialAuthException {
-                      dev.log('invalid credential'); //pladeholder
+                      dev.log('invalid credential');
+                      if (context.mounted) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text(
+                                'No user found. Please check your credentials.'),
+                            backgroundColor:
+                                Colors.red, // Optional: Set a color
+                          ),
+                        );
+                      } //pladeholder
                     } on GenericAuthException catch (e) {
+                      if (context.mounted) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text(
+                                'No user found. Please check your credentials.'),
+                            backgroundColor:
+                                Colors.red, // Optional: Set a color
+                          ),
+                        );
+                      }
                       dev.log(e.toString()); //placeholder
                     }
 
@@ -110,11 +141,24 @@ class _LoginFormState extends State<LoginForm> {
                     // *******************************************************
                     //
                     // Go to profile page on button press
-                    if (context.mounted) {
-                      Navigator.of(context).pushNamedAndRemoveUntil(
-                        homePageRoute,
-                        (route) => false,
-                      );
+                    if (user != null) {
+                      if (context.mounted) {
+                        Navigator.of(context).pushNamedAndRemoveUntil(
+                          homePageRoute,
+                          (route) => false,
+                        );
+                      }
+                    } else {
+                      if (context.mounted) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text(
+                                'No user found. Please check your credentials.'),
+                            backgroundColor:
+                                Colors.red, // Optional: Set a color
+                          ),
+                        );
+                      }
                     }
                   }
                 },
