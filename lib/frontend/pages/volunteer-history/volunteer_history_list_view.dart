@@ -35,62 +35,80 @@ class VolunteerHistoryListView extends StatelessWidget {
                 switch (snapshot.connectionState) {
                   case ConnectionState.done:
                     final event = snapshot.data!;
-                    return ListTile(
-                      onTap: () {
-                        //onTap(event);
-                      },
-                      title: Container(
-                        margin: const EdgeInsets.only(left: 10),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            // Event
-                            RichText(
-                              maxLines: 3,
-                              overflow: TextOverflow.ellipsis,
-                              text: TextSpan(
-                                text: event.name,
-                                style: const TextStyle(
-                                    fontSize: 14,
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.bold),
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 4.0),
+                      child: ListTile(
+                        onTap: () {
+                          //onTap(event);
+                        },
+                        contentPadding: const EdgeInsets.symmetric(
+                            horizontal: 16.0, vertical: 8.0), // Custom padding
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(
+                              12), // Rounded corners for the tile
+                          side: BorderSide(
+                              color: Colors.grey
+                                  .withOpacity(0.2)), // Border styling
+                        ),
+                        tileColor: Colors
+                            .grey.shade100, // Background color for the tile
+                        selectedTileColor: Colors
+                            .blue.shade50, // Background color when selected
+                        leading: const Icon(Icons.event,
+                            color: Colors.blue), // Add an icon at the start
+                        title: Container(
+                          margin: const EdgeInsets.only(left: 10),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              // Event
+                              RichText(
+                                maxLines: 3,
+                                overflow: TextOverflow.ellipsis,
+                                text: TextSpan(
+                                  text: event.name,
+                                  style: const TextStyle(
+                                      fontSize: 14,
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.bold),
+                                ),
                               ),
-                            ),
 
-                            // Properties
-                            Container(
-                              margin: const EdgeInsets.only(
-                                top: 10,
-                                right: 20,
-                                left: 20,
-                              ),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(
-                                    'Date: ${event.date}',
-                                    style: const TextStyle(
-                                      fontSize: 10,
+                              // Properties
+                              Container(
+                                margin: const EdgeInsets.only(
+                                  top: 10,
+                                  right: 20,
+                                  left: 20,
+                                ),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      'Date: ${event.date}',
+                                      style: const TextStyle(
+                                        fontSize: 10,
+                                      ),
                                     ),
-                                  ),
-                                  Text(
-                                    'Urgency: ${event.urgency}',
-                                    style: const TextStyle(
-                                      fontSize: 10,
+                                    Text(
+                                      'Urgency: ${event.urgency}',
+                                      style: const TextStyle(
+                                        fontSize: 10,
+                                      ),
                                     ),
-                                  ),
-                                  Text(
-                                    status,
-                                    style: const TextStyle(
-                                      fontSize: 10,
-                                      color: Color.fromARGB(255, 18, 168, 33),
+                                    Text(
+                                      status,
+                                      style: const TextStyle(
+                                        fontSize: 10,
+                                        color: Color.fromARGB(255, 18, 168, 33),
+                                      ),
                                     ),
-                                  ),
-                                ],
-                              ),
-                            )
-                          ],
+                                  ],
+                                ),
+                              )
+                            ],
+                          ),
                         ),
                       ),
                     );
