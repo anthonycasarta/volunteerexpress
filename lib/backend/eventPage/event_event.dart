@@ -53,8 +53,10 @@ class DeleteEvent extends EventEvent {
   List<Object?> get props => [event];
 }
 
+/*
 class FetchUserRole extends EventEvent {
   final String userID;
 
   const FetchUserRole(this.userID);  // Pass user ID to trigger the fetch
 }
+*/

@@ -105,6 +105,7 @@ class EventRepository {
         adminId: data[adminUidFieldName]);
   }
 
+  /* 
   Future<String> userSelector(String currentID) async {
 
     final data = await string
@@ -126,5 +127,6 @@ class EventRepository {
       return "User's Role Not Found";
       
   }
+  */
 
 }
