@@ -299,6 +299,8 @@ class _ProfilePageState extends State<ProfilePage> {
                       borderSide: BorderSide(color: primaryAccentColor),
                     ),
                   ),
+                  readOnly: true,
+                  onTap: selectDate,
                 ),
                 const Text(
                   'Selected Dates: ',
