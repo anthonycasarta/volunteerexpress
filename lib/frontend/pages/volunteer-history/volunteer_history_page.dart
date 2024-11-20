@@ -46,6 +46,15 @@ class _VolunteerHistoryPageState extends State<VolunteerHistoryPage> {
             if (snapshot.hasData) {
               final allVolHist =
                   snapshot.data as Iterable<CloudVolunteerHistory>;
+              if (allVolHist.isEmpty) {
+                // No history available
+                return const Center(
+                  child: Text(
+                    "No History Available",
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                );
+              }
               return VolunteerHistoryListView(
                   volunteerHistory: allVolHist,
                   onTap: (event) {

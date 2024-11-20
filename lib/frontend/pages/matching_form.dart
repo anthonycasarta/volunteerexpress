@@ -8,6 +8,7 @@ import 'package:volunteerexpress/frontend/themes/colors.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:volunteerexpress/backend/services/matching_services.dart';
 import 'package:intl/intl.dart';
+import 'package:volunteerexpress/backend/services/notification_services.dart';
 //Import for Firebase initialization
 
 class MatchingFormPage extends StatefulWidget {
@@ -41,7 +42,7 @@ class _MatchingFormPageState extends State<MatchingFormPage> {
     dateController = TextEditingController();
     _fetchEventsFromFirestore();
   }
- 
+
   Future<void> _fetchEventsFromFirestore() async {
     try {
       QuerySnapshot snapshot =
@@ -49,15 +50,14 @@ class _MatchingFormPageState extends State<MatchingFormPage> {
       setState(() {
         eventNames =
             snapshot.docs.map((doc) => doc['event_name'] as String).toList();
-        eventSkills =
-            snapshot.docs.map((doc) {
-              List<dynamic> skills = doc['event_skills'] as List<dynamic>;
-             return skills.cast<String>();  // Convert dynamic list to List<String>
-            }).toList();
-        eventDates = 
+        eventSkills = snapshot.docs.map((doc) {
+          List<dynamic> skills = doc['event_skills'] as List<dynamic>;
+          return skills.cast<String>(); // Convert dynamic list to List<String>
+        }).toList();
+        eventDates =
             snapshot.docs.map((doc) => doc['event_date'] as String).toList();
-        eventIds = 
-        snapshot.docs.map((doc) => doc['event_id'] as String).toList();
+        eventIds =
+            snapshot.docs.map((doc) => doc['event_id'] as String).toList();
       });
     } catch (e) {
       print('Error fetching events $e');
@@ -71,29 +71,10 @@ class _MatchingFormPageState extends State<MatchingFormPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Matching Form"),
-        backgroundColor: primaryAccentColor,
+        //title: const Text("Matching Form"),
+        backgroundColor: Colors.white,
         foregroundColor: Colors.white,
         centerTitle: true,
-        actions: [
-          PopupMenuButton<MenuAction>(
-            itemBuilder: (context) {
-              return const [
-                PopupMenuItem<MenuAction>(
-                    value: MenuAction.logout, child: Text('Log out')),
-              ];
-            },
-            onSelected: (value) async {
-              await AuthService.firebase().logOut();
-              if (context.mounted) {
-                Navigator.of(context).pushNamedAndRemoveUntil(
-                  loginRoute,
-                  (route) => false,
-                );
-              }
-            },
-          )
-        ],
       ),
       body: Center(
         child: Padding(
@@ -151,8 +132,7 @@ class _MatchingFormPageState extends State<MatchingFormPage> {
                     String isoDate = parsedDate.toIso8601String();
                     selectedEventID = eventIds[selectedIndex];
                     matchedVolunteers = await _matchingServices
-                        
-                        .displayMatchedVolunteers(isoDate,skillsForEvent);
+                        .displayMatchedVolunteers(isoDate, skillsForEvent);
                     if (matchedVolunteers.isEmpty) {
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
@@ -175,32 +155,6 @@ class _MatchingFormPageState extends State<MatchingFormPage> {
               ),
               const SizedBox(height: 60),
               // Nav bar
-              Center(
-                child: SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      TextOnlyButton(
-                          onPressed: () =>
-                              Navigator.pushNamed(context, eventPageRoute),
-                          label: "Event Form"),
-                      TextOnlyButton(
-                          onPressed: () =>
-                              Navigator.pushNamed(context, profileRoute),
-                          label: "Profile Page"),
-                      TextOnlyButton(
-                          onPressed: () => Navigator.pushNamed(
-                              context, volunteerHistoryRoute),
-                          label: "Volunteer History"),
-                      TextOnlyButton(
-                          onPressed: () =>
-                              Navigator.pushNamed(context, notificationRoute),
-                          label: "Notifications"),
-                    ],
-                  ),
-                ),
-              ),
             ],
           ),
         ),
@@ -208,81 +162,91 @@ class _MatchingFormPageState extends State<MatchingFormPage> {
     );
   }
 
-void showMatchedVolunteersDialog(BuildContext context) {
-  showDialog(
-    context: context,
-    builder: (BuildContext context) {
-      return AlertDialog(
-        title: const Text('Matched Volunteers'),
-        content: StatefulBuilder(
-          builder: (BuildContext context, StateSetter setState) {
-            return Column(
-              mainAxisSize: MainAxisSize.min,
-              children: matchedVolunteers.map((volunteer) {
-                bool isSelected = selectedVolunteers.contains(volunteer);
-                return ListTile(
-                  title: Text(volunteer['fullName']),
-                  trailing: IconButton(
-                    icon: Icon(
-                      isSelected ? Icons.check_box : Icons.check_box_outline_blank,
-                      color: primaryAccentColor,
+  void showMatchedVolunteersDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Matched Volunteers'),
+          content: StatefulBuilder(
+            builder: (BuildContext context, StateSetter setState) {
+              return Column(
+                mainAxisSize: MainAxisSize.min,
+                children: matchedVolunteers.map((volunteer) {
+                  bool isSelected = selectedVolunteers.contains(volunteer);
+                  return ListTile(
+                    title: Text(volunteer['fullName']),
+                    trailing: IconButton(
+                      icon: Icon(
+                        isSelected
+                            ? Icons.check_box
+                            : Icons.check_box_outline_blank,
+                        color: primaryAccentColor,
+                      ),
+                      onPressed: () {
+                        setState(() {
+                          if (isSelected) {
+                            selectedVolunteers.remove(volunteer);
+                          } else {
+                            selectedVolunteers.add(volunteer);
+                          }
+                        });
+                      },
                     ),
-                    onPressed: () {
-                      setState(() {
-                        if (isSelected) {
-                          selectedVolunteers.remove(volunteer);
-                        } else {
-                          selectedVolunteers.add(volunteer);
-                        }
-                      });
-                    },
-                  ),
-                );
-              }).toList(),
-            );
-          },
-        ),
-        actions: [
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).pop();
+                  );
+                }).toList(),
+              );
             },
-            child: const Text('Cancel'),
           ),
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-              _handleSelectedVolunteers();
-            },
-            child: const Text('Confirm Selection'),
-          ),
-        ],
-      );
-    },
-  );
-}
-void _handleSelectedVolunteers() async {
-  // Placeholder function to handle the selected volunteers
- try{
-  for (var volunteer in selectedVolunteers) {
-  
-      String eventID =  selectedEventID;
-      String volID = volunteer['userId'];
-         
-      
-      await _matchingServices.addToVolunteerHistory(
-        eventID, 
-        volID,
-        "Assigned"
-      );
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+                _handleSelectedVolunteers();
+              },
+              child: const Text('Confirm Selection'),
+            ),
+          ],
+        );
+      },
+    );
   }
-  ScaffoldMessenger.of(context).showSnackBar(
-    const SnackBar(content: Text('Volunteers selected successfully')),
-  );
-} catch (e) {
-  ScaffoldMessenger.of(context).showSnackBar(
-    SnackBar(content: Text('error assigning volunteers: $e')),
-  );
-}
-}
+
+  void _handleSelectedVolunteers() async {
+    // Placeholder function to handle the selected volunteers
+    final NotificationServices notificationServices =
+        NotificationServices(firestore: FirebaseFirestore.instance);
+    try {
+      for (var volunteer in selectedVolunteers) {
+        String eventID = selectedEventID;
+        String volID = volunteer['userId'];
+
+        await _matchingServices.addToVolunteerHistory(
+            eventID, volID, "Assigned");
+
+        //send notifications to volunteers
+        await notificationServices.addNotification(
+          'Volunteer Assignment',
+          'You have been assigned to $selectedEvent',
+          DateTime.now(),
+          false,
+          volID,
+        );
+      }
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+            content: Text('Volunteers selected and notified successfully')),
+      );
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('error assigning volunteers: $e')),
+      );
+    }
+  }
 }

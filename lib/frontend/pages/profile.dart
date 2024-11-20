@@ -7,7 +7,7 @@ import 'package:volunteerexpress/frontend/themes/colors.dart';
 import 'package:volunteerexpress/backend/services/profile_services.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:volunteerexpress/models/profile_model.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -27,25 +27,8 @@ class _ProfilePageState extends State<ProfilePage> {
       auth: FirebaseAuth
           .instance); // Real Firestore // Instance of ProfileServices
 
-  @override
-  void initState() {
-    dateController = TextEditingController();
-    nameController = TextEditingController();
-    address1Controller = TextEditingController();
-    cityController = TextEditingController();
-    zipController = TextEditingController();
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    dateController.dispose();
-    nameController.dispose();
-    address1Controller.dispose();
-    cityController.dispose();
-    zipController.dispose();
-    super.dispose();
-  }
+  bool profileExists = false;
+  late Profile profile;
 
   List<DateTime> dates = [];
   String? selectedState;
@@ -58,6 +41,57 @@ class _ProfilePageState extends State<ProfilePage> {
     'Teamwork',
     'Communication',
   ];
+
+  Future<void> loadProfile() async {
+    // Made fetching the Profile Info too slow, having to go to the firebase twice for one request
+    //profileExists = await _profileServices.profileInDatabase();
+    profile = await _profileServices.fetchProfileInfo();
+
+    if (mounted) {
+      if (profile.fullName != 'No Profile') {
+        setState(() {
+          profileExists = true;
+          // dateController.text = profile?.dates.map((date) => date).join(', ') ?? '';
+          nameController.text = profile.fullName;
+          address1Controller.text = profile.address;
+          cityController.text = profile.city;
+          zipController.text = profile.zipCode;
+          selectedState = profile.state;
+          selectedSkills = profile.selectedSkills;
+          //if (profile.dates != 'No Profile')
+          dates = profile.dates
+              //.where((dateString) => dateString != 'No Profile')
+              .map((dateString) => DateTime.parse(dateString))
+              .toList();
+        });
+      } else {
+        profileExists = false;
+      }
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    dateController = TextEditingController();
+    nameController = TextEditingController();
+    address1Controller = TextEditingController();
+    cityController = TextEditingController();
+    zipController = TextEditingController();
+
+    loadProfile();
+  }
+
+  @override
+  void dispose() {
+    dateController.dispose();
+    nameController.dispose();
+    address1Controller.dispose();
+    cityController.dispose();
+    zipController.dispose();
+    super.dispose();
+  }
 
   Future<void> selectDate() async {
     DateTime? picked = await showDatePicker(
@@ -75,6 +109,8 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   void showSkillsDialog() {
+    List<String> tempSelectedSkills = List.from(selectedSkills);
+
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -87,13 +123,13 @@ class _ProfilePageState extends State<ProfilePage> {
                 children: allSkills.map((skill) {
                   return CheckboxListTile(
                     title: Text(skill),
-                    value: selectedSkills.contains(skill),
+                    value: tempSelectedSkills.contains(skill),
                     onChanged: (bool? value) {
                       setState(() {
                         if (value == true) {
-                          selectedSkills.add(skill);
+                          tempSelectedSkills.add(skill);
                         } else {
-                          selectedSkills.remove(skill);
+                          tempSelectedSkills.remove(skill);
                         }
                       });
                     },
@@ -104,7 +140,12 @@ class _ProfilePageState extends State<ProfilePage> {
           ),
           actions: [
             TextButton(
-              onPressed: () => Navigator.pop(context),
+              onPressed: () {
+                Navigator.pop(context);
+                setState(() {
+                  selectedSkills = List.from(tempSelectedSkills);
+                });
+              },
               child: const Text('OK'),
             ),
           ],
@@ -157,6 +198,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   style: TextStyle(color: textColorDark, fontSize: 24),
                 ),
                 DropdownMenu<String>(
+                  initialSelection: selectedState,
                   onSelected: (String? newValue) {
                     if (newValue != null) {
                       setState(() {
@@ -257,8 +299,6 @@ class _ProfilePageState extends State<ProfilePage> {
                       borderSide: BorderSide(color: primaryAccentColor),
                     ),
                   ),
-                  readOnly: true,
-                  onTap: selectDate,
                 ),
                 const Text(
                   'Selected Dates: ',
@@ -269,52 +309,40 @@ class _ProfilePageState extends State<ProfilePage> {
                   style: const TextStyle(color: textColorDark, fontSize: 15),
                 ),
                 TextOnlyButton(
-                  onPressed: () {
+                  onPressed: () async {
                     // THIS IS BACKEND CODE IMPLEMENTATION
-                    String fullName = nameController.text;
-                    String address = address1Controller.text;
-                    String city = cityController.text;
-                    String zip = zipController
-                        .text; // Make sure you have a controller for preference
 
-                    _profileServices.saveProfileToFirestore(
-                        fullName,
-                        address,
-                        city,
-                        selectedState.toString(),
-                        zip,
-                        selectedSkills,
-                        dates);
+                    if (profileExists) {
+                      profile.fullName = nameController.text;
+                      profile.address = address1Controller.text;
+                      profile.city = cityController.text;
+                      profile.state = selectedState ?? 'NY';
+                      profile.zipCode = zipController.text;
+                      profile.selectedSkills = selectedSkills;
+                      profile.dates =
+                          dates.map((date) => date.toIso8601String()).toList();
+
+                      await _profileServices.updateProfile(profile);
+                    } else {
+                      String fullName = nameController.text;
+                      String address = address1Controller.text;
+                      String city = cityController.text;
+                      String zip = zipController
+                          .text; // Make sure you have a controller for preference
+
+                      await _profileServices.saveProfileToFirestore(
+                          fullName,
+                          address,
+                          city,
+                          selectedState.toString(),
+                          zip,
+                          selectedSkills,
+                          dates);
+                    }
                   },
                   fontSize: 20,
                   label: 'Save Changes',
                 ),
-                Center(
-                  child: SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        TextOnlyButton(
-                            onPressed: () =>
-                                Navigator.pushNamed(context, eventPageRoute),
-                            label: "Event Form"),
-                        TextOnlyButton(
-                            onPressed: () => Navigator.pushNamed(
-                                context, volunteerHistoryRoute),
-                            label: "Volunteer History"),
-                        TextOnlyButton(
-                            onPressed: () =>
-                                Navigator.pushNamed(context, notificationRoute),
-                            label: "Notifications"),
-                        TextOnlyButton(
-                            onPressed: () =>
-                                Navigator.pushNamed(context, matchingFormRoute),
-                            label: "Matching Form"),
-                      ],
-                    ),
-                  ),
-                )
               ],
             ),
           ),
