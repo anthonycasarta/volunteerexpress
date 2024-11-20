@@ -81,6 +81,15 @@ class Sidebar extends StatelessWidget {
                         if (userRole == 'admin') ...[
                           ListTile(
                             leading:
+                                const Icon(Icons.event, color: Colors.white),
+                            title: const Text('Event',
+                                style: TextStyle(color: Colors.white)),
+                            onTap: () {
+                              Navigator.pushNamed(context, eventPageRoute);
+                            },
+                          ),
+                          ListTile(
+                            leading:
                                 const Icon(Icons.report, color: Colors.white),
                             title: const Text('Report',
                                 style: TextStyle(color: Colors.white)),
