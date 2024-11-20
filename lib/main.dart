@@ -2,6 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:volunteerexpress/backend/services/auth/auth_service.dart';
 import 'package:volunteerexpress/frontend/constants/routes.dart';
+import 'package:volunteerexpress/frontend/custom-widgets/sidebar.dart';
 import 'package:volunteerexpress/frontend/pages/home_page.dart';
 
 import 'package:volunteerexpress/frontend/pages/matching_form.dart';
@@ -140,19 +141,40 @@ class MyApp extends StatelessWidget {
 
       home: const Routes(),
       routes: {
-        homePageRoute: (context) => const HomePage(),
+        homePageRoute: (context) => const Sidebar(
+              title: 'H O M E',
+              child: HomePage(),
+            ),
         loginRoute: (context) => const LoginPage(),
         registerRoute: (context) => const RegisterPage(),
-        profileRoute: (context) => const ProfilePage(),
-        notificationRoute: (context) => const NotificationViewPage(),
-        volunteerHistoryRoute: (context) => const VolunteerHistoryPage(),
+        profileRoute: (context) => const Sidebar(
+              title: 'P R O F I L E',
+              child: ProfilePage(),
+            ),
+        notificationRoute: (context) => const Sidebar(
+              title: 'N O T I F I C A T I O N S',
+              child: NotificationViewPage(),
+            ),
+        volunteerHistoryRoute: (context) => const Sidebar(
+              title: 'V O L U N T E E R H I S T O R Y',
+              child: VolunteerHistoryPage(),
+            ),
         eventPageRoute: (context) => BlocProvider(
               create: (context) => EventBloc(EventRepository(
                   firestore: firestore)), // Initialize EventBloc
-              child: const EventPage(),
+              child: const Sidebar(
+                title: 'E V E N T S',
+                child: EventPage(),
+              ),
             ),
-        matchingFormRoute: (context) => const MatchingFormPage(),
-        reportPageRoute: (context) => const ReportPage(),
+        matchingFormRoute: (context) => const Sidebar(
+              title: 'M A T C H I N G F O R M',
+              child: MatchingFormPage(),
+            ),
+        reportPageRoute: (context) => const Sidebar(
+              title: 'R E P O R T',
+              child: ReportPage(),
+            ),
       },
     );
   }
@@ -176,7 +198,7 @@ class _RoutesState extends State<Routes> {
               case ConnectionState.done:
                 final user = AuthService.firebase().currentUser;
                 if (user != null) {
-                  return const HomePage();
+                  return const Sidebar(title: 'H O M E', child: HomePage());
                 } else {
                   return const LoginPage();
                 }
