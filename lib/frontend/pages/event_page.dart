@@ -19,26 +19,8 @@ class EventPage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Events'),
-        actions: [
-          PopupMenuButton<MenuAction>(
-            itemBuilder: (context) {
-              return const [
-                PopupMenuItem<MenuAction>(
-                    value: MenuAction.logout, child: Text('Log out')),
-              ];
-            },
-            onSelected: (value) async {
-              await AuthService.firebase().logOut();
-              if (context.mounted) {
-                Navigator.of(context).pushNamedAndRemoveUntil(
-                  loginRoute,
-                  (route) => false,
-                );
-              }
-            },
-          )
-        ],
+        //title: const Text('Events'),
+        backgroundColor: Colors.white,
       ),
       body: BlocBuilder<EventBloc, EventState>(
         builder: (context, state) {

@@ -16,7 +16,8 @@ class NotificationViewPage extends StatefulWidget {
 }
 
 class _NotificationViewPageState extends State<NotificationViewPage> {
-  final NotificationServices notificationServices = NotificationServices(firestore: FirebaseFirestore.instance);
+  final NotificationServices notificationServices =
+      NotificationServices(firestore: FirebaseFirestore.instance);
   List<Map<String, dynamic>> notifications = [];
 
   @override
@@ -27,7 +28,8 @@ class _NotificationViewPageState extends State<NotificationViewPage> {
 
   Future<void> loadNotifications() async {
     final userID = FirebaseAuth.instance.currentUser?.uid;
-    final fetchedNotifications = await notificationServices.fetchNotificationsForUser(userID);
+    final fetchedNotifications =
+        await notificationServices.fetchNotificationsForUser(userID);
 
     setState(() {
       notifications = fetchedNotifications;
@@ -36,10 +38,7 @@ class _NotificationViewPageState extends State<NotificationViewPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: appBar(),
-      body: listView(),
-    );
+    return listView();
   }
 
   PreferredSizeWidget appBar() {
