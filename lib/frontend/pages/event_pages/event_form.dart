@@ -26,7 +26,7 @@ class EventManagementForm extends StatefulWidget {
 class _EventManagementFormState extends State<EventManagementForm> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  late String userRole = ''; 
+  // late String userRole = ''; 
   late final TextEditingController eventNameController;
   late final TextEditingController eventDescriptionController;
   late final TextEditingController eventLocationController;
@@ -79,16 +79,18 @@ class _EventManagementFormState extends State<EventManagementForm> {
   void initState() {
     super.initState();
 
+    /*
     final authService = AuthService.firebase();
     final AuthUser? currentUser = authService.currentUser;
     widget.bloc.add(FetchUserRole(currentUser!.id));
-
+    
     //await Future.delayed(const Duration(milliseconds: 50));
     // print("Fetched role from event page: $userRole");    
     
     if (userRole == "volunteer") {
       isReadOnly = true;
     }
+    */
     
     eventNameController = TextEditingController(text: widget.event?.name ?? '');
     eventDescriptionController = TextEditingController(text: widget.event?.description ?? '');

@@ -13,7 +13,7 @@ class EventBloc extends Bloc<EventEvent, EventState> {
     on<UpdateEvent>(_onSaveEvent);
     on<AddEvent>(_onAddEvent);
     on<DeleteEvent>(_onDeleteEvent);
-    on<FetchUserRole>(_onFetchUserRole);
+    //on<FetchUserRole>(_onFetchUserRole);
   }
 
   Future<void> _onLoadEvents(LoadEvents event, Emitter<EventState> emit) async {
@@ -64,6 +64,7 @@ class EventBloc extends Bloc<EventEvent, EventState> {
   }
 }
 
+  /*
   Future<void> _onFetchUserRole(FetchUserRole event, Emitter<EventState> emit) async {
     emit(const EventLoading());
     try {
@@ -77,6 +78,6 @@ class EventBloc extends Bloc<EventEvent, EventState> {
     }
   }
 
-
+*/
 
 }

@@ -64,7 +64,7 @@ class ReportPage extends StatelessWidget {
           //mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             const Text(
-              'This is the Report Page!',
+              'Create your Reports!',
               style: TextStyle(fontSize: 24),
             ),
 
