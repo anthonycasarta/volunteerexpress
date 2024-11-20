@@ -29,98 +29,75 @@ class _VolunteerHistoryPageState extends State<VolunteerHistoryPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Volunteer History'),
-        actions: [
-          PopupMenuButton<MenuAction>(
-            itemBuilder: (context) {
-              return const [
-                PopupMenuItem<MenuAction>(
-                    value: MenuAction.logout, child: Text('Log out')),
-              ];
-            },
-            onSelected: (value) async {
-              await AuthService.firebase().logOut();
-              if (context.mounted) {
-                Navigator.of(context).pushNamedAndRemoveUntil(
-                  loginRoute,
-                  (route) => false,
-                );
-              }
-            },
-          )
-        ],
-      ),
-      // **************************************************************
-      // **************************************************************
-      // ************* CONNECTION FROM BACKEND TO FRONTEND ************
-      // **************************************************************
-      // **************************************************************
-      //
-      body: StreamBuilder(
-        // Get Stream of all volunteer history
-        stream: _volunteerService.allVolunteerHistory(volunteerUid: uId),
-        builder: (context, snapshot) {
-          switch (snapshot.connectionState) {
-            case ConnectionState.waiting:
-            case ConnectionState.active:
-              if (snapshot.hasData) {
-                final allVolHist =
-                    snapshot.data as Iterable<CloudVolunteerHistory>;
-                return VolunteerHistoryListView(
-                    volunteerHistory: allVolHist,
-                    onTap: (event) {
-                      // ********************
-                      //*******Todo**********
-                      // ********************
-                    });
-              } else {
-                return const CircularProgressIndicator();
-              }
-            default:
+    return
+        // **************************************************************
+        // **************************************************************
+        // ************* CONNECTION FROM BACKEND TO FRONTEND ************
+        // **************************************************************
+        // **************************************************************
+        //
+        StreamBuilder(
+      // Get Stream of all volunteer history
+      stream: _volunteerService.allVolunteerHistory(volunteerUid: uId),
+      builder: (context, snapshot) {
+        switch (snapshot.connectionState) {
+          case ConnectionState.waiting:
+          case ConnectionState.active:
+            if (snapshot.hasData) {
+              final allVolHist =
+                  snapshot.data as Iterable<CloudVolunteerHistory>;
+              return VolunteerHistoryListView(
+                  volunteerHistory: allVolHist,
+                  onTap: (event) {
+                    // ********************
+                    //*******Todo**********
+                    // ********************
+                  });
+            } else {
               return const CircularProgressIndicator();
-          }
-        },
-      ),
-      //
-      // ************************************************************
-      // ************************************************************
-      // ************************************************************
-      // **************************************************************
-      // **************************************************************
-      // ************* CONNECTION FROM BACKEND TO FRONTEND ************
-      // **************************************************************
-      // **************************************************************
-      // body: StreamBuilder(
-      //   // Get Stream of all volunteer history
-      //   stream: _volunteerService.allVolunteerHistory(volunteerUid: uId),
-      //   builder: (context, snapshot) {
-      //     switch (snapshot.connectionState) {
-      //       case ConnectionState.waiting:
-      //       case ConnectionState.active:
-      //         if (snapshot.hasData) {
-      //           final allVolHist =
-      //               snapshot.data as Iterable<CloudVolunteerHistory>;
-      //           return VolunteerHistoryListView(
-      //               volunteerHistory: allVolHist,
-      //               onTap: (event) {
-      //                 // ********************
-      //                 //*******Todo**********
-      //                 // ********************
-      //               });
-      //         } else {
-      //           return const CircularProgressIndicator();
-      //         }
-      //       default:
-      //         return const CircularProgressIndicator();
-      //     }
-      //   },
-      // ),
-      // ************************************************************
-      // ************************************************************
-      // ************************************************************
+            }
+          default:
+            return const CircularProgressIndicator();
+        }
+      },
     );
+    //
+    // ************************************************************
+    // ************************************************************
+    // ************************************************************
+    // **************************************************************
+    // **************************************************************
+    // ************* CONNECTION FROM BACKEND TO FRONTEND ************
+    // **************************************************************
+    // **************************************************************
+    // body: StreamBuilder(
+    //   // Get Stream of all volunteer history
+    //   stream: _volunteerService.allVolunteerHistory(volunteerUid: uId),
+    //   builder: (context, snapshot) {
+    //     switch (snapshot.connectionState) {
+    //       case ConnectionState.waiting:
+    //       case ConnectionState.active:
+    //         if (snapshot.hasData) {
+    //           final allVolHist =
+    //               snapshot.data as Iterable<CloudVolunteerHistory>;
+    //           return VolunteerHistoryListView(
+    //               volunteerHistory: allVolHist,
+    //               onTap: (event) {
+    //                 // ********************
+    //                 //*******Todo**********
+    //                 // ********************
+    //               });
+    //         } else {
+    //           return const CircularProgressIndicator();
+    //         }
+    //       default:
+    //         return const CircularProgressIndicator();
+    //     }
+    //   },
+    // ),
+    // ************************************************************
+    // ************************************************************
+    // ************************************************************
   }
 
   // Column(

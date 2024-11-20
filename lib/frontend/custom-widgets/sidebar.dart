@@ -26,25 +26,6 @@ class Sidebar extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(title),
-        actions: [
-          PopupMenuButton<MenuAction>(
-            itemBuilder: (context) {
-              return const [
-                PopupMenuItem<MenuAction>(
-                    value: MenuAction.logout, child: Text('Log out')),
-              ];
-            },
-            onSelected: (value) async {
-              await AuthService.firebase().logOut();
-              if (context.mounted) {
-                Navigator.of(context).pushNamedAndRemoveUntil(
-                  loginRoute,
-                  (route) => false,
-                );
-              }
-            },
-          )
-        ],
       ),
       drawer: Drawer(
         child: FutureBuilder<String>(

@@ -156,7 +156,7 @@ class MyApp extends StatelessWidget {
               child: NotificationViewPage(),
             ),
         volunteerHistoryRoute: (context) => const Sidebar(
-              title: 'V O L U N T E E R H I S T O R Y',
+              title: 'H I S T O R Y',
               child: VolunteerHistoryPage(),
             ),
         eventPageRoute: (context) => BlocProvider(
@@ -168,7 +168,7 @@ class MyApp extends StatelessWidget {
               ),
             ),
         matchingFormRoute: (context) => const Sidebar(
-              title: 'M A T C H I N G F O R M',
+              title: 'M A T C H I N G  F O R M',
               child: MatchingFormPage(),
             ),
         reportPageRoute: (context) => const Sidebar(
