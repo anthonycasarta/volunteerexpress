@@ -30,7 +30,7 @@ class ProfileServices {
     }
     String userId = currentUser.uid; // Retrieve the user's UID
 
-    firestore.collection('PROFILE').add({
+    await firestore.collection('PROFILE').add({
       'fullName': fullName,
       'address': address,
       'city': city,
